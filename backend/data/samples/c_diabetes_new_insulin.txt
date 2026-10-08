@@ -1,0 +1,32 @@
+MARINA MEDICAL CENTRE, CHENNAI
+DISCHARGE SUMMARY (SYNTHETIC DOCUMENT FOR DEMO. NOT A REAL PATIENT.)
+Patient: Mr. Karthik Subramanian (synthetic)
+Age/Sex: 55 / Male
+Date of admission: 08 Oct 2026
+Date of discharge: 12 Oct 2026
+Diagnosis: Type 2 diabetes mellitus with very high blood sugar
+
+MEDICATIONS ON DISCHARGE
+Tab Metformin 500 mg twice daily after breakfast and dinner
+Tab Glimepiride 1 mg once daily in the morning before breakfast
+Insulin glargine 10 units under the skin once daily at night. This is a new medicine started in hospital.
+Tab Atorvastatin 10 mg once daily at night
+
+SUGAR CHECKS AND INSULIN
+Check blood sugar before breakfast and at bedtime every day and write it in the diary.
+The nurse trained the family to give the insulin injection. Change the injection site every day.
+
+FOLLOW-UP
+Review with the diabetologist at Marina Medical Centre after 1 week with the sugar diary.
+HbA1c and kidney function tests after 3 months.
+Referred to an eye specialist for a retina check within 1 month.
+Referred to a dietician for a diabetic diet plan on 20 Oct 2026.
+
+DIET AND ACTIVITY
+Eat small meals every 3 to 4 hours. Avoid sugar, sweets, and sweetened drinks.
+Include vegetables, dal, and whole grains in each meal.
+Walk for 30 minutes every day after dinner.
+
+WARNING SIGNS
+Sweating, shaking, hunger, or confusion can mean low blood sugar. Call your doctor at once.
+Blood sugar above 300 mg/dl on two readings. Call your doctor.

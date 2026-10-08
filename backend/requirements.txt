@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+pydantic>=2
+groq
+python-dotenv
+pdfplumber
+qrcode[pil]
+pytest
+httpx
+reportlab
+python-multipart
+pyjwt

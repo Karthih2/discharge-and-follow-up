@@ -1,0 +1,259 @@
+{
+  "items": [
+    {
+      "category": "medication",
+      "title": "Metformin 500 mg",
+      "original_text": "Tab Metformin 500 mg twice daily after breakfast and dinner",
+      "source_line_numbers": [
+        9
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,night",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Metformin 500 mg twice a day, after breakfast and after dinner.",
+        "ta": "Metformin 500 mg மாத்திரையை தினமும் இரண்டு முறை, காலை உணவுக்கும் இரவு உணவுக்கும் பிறகு சாப்பிடவும்.",
+        "hi": "Metformin 500 mg की गोली दिन में दो बार, नाश्ते और रात के खाने के बाद लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Glimepiride 1 mg",
+      "original_text": "Tab Glimepiride 1 mg once daily in the morning before breakfast",
+      "source_line_numbers": [
+        10
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Glimepiride 1 mg once a day in the morning, before breakfast.",
+        "ta": "Glimepiride 1 mg மாத்திரையை தினமும் ஒரு முறை காலையில் காலை உணவுக்கு முன் சாப்பிடவும்.",
+        "hi": "Glimepiride 1 mg की गोली दिन में एक बार सुबह नाश्ते से पहले लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Insulin glargine 10 units",
+      "original_text": "Insulin glargine 10 units under the skin once daily at night. This is a new medicine started in hospital.",
+      "source_line_numbers": [
+        11
+      ],
+      "date_raw": null,
+      "time_of_day": "night",
+      "confidence": 0.93,
+      "expect_review": true,
+      "simple": {
+        "en": "Insulin glargine 10 units under the skin once a day at night. This is a new medicine.",
+        "ta": "Insulin glargine 10 units தோலுக்கு அடியில் தினமும் ஒரு முறை இரவில். இது ஒரு புதிய மருந்து.",
+        "hi": "Insulin glargine 10 units त्वचा के नीचे दिन में एक बार रात को। यह नई दवा है।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Atorvastatin 10 mg",
+      "original_text": "Tab Atorvastatin 10 mg once daily at night",
+      "source_line_numbers": [
+        12
+      ],
+      "date_raw": null,
+      "time_of_day": "night",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Atorvastatin 10 mg once a day at night.",
+        "ta": "Atorvastatin 10 mg மாத்திரையை தினமும் ஒரு முறை இரவில் சாப்பிடவும்.",
+        "hi": "Atorvastatin 10 mg की गोली दिन में एक बार रात को लें।"
+      }
+    },
+    {
+      "category": "other",
+      "title": "Daily sugar check",
+      "original_text": "Check blood sugar before breakfast and at bedtime every day and write it in the diary.",
+      "source_line_numbers": [
+        14
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,night",
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "Check your blood sugar before breakfast and at bedtime every day. Write it in the diary.",
+        "ta": "தினமும் காலை உணவுக்கு முன்பும் படுக்கும் முன்பும் இரத்த சர்க்கரையை பரிசோதிக்கவும். அதை டைரியில் எழுதவும்.",
+        "hi": "रोज़ नाश्ते से पहले और सोने से पहले ब्लड शुगर जांचें। इसे डायरी में लिखें।"
+      }
+    },
+    {
+      "category": "other",
+      "title": "Insulin injection",
+      "original_text": "The nurse trained the family to give the insulin injection. Change the injection site every day.",
+      "source_line_numbers": [
+        15
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "The nurse trained your family to give the insulin injection. Change the injection site every day.",
+        "ta": "செவிலியர் உங்கள் குடும்பத்திற்கு இன்சுலின் ஊசி போடக் கற்றுக் கொடுத்தார். ஒவ்வொரு நாளும் ஊசி போடும் இடத்தை மாற்றவும்.",
+        "hi": "नर्स ने आपके परिवार को इंसुलिन इंजेक्शन लगाना सिखाया। हर दिन इंजेक्शन की जगह बदलें।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Diabetes doctor visit",
+      "original_text": "Review with the diabetologist at Marina Medical Centre after 1 week with the sugar diary.",
+      "source_line_numbers": [
+        17
+      ],
+      "date_raw": "after 1 week",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "See the diabetes doctor (diabetologist) at Marina Medical Centre after 1 week. Bring your sugar diary.",
+        "ta": "1 வாரத்திற்குப் பிறகு Marina Medical Centre-இல் நீரிழிவு மருத்துவரைப் (diabetologist) பார்க்கவும். சர்க்கரை டைரியை எடுத்துச் செல்லவும்.",
+        "hi": "1 सप्ताह बाद Marina Medical Centre में मधुमेह डॉक्टर (diabetologist) से मिलें। शुगर डायरी साथ लाएं।"
+      }
+    },
+    {
+      "category": "test",
+      "title": "HbA1c and kidney tests",
+      "original_text": "HbA1c and kidney function tests after 3 months.",
+      "source_line_numbers": [
+        18
+      ],
+      "date_raw": "after 3 months",
+      "time_of_day": null,
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "Get the HbA1c and kidney function blood tests after 3 months.",
+        "ta": "3 மாதங்களுக்குப் பிறகு HbA1c மற்றும் சிறுநீரக செயல்பாட்டு இரத்த பரிசோதனைகள் செய்யவும்.",
+        "hi": "3 महीने बाद HbA1c और किडनी की कार्यक्षमता की जांच कराएं।"
+      }
+    },
+    {
+      "category": "referral",
+      "title": "Eye check (retina)",
+      "original_text": "Referred to an eye specialist for a retina check within 1 month.",
+      "source_line_numbers": [
+        19
+      ],
+      "date_raw": "within 1 month",
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "You are referred to an eye specialist for a retina check within 1 month.",
+        "ta": "1 மாதத்திற்குள் விழித்திரை பரிசோதனைக்காக கண் மருத்துவரிடம் அனுப்பப்பட்டுள்ளீர்கள்.",
+        "hi": "आपको 1 महीने के भीतर रेटिना जांच के लिए नेत्र रोग विशेषज्ञ के पास भेजा गया है।"
+      }
+    },
+    {
+      "category": "referral",
+      "title": "Dietician visit",
+      "original_text": "Referred to a dietician for a diabetic diet plan on 20 Oct 2026.",
+      "source_line_numbers": [
+        20
+      ],
+      "date_raw": "20 Oct 2026",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "You are referred to a dietician for a diabetic diet plan on 20 October 2026.",
+        "ta": "20 அக்டோபர் 2026 அன்று நீரிழிவு உணவுத் திட்டத்திற்காக உணவு நிபுணரிடம் (dietician) அனுப்பப்பட்டுள்ளீர்கள்.",
+        "hi": "आपको 20 अक्टूबर 2026 को मधुमेह आहार योजना के लिए आहार विशेषज्ञ (dietician) के पास भेजा गया है।"
+      }
+    },
+    {
+      "category": "diet",
+      "title": "Small, regular meals",
+      "original_text": "Eat small meals every 3 to 4 hours. Avoid sugar, sweets, and sweetened drinks.",
+      "source_line_numbers": [
+        22
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Eat small meals every 3 to 4 hours. Avoid sugar, sweets, and sweetened drinks.",
+        "ta": "ஒவ்வொரு 3 முதல் 4 மணி நேரத்திற்கும் சிறிய உணவுகளை சாப்பிடுங்கள். சர்க்கரை, இனிப்புகள், இனிப்பு பானங்களைத் தவிர்க்கவும்.",
+        "hi": "हर 3 से 4 घंटे में थोड़ा-थोड़ा खाएं। चीनी, मिठाई और मीठे पेय से बचें।"
+      }
+    },
+    {
+      "category": "diet",
+      "title": "Vegetables, dal and whole grains",
+      "original_text": "Include vegetables, dal, and whole grains in each meal.",
+      "source_line_numbers": [
+        23
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Include vegetables, dal, and whole grains in each meal.",
+        "ta": "ஒவ்வொரு வேளை உணவிலும் காய்கறிகள், பருப்பு, முழு தானியங்களைச் சேர்த்துக் கொள்ளுங்கள்.",
+        "hi": "हर भोजन में सब्ज़ियां, दाल और साबुत अनाज शामिल करें।"
+      }
+    },
+    {
+      "category": "activity",
+      "title": "Daily walk",
+      "original_text": "Walk for 30 minutes every day after dinner.",
+      "source_line_numbers": [
+        24
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Walk for 30 minutes every day after dinner.",
+        "ta": "தினமும் இரவு உணவுக்குப் பிறகு 30 நிமிடங்கள் நடக்கவும்.",
+        "hi": "हर दिन रात के खाने के बाद 30 मिनट चलें।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Signs of low blood sugar",
+      "original_text": "Sweating, shaking, hunger, or confusion can mean low blood sugar. Call your doctor at once.",
+      "source_line_numbers": [
+        26
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Sweating, shaking, hunger, or confusion can mean low blood sugar. Call your doctor at once.",
+        "ta": "வியர்வை, நடுக்கம், பசி அல்லது குழப்பம் குறைந்த இரத்த சர்க்கரையைக் குறிக்கலாம். உடனே உங்கள் மருத்துவரை அழைக்கவும்.",
+        "hi": "पसीना, कांपना, भूख या भ्रम कम ब्लड शुगर का संकेत हो सकता है। तुरंत अपने डॉक्टर को कॉल करें।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "High blood sugar",
+      "original_text": "Blood sugar above 300 mg/dl on two readings. Call your doctor.",
+      "source_line_numbers": [
+        27
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "If your blood sugar is above 300 mg/dl on two readings, call your doctor.",
+        "ta": "இரண்டு அளவீடுகளிலும் இரத்த சர்க்கரை 300 mg/dl க்கு மேல் இருந்தால் உங்கள் மருத்துவரை அழைக்கவும்.",
+        "hi": "लगातार दो रीडिंग में ब्लड शुगर 300 mg/dl से ऊपर हो तो अपने डॉक्टर को कॉल करें।"
+      }
+    }
+  ]
+}

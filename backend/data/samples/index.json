@@ -1,0 +1,46 @@
+[
+  {
+    "key": "a",
+    "file": "a_heart_attack_angioplasty.txt",
+    "title": "Heart attack with angioplasty",
+    "patient_alias": "Mr. R. Iyer (synthetic)",
+    "discharge_date": "2026-10-10",
+    "city": "Chennai",
+    "pincode": "600017",
+    "preferred_language": "ta",
+    "blurb": "Medicines for the heart, a check-up with ECG, and a rehabilitation referral."
+  },
+  {
+    "key": "b",
+    "file": "b_knee_replacement.txt",
+    "title": "Knee replacement with physiotherapy",
+    "patient_alias": "Mrs. S. Verma (synthetic)",
+    "discharge_date": "2026-10-11",
+    "city": "Delhi",
+    "pincode": "110024",
+    "preferred_language": "hi",
+    "blurb": "Wound care, stitch removal, physiotherapy sessions and a blood test."
+  },
+  {
+    "key": "c",
+    "file": "c_diabetes_new_insulin.txt",
+    "title": "Type 2 diabetes with new insulin",
+    "patient_alias": "Mr. K. Subramanian (synthetic)",
+    "discharge_date": "2026-10-12",
+    "city": "Chennai",
+    "pincode": "600020",
+    "preferred_language": "en",
+    "blurb": "New insulin, sugar checks, a diet plan and an eye check referral."
+  },
+  {
+    "key": "d",
+    "file": "d_messy_unclear.txt",
+    "title": "Unclear summary (needs human review)",
+    "patient_alias": "Mrs. L. Narayanan (synthetic)",
+    "discharge_date": "2026-10-12",
+    "city": "Chennai",
+    "pincode": "600042",
+    "preferred_language": "en",
+    "blurb": "Vague wording, a missing date and conflicting lines, so many items go to a reviewer."
+  }
+]

@@ -1,0 +1,276 @@
+{
+  "items": [
+    {
+      "category": "medication",
+      "title": "Paracetamol 650 mg",
+      "original_text": "Tab Paracetamol 650 mg three times daily after food for 7 days",
+      "source_line_numbers": [
+        10
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,afternoon,night",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Paracetamol 650 mg three times a day, after food, for 7 days.",
+        "ta": "Paracetamol 650 mg மாத்திரையை தினமும் மூன்று முறை, உணவுக்குப் பிறகு, 7 நாட்களுக்கு சாப்பிடவும்.",
+        "hi": "Paracetamol 650 mg की गोली दिन में तीन बार, खाने के बाद, 7 दिन तक लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Rivaroxaban 10 mg",
+      "original_text": "Tab Rivaroxaban 10 mg once daily at night for 14 days",
+      "source_line_numbers": [
+        11
+      ],
+      "date_raw": null,
+      "time_of_day": "night",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Rivaroxaban 10 mg once a day at night, for 14 days.",
+        "ta": "Rivaroxaban 10 mg மாத்திரையை தினமும் ஒரு முறை இரவில், 14 நாட்களுக்கு சாப்பிடவும்.",
+        "hi": "Rivaroxaban 10 mg की गोली दिन में एक बार रात को, 14 दिन तक लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Calcium 500 mg with Vitamin D3",
+      "original_text": "Tab Calcium 500 mg with Vitamin D3 once daily in the afternoon after lunch",
+      "source_line_numbers": [
+        12
+      ],
+      "date_raw": null,
+      "time_of_day": "afternoon",
+      "confidence": 0.95,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Calcium 500 mg with Vitamin D3 once a day in the afternoon, after lunch.",
+        "ta": "Calcium 500 mg with Vitamin D3 மாத்திரையை தினமும் ஒரு முறை மதியம் உணவுக்குப் பிறகு சாப்பிடவும்.",
+        "hi": "Calcium 500 mg with Vitamin D3 की गोली दिन में एक बार दोपहर को खाने के बाद लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Pantoprazole 40 mg",
+      "original_text": "Tab Pantoprazole 40 mg once daily in the morning before food",
+      "source_line_numbers": [
+        13
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Pantoprazole 40 mg once a day in the morning, before food.",
+        "ta": "Pantoprazole 40 mg மாத்திரையை தினமும் ஒரு முறை காலையில் உணவுக்கு முன் சாப்பிடவும்.",
+        "hi": "Pantoprazole 40 mg की गोली दिन में एक बार सुबह खाने से पहले लें।"
+      }
+    },
+    {
+      "category": "wound_care",
+      "title": "Knee wound care",
+      "original_text": "Keep the knee wound dry and covered. Do not wet the dressing.",
+      "source_line_numbers": [
+        15
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "Keep the knee wound dry and covered. Do not wet the dressing.",
+        "ta": "முழங்கால் காயத்தை உலர்வாகவும் மூடியும் வைத்திருங்கள். கட்டை நனைக்க வேண்டாம்.",
+        "hi": "घुटने के घाव को सूखा और ढका रखें। पट्टी गीली न करें।"
+      }
+    },
+    {
+      "category": "wound_care",
+      "title": "Dressing change at the clinic",
+      "original_text": "Dressing change at the clinic on day 5.",
+      "source_line_numbers": [
+        16
+      ],
+      "date_raw": "on day 5",
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Get your dressing changed at the clinic on day 5.",
+        "ta": "5 ஆம் நாள் மருத்துவமனையில் கட்டை மாற்றிக்கொள்ளுங்கள்.",
+        "hi": "दिन 5 पर क्लिनिक में पट्टी बदलवाएं।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Stitch removal",
+      "original_text": "Stitch removal on day 14 at the orthopaedic clinic.",
+      "source_line_numbers": [
+        17
+      ],
+      "date_raw": "on day 14",
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Visit the orthopaedic clinic on day 14 to have the stitches removed.",
+        "ta": "14 ஆம் நாள் எலும்பு மருத்துவ கிளினிக்கில் தையல்களை அகற்றிக்கொள்ளுங்கள்.",
+        "hi": "दिन 14 पर हड्डी रोग क्लिनिक में टांके हटवाएं।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Knee surgeon review with X-ray",
+      "original_text": "Orthopaedic surgeon review after 6 weeks with a knee X-ray.",
+      "source_line_numbers": [
+        19
+      ],
+      "date_raw": "after 6 weeks",
+      "time_of_day": null,
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "See your bone surgeon (orthopaedic surgeon) after 6 weeks. You will have a knee X-ray.",
+        "ta": "6 வாரங்களுக்குப் பிறகு எலும்பு அறுவை மருத்துவரைப் (orthopaedic surgeon) பார்க்கவும். முழங்கால் X-ray எடுக்கப்படும்.",
+        "hi": "6 सप्ताह बाद हड्डी रोग सर्जन (orthopaedic surgeon) से मिलें। घुटने का X-ray होगा।"
+      }
+    },
+    {
+      "category": "test",
+      "title": "Blood test (CBC)",
+      "original_text": "Blood test (CBC) on 18 Oct 2026.",
+      "source_line_numbers": [
+        20
+      ],
+      "date_raw": "18 Oct 2026",
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": false,
+      "simple": {
+        "en": "Get a blood test (CBC) on 18 October 2026.",
+        "ta": "18 அக்டோபர் 2026 அன்று இரத்த பரிசோதனை (CBC) செய்யவும்.",
+        "hi": "18 अक्टूबर 2026 को खून की जांच (CBC) कराएं।"
+      }
+    },
+    {
+      "category": "referral",
+      "title": "Physiotherapy",
+      "original_text": "Referred to physiotherapy: 3 sessions per week for 6 weeks, starting from 14 Oct 2026.",
+      "source_line_numbers": [
+        21
+      ],
+      "date_raw": "14 Oct 2026",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "You are referred to physiotherapy: 3 sessions per week for 6 weeks, starting from 14 October 2026.",
+        "ta": "பிசியோதெரபிக்கு அனுப்பப்பட்டுள்ளீர்கள்: வாரத்திற்கு 3 முறை, 6 வாரங்கள், 14 அக்டோபர் 2026 முதல்.",
+        "hi": "आपको फिजियोथेरेपी के लिए भेजा गया है: सप्ताह में 3 सत्र, 6 सप्ताह तक, 14 अक्टूबर 2026 से।"
+      }
+    },
+    {
+      "category": "rehab",
+      "title": "Knee exercises",
+      "original_text": "Do the knee bending and straightening exercises 3 times a day as the physiotherapist showed you.",
+      "source_line_numbers": [
+        23
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Do the knee bending and straightening exercises 3 times a day, as the physiotherapist showed you.",
+        "ta": "பிசியோதெரபிஸ்ட் காட்டியபடி முழங்காலை மடக்கி நீட்டும் பயிற்சிகளை ஒரு நாளில் 3 முறை செய்யவும்.",
+        "hi": "फिजियोथेरेपिस्ट के बताए अनुसार घुटना मोड़ने और सीधा करने के व्यायाम दिन में 3 बार करें।"
+      }
+    },
+    {
+      "category": "activity",
+      "title": "Walking with a walker",
+      "original_text": "Walk with a walker for short distances. Do not climb stairs without support.",
+      "source_line_numbers": [
+        24
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Walk with a walker for short distances. Do not climb stairs without support.",
+        "ta": "நடைபயில் கருவியுடன் (walker) குறுகிய தூரம் நடக்கவும். ஆதரவு இல்லாமல் படிக்கட்டு ஏற வேண்டாம்.",
+        "hi": "छोटी दूरी के लिए वॉकर के साथ चलें। सहारे के बिना सीढ़ियां न चढ़ें।"
+      }
+    },
+    {
+      "category": "activity",
+      "title": "Sitting and leg position",
+      "original_text": "Do not sit on low chairs or cross your legs for 6 weeks.",
+      "source_line_numbers": [
+        25
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Do not sit on low chairs or cross your legs for 6 weeks.",
+        "ta": "6 வாரங்களுக்கு தாழ்வான நாற்காலிகளில் உட்கார வேண்டாம், கால்களை குறுக்காக வைக்க வேண்டாம்.",
+        "hi": "6 सप्ताह तक नीची कुर्सियों पर न बैठें और पैर क्रॉस न करें।"
+      }
+    },
+    {
+      "category": "diet",
+      "title": "Protein-rich food",
+      "original_text": "Eat protein-rich food such as dal, eggs and milk. Drink plenty of water.",
+      "source_line_numbers": [
+        27
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Eat protein-rich food such as dal, eggs and milk. Drink plenty of water.",
+        "ta": "பருப்பு, முட்டை, பால் போன்ற புரதம் நிறைந்த உணவை சாப்பிடுங்கள். நிறைய தண்ணீர் குடியுங்கள்.",
+        "hi": "दाल, अंडे और दूध जैसा प्रोटीन वाला खाना खाएं। खूब पानी पिएं।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Fever or wound problem",
+      "original_text": "Fever above 100.4 F or redness, pus, or swelling at the wound.",
+      "source_line_numbers": [
+        29
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Fever above 100.4 F, or redness, pus, or swelling at the wound, are warning signs.",
+        "ta": "100.4 F க்கு மேல் காய்ச்சல், அல்லது காயத்தில் சிவப்பு, சீழ், வீக்கம் ஆகியவை எச்சரிக்கை அறிகுறிகள்.",
+        "hi": "100.4 F से ऊपर बुखार, या घाव पर लालिमा, मवाद या सूजन चेतावनी के संकेत हैं।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Calf pain or breathlessness",
+      "original_text": "Calf pain, swelling of the leg, or sudden shortness of breath.",
+      "source_line_numbers": [
+        30
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Calf pain, swelling of the leg, or sudden shortness of breath are warning signs.",
+        "ta": "கெண்டைக்கால் வலி, காலில் வீக்கம் அல்லது திடீர் மூச்சுத் திணறல் ஆகியவை எச்சரிக்கை அறிகுறிகள்.",
+        "hi": "पिंडली में दर्द, पैर में सूजन या अचानक सांस फूलना चेतावनी के संकेत हैं।"
+      }
+    }
+  ]
+}

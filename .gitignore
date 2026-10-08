@@ -1,0 +1,42 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Database (demo data is rebuilt on start)
+*.db
+*.db-journal
+*.sqlite3
+
+# Node and build output
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+npm-debug.log*
+
+# Logs and temp
+*.log
+backend.log
+frontend.log
+npm-install.log
+_shots/
+.playwright-mcp/
+_*.py
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude Code local files
+.claude/

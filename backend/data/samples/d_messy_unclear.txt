@@ -1,0 +1,32 @@
+GREEN LEAF HOSPITAL, CHENNAI
+DISCHARGE SUMMARY (SYNTHETIC DOCUMENT FOR DEMO. NOT A REAL PATIENT.)
+Patient: Mrs. Lakshmi Narayanan (synthetic)
+Age/Sex: 71 / Female
+Date of admission: 08 Oct 2026
+Date of discharge: 12 Oct 2026
+Diagnosis: Chest infection with high blood pressure
+
+MEDICATIONS
+Tab Amlodipine 5 mg once daily in the morning, may increase to 10 mg if BP stays high
+Tab Azithromycin 500 mg once daily for 3 days. Stop when better.
+Cough syrup 10 ml as needed for cough
+Tab Paracetamol 650 mg if required for fever
+Stop the old BP tablet. Continue the old BP tablet in the morning.
+Tab Pantoprazole 40 mg once daily in the morning before food
+
+FOLLOW-UP
+See Dr. Mehta, physician, at Green Leaf Hospital on 20 Oct 2026.
+Come for a review sometime next week.
+Chest X-ray to be done, date to be decided.
+Review with the chest specialist after the reports.
+Blood test for kidney function when the doctor advises.
+Refer to a dietician as needed.
+
+CARE AT HOME
+Rest at home. Activity can be adjusted as per comfort.
+Avoid salt in food.
+Drink plenty of fluids, but restrict fluids if there is leg swelling.
+
+WARNING SIGNS
+Fever returning, fast breathing, or bluish lips.
+Feeling very dizzy or confused.

@@ -1,0 +1,293 @@
+{
+  "items": [
+    {
+      "category": "medication",
+      "title": "Amlodipine 5 mg",
+      "original_text": "Tab Amlodipine 5 mg once daily in the morning, may increase to 10 mg if BP stays high",
+      "source_line_numbers": [
+        9
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.8,
+      "expect_review": true,
+      "simple": {
+        "en": "Amlodipine 5 mg once a day in the morning. The note says the dose may go up to 10 mg if BP stays high.",
+        "ta": "Amlodipine 5 mg தினமும் ஒரு முறை காலையில். BP அதிகமாக இருந்தால் மருந்தளவு 10 mg ஆக உயரலாம் என்று குறிப்பு கூறுகிறது.",
+        "hi": "Amlodipine 5 mg दिन में एक बार सुबह। नोट कहता है कि BP ज़्यादा रहे तो खुराक 10 mg तक बढ़ सकती है।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Azithromycin 500 mg",
+      "original_text": "Tab Azithromycin 500 mg once daily for 3 days. Stop when better.",
+      "source_line_numbers": [
+        10
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.85,
+      "expect_review": true,
+      "simple": {
+        "en": "Azithromycin 500 mg once a day for 3 days. The note says to stop when better.",
+        "ta": "Azithromycin 500 mg தினமும் ஒரு முறை, 3 நாட்களுக்கு. நன்றாக ஆனதும் நிறுத்தலாம் என்று குறிப்பு கூறுகிறது.",
+        "hi": "Azithromycin 500 mg दिन में एक बार, 3 दिन तक। नोट कहता है कि ठीक होने पर बंद करें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Cough syrup 10 ml",
+      "original_text": "Cough syrup 10 ml as needed for cough",
+      "source_line_numbers": [
+        11
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.8,
+      "expect_review": true,
+      "simple": {
+        "en": "Cough syrup 10 ml as needed for cough.",
+        "ta": "இருமலுக்கு தேவைப்பட்டால் இருமல் மருந்து 10 ml.",
+        "hi": "खांसी के लिए ज़रूरत पड़ने पर खांसी की दवा 10 ml।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Paracetamol 650 mg",
+      "original_text": "Tab Paracetamol 650 mg if required for fever",
+      "source_line_numbers": [
+        12
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.8,
+      "expect_review": true,
+      "simple": {
+        "en": "Paracetamol 650 mg if required for fever.",
+        "ta": "காய்ச்சலுக்கு தேவைப்பட்டால் Paracetamol 650 mg.",
+        "hi": "बुखार के लिए ज़रूरत पड़ने पर Paracetamol 650 mg।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Old BP tablet",
+      "original_text": "Stop the old BP tablet. Continue the old BP tablet in the morning.",
+      "source_line_numbers": [
+        13
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.75,
+      "expect_review": true,
+      "simple": {
+        "en": "One line says to stop the old BP tablet. The next line says to continue it in the morning.",
+        "ta": "பழைய BP மாத்திரையை நிறுத்த வேண்டும் என்று ஒரு வரி கூறுகிறது. அடுத்த வரி காலையில் தொடர வேண்டும் என்று கூறுகிறது.",
+        "hi": "एक पंक्ति पुरानी BP गोली बंद करने को कहती है। अगली पंक्ति इसे सुबह जारी रखने को कहती है।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Pantoprazole 40 mg",
+      "original_text": "Tab Pantoprazole 40 mg once daily in the morning before food",
+      "source_line_numbers": [
+        14
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.95,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Pantoprazole 40 mg once a day in the morning, before food.",
+        "ta": "Pantoprazole 40 mg மாத்திரையை தினமும் ஒரு முறை காலையில் உணவுக்கு முன் சாப்பிடவும்.",
+        "hi": "Pantoprazole 40 mg की गोली दिन में एक बार सुबह खाने से पहले लें।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Visit Dr. Mehta (physician)",
+      "original_text": "See Dr. Mehta, physician, at Green Leaf Hospital on 20 Oct 2026.",
+      "source_line_numbers": [
+        16
+      ],
+      "date_raw": "on 20 Oct 2026",
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": false,
+      "simple": {
+        "en": "See Dr. Mehta, the physician, at Green Leaf Hospital on 20 October 2026.",
+        "ta": "20 அக்டோபர் 2026 அன்று Green Leaf Hospital-இல் மருத்துவர் Mehta (physician) அவர்களைப் பார்க்கவும்.",
+        "hi": "20 अक्टूबर 2026 को Green Leaf Hospital में डॉ. Mehta (physician) से मिलें।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Review visit",
+      "original_text": "Come for a review sometime next week.",
+      "source_line_numbers": [
+        17
+      ],
+      "date_raw": "sometime next week",
+      "time_of_day": null,
+      "confidence": 0.7,
+      "expect_review": true,
+      "simple": {
+        "en": "Come for a review sometime next week. The exact day is not given.",
+        "ta": "அடுத்த வாரத்தில் ஏதாவது ஒரு நாள் மறுபரிசோதனைக்கு வரவும். சரியான நாள் கொடுக்கப்படவில்லை.",
+        "hi": "अगले सप्ताह किसी दिन जांच के लिए आएं। सटीक दिन नहीं दिया गया है।"
+      }
+    },
+    {
+      "category": "test",
+      "title": "Chest X-ray",
+      "original_text": "Chest X-ray to be done, date to be decided.",
+      "source_line_numbers": [
+        18
+      ],
+      "date_raw": "date to be decided",
+      "time_of_day": null,
+      "confidence": 0.6,
+      "expect_review": true,
+      "simple": {
+        "en": "A chest X-ray is to be done. The date is still to be decided.",
+        "ta": "மார்பு X-ray எடுக்க வேண்டும். தேதி இன்னும் முடிவு செய்யப்படவில்லை.",
+        "hi": "छाती का X-ray कराना है। तारीख अभी तय नहीं है।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Chest specialist review",
+      "original_text": "Review with the chest specialist after the reports.",
+      "source_line_numbers": [
+        19
+      ],
+      "date_raw": "after the reports",
+      "time_of_day": null,
+      "confidence": 0.55,
+      "expect_review": true,
+      "simple": {
+        "en": "Review with the chest specialist after the reports are ready.",
+        "ta": "அறிக்கைகள் தயாரான பிறகு நெஞ்சு மருத்துவ நிபுணரிடம் மறுபரிசோதனை செய்யவும்.",
+        "hi": "रिपोर्ट आने के बाद छाती रोग विशेषज्ञ से जांच कराएं।"
+      }
+    },
+    {
+      "category": "test",
+      "title": "Kidney function blood test",
+      "original_text": "Blood test for kidney function when the doctor advises.",
+      "source_line_numbers": [
+        20
+      ],
+      "date_raw": "when the doctor advises",
+      "time_of_day": null,
+      "confidence": 0.6,
+      "expect_review": true,
+      "simple": {
+        "en": "A blood test for kidney function is planned. The doctor will say when.",
+        "ta": "சிறுநீரக செயல்பாட்டிற்கான இரத்த பரிசோதனை திட்டமிடப்பட்டுள்ளது. எப்போது என்று மருத்துவர் கூறுவார்.",
+        "hi": "किडनी की कार्यक्षमता की खून जांच तय है। कब कराना है, डॉक्टर बताएंगे।"
+      }
+    },
+    {
+      "category": "referral",
+      "title": "Dietician",
+      "original_text": "Refer to a dietician as needed.",
+      "source_line_numbers": [
+        21
+      ],
+      "date_raw": "as needed",
+      "time_of_day": null,
+      "confidence": 0.6,
+      "expect_review": true,
+      "simple": {
+        "en": "A visit to a dietician is mentioned, as needed.",
+        "ta": "தேவைப்பட்டால் உணவு நிபுணரைப் (dietician) பார்க்க வேண்டும் என்று குறிப்பிடப்பட்டுள்ளது.",
+        "hi": "ज़रूरत पड़ने पर आहार विशेषज्ञ (dietician) से मिलने का उल्लेख है।"
+      }
+    },
+    {
+      "category": "activity",
+      "title": "Rest at home",
+      "original_text": "Rest at home. Activity can be adjusted as per comfort.",
+      "source_line_numbers": [
+        23
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.7,
+      "expect_review": true,
+      "simple": {
+        "en": "Rest at home. The note says activity can be adjusted as per comfort.",
+        "ta": "வீட்டில் ஓய்வெடுக்கவும். வசதிக்கு ஏற்ப செயல்பாட்டை மாற்றிக்கொள்ளலாம் என்று குறிப்பு கூறுகிறது.",
+        "hi": "घर पर आराम करें। नोट कहता है कि आराम के अनुसार गतिविधि बदली जा सकती है।"
+      }
+    },
+    {
+      "category": "diet",
+      "title": "Avoid salt",
+      "original_text": "Avoid salt in food.",
+      "source_line_numbers": [
+        24
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "Avoid salt in food.",
+        "ta": "உணவில் உப்பைத் தவிர்க்கவும்.",
+        "hi": "खाने में नमक से बचें।"
+      }
+    },
+    {
+      "category": "diet",
+      "title": "Fluids",
+      "original_text": "Drink plenty of fluids, but restrict fluids if there is leg swelling.",
+      "source_line_numbers": [
+        25
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.75,
+      "expect_review": true,
+      "simple": {
+        "en": "One line says to drink plenty of fluids and also to restrict fluids if there is leg swelling.",
+        "ta": "நிறைய திரவங்கள் குடிக்க வேண்டும் என்றும், கால் வீக்கம் இருந்தால் திரவங்களைக் கட்டுப்படுத்த வேண்டும் என்றும் ஒரு வரி கூறுகிறது.",
+        "hi": "एक पंक्ति खूब तरल पीने को कहती है और पैर में सूजन हो तो तरल सीमित करने को भी कहती है।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Fever, fast breathing, bluish lips",
+      "original_text": "Fever returning, fast breathing, or bluish lips.",
+      "source_line_numbers": [
+        27
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Fever returning, fast breathing, or bluish lips are warning signs.",
+        "ta": "மீண்டும் காய்ச்சல், வேகமான சுவாசம் அல்லது உதடுகள் நீல நிறமாதல் ஆகியவை எச்சரிக்கை அறிகுறிகள்.",
+        "hi": "बुखार का लौटना, तेज़ सांस या होंठ नीले पड़ना चेतावनी के संकेत हैं।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Dizziness or confusion",
+      "original_text": "Feeling very dizzy or confused.",
+      "source_line_numbers": [
+        28
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Feeling very dizzy or confused is a warning sign.",
+        "ta": "மிகவும் தலைசுற்றல் அல்லது குழப்பம் எச்சரிக்கை அறிகுறி.",
+        "hi": "बहुत चक्कर आना या भ्रम चेतावनी का संकेत है।"
+      }
+    }
+  ]
+}

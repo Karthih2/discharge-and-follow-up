@@ -1,0 +1,259 @@
+{
+  "items": [
+    {
+      "category": "medication",
+      "title": "Aspirin 75 mg",
+      "original_text": "Tab Aspirin 75 mg once daily in the morning after food",
+      "source_line_numbers": [
+        10
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Aspirin 75 mg once a day in the morning, after food.",
+        "ta": "Aspirin 75 mg மாத்திரையை தினமும் ஒரு முறை காலையில் உணவுக்குப் பிறகு சாப்பிடவும்.",
+        "hi": "Aspirin 75 mg की गोली दिन में एक बार सुबह खाने के बाद लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Clopidogrel 75 mg",
+      "original_text": "Tab Clopidogrel 75 mg once daily in the morning",
+      "source_line_numbers": [
+        11
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Clopidogrel 75 mg once a day in the morning.",
+        "ta": "Clopidogrel 75 mg மாத்திரையை தினமும் ஒரு முறை காலையில் சாப்பிடவும்.",
+        "hi": "Clopidogrel 75 mg की गोली दिन में एक बार सुबह लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Atorvastatin 40 mg",
+      "original_text": "Tab Atorvastatin 40 mg once daily at night",
+      "source_line_numbers": [
+        12
+      ],
+      "date_raw": null,
+      "time_of_day": "night",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Atorvastatin 40 mg once a day at night.",
+        "ta": "Atorvastatin 40 mg மாத்திரையை தினமும் ஒரு முறை இரவில் சாப்பிடவும்.",
+        "hi": "Atorvastatin 40 mg की गोली दिन में एक बार रात को लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Metoprolol 25 mg",
+      "original_text": "Tab Metoprolol 25 mg twice daily, morning and night",
+      "source_line_numbers": [
+        13
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,night",
+      "confidence": 0.95,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Metoprolol 25 mg twice a day, once in the morning and once at night.",
+        "ta": "Metoprolol 25 mg மாத்திரையை தினமும் இரண்டு முறை, காலையிலும் இரவிலும் சாப்பிடவும்.",
+        "hi": "Metoprolol 25 mg की गोली दिन में दो बार, सुबह और रात को लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Pantoprazole 40 mg",
+      "original_text": "Tab Pantoprazole 40 mg once daily in the morning before food",
+      "source_line_numbers": [
+        14
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Pantoprazole 40 mg once a day in the morning, before food.",
+        "ta": "Pantoprazole 40 mg மாத்திரையை தினமும் ஒரு முறை காலையில் உணவுக்கு முன் சாப்பிடவும்.",
+        "hi": "Pantoprazole 40 mg की गोली दिन में एक बार सुबह खाने से पहले लें।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Heart doctor visit with ECG",
+      "original_text": "Review with the cardiologist at City Heart Institute after 2 weeks with an ECG.",
+      "source_line_numbers": [
+        16
+      ],
+      "date_raw": "after 2 weeks",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "Visit the heart doctor (cardiologist) at City Heart Institute after 2 weeks. You will have an ECG test.",
+        "ta": "2 வாரங்களுக்குப் பிறகு City Heart Institute-இல் இதய மருத்துவரைப் (cardiologist) பார்க்கவும். ECG பரிசோதனை செய்யப்படும்.",
+        "hi": "2 सप्ताह बाद City Heart Institute में हृदय रोग विशेषज्ञ (cardiologist) से मिलें। ECG जांच होगी।"
+      }
+    },
+    {
+      "category": "test",
+      "title": "Lipid profile and blood sugar test",
+      "original_text": "Fasting lipid profile and blood sugar test after 4 weeks.",
+      "source_line_numbers": [
+        17
+      ],
+      "date_raw": "after 4 weeks",
+      "time_of_day": null,
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "Get a blood test for fats (lipid profile) and sugar after 4 weeks. Do not eat before the test.",
+        "ta": "4 வாரங்களுக்குப் பிறகு இரத்தத்தில் கொழுப்பு (lipid profile) மற்றும் சர்க்கரை பரிசோதனை செய்யவும். பரிசோதனைக்கு முன் சாப்பிட வேண்டாம்.",
+        "hi": "4 सप्ताह बाद खून में चर्बी (lipid profile) और शुगर की जांच कराएं। जांच से पहले कुछ न खाएं।"
+      }
+    },
+    {
+      "category": "referral",
+      "title": "Cardiac rehabilitation clinic",
+      "original_text": "Referred to the cardiac rehabilitation clinic for a supervised walking program after 6 weeks.",
+      "source_line_numbers": [
+        18
+      ],
+      "date_raw": "after 6 weeks",
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "You are referred to a cardiac rehabilitation clinic for a supervised walking program, after 6 weeks.",
+        "ta": "6 வாரங்களுக்குப் பிறகு, கண்காணிப்புடன் நடைப்பயிற்சி செய்ய இதய மறுவாழ்வு மையத்திற்கு (cardiac rehabilitation) அனுப்பப்பட்டுள்ளீர்கள்.",
+        "hi": "आपको 6 सप्ताह बाद निगरानी में चलने के कार्यक्रम के लिए हृदय पुनर्वास क्लिनिक (cardiac rehabilitation) भेजा गया है।"
+      }
+    },
+    {
+      "category": "wound_care",
+      "title": "Wrist wound care",
+      "original_text": "Keep the wrist puncture site dry and clean for 3 days.",
+      "source_line_numbers": [
+        19
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "Keep the wrist puncture site dry and clean for 3 days.",
+        "ta": "கை மணிக்கட்டில் ஊசி போட்ட இடத்தை 3 நாட்கள் உலர்வாகவும் சுத்தமாகவும் வைத்திருங்கள்.",
+        "hi": "कलाई के पंक्चर वाले स्थान को 3 दिन सूखा और साफ रखें।"
+      }
+    },
+    {
+      "category": "diet",
+      "title": "Low salt, low fat diet",
+      "original_text": "Eat a low salt, low fat diet. Avoid fried and oily food.",
+      "source_line_numbers": [
+        21
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "Eat food with low salt and low fat. Avoid fried and oily food.",
+        "ta": "உப்பு மற்றும் கொழுப்பு குறைவான உணவை சாப்பிடுங்கள். வறுத்த மற்றும் எண்ணெய் அதிகமான உணவைத் தவிர்க்கவும்.",
+        "hi": "कम नमक और कम चर्बी वाला खाना खाएं। तला हुआ और तेलीय खाना न खाएं।"
+      }
+    },
+    {
+      "category": "activity",
+      "title": "Slow daily walking",
+      "original_text": "Walk slowly for 10 minutes twice a day and add a few minutes each week.",
+      "source_line_numbers": [
+        22
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "Walk slowly for 10 minutes, two times a day. Add a few minutes each week.",
+        "ta": "மெதுவாக 10 நிமிடங்கள், ஒரு நாளில் இரண்டு முறை நடக்கவும். ஒவ்வொரு வாரமும் சில நிமிடங்கள் கூட்டவும்.",
+        "hi": "धीरे-धीरे 10 मिनट चलें, दिन में दो बार। हर सप्ताह कुछ मिनट बढ़ाएं।"
+      }
+    },
+    {
+      "category": "activity",
+      "title": "No heavy lifting or driving",
+      "original_text": "Do not lift heavy weights or drive for 2 weeks.",
+      "source_line_numbers": [
+        23
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Do not lift heavy weights or drive for 2 weeks.",
+        "ta": "2 வாரங்களுக்கு கனமான பொருட்களைத் தூக்கவோ வாகனம் ஓட்டவோ வேண்டாம்.",
+        "hi": "2 सप्ताह तक भारी वजन न उठाएं और गाड़ी न चलाएं।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Chest pain or pressure",
+      "original_text": "Chest pain or pressure lasting more than 15 minutes. Call 108 at once.",
+      "source_line_numbers": [
+        25
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Call 108 at once if you have chest pain or pressure that lasts more than 15 minutes.",
+        "ta": "மார்பில் வலி அல்லது அழுத்தம் 15 நிமிடங்களுக்கு மேல் நீடித்தால் உடனே 108 ஐ அழைக்கவும்.",
+        "hi": "सीने में दर्द या दबाव 15 मिनट से ज़्यादा रहे तो तुरंत 108 पर कॉल करें।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Sudden breathlessness or fainting",
+      "original_text": "Sudden breathlessness, heavy sweating, or fainting.",
+      "source_line_numbers": [
+        26
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Sudden breathlessness, heavy sweating, or fainting are warning signs.",
+        "ta": "திடீர் மூச்சுத் திணறல், அதிக வியர்வை அல்லது மயக்கம் ஆகியவை எச்சரிக்கை அறிகுறிகள்.",
+        "hi": "अचानक सांस फूलना, बहुत पसीना आना या बेहोशी चेतावनी के संकेत हैं।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Problem at the wrist site",
+      "original_text": "Swelling, bleeding, or severe pain at the wrist puncture site.",
+      "source_line_numbers": [
+        27
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Swelling, bleeding, or severe pain at the wrist puncture site are warning signs.",
+        "ta": "கை மணிக்கட்டில் ஊசி போட்ட இடத்தில் வீக்கம், இரத்தப்போக்கு அல்லது கடுமையான வலி ஆகியவை எச்சரிக்கை அறிகுறிகள்.",
+        "hi": "कलाई के पंक्चर वाले स्थान पर सूजन, खून बहना या तेज़ दर्द चेतावनी के संकेत हैं।"
+      }
+    }
+  ]
+}
