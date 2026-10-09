@@ -4,7 +4,7 @@ import re
 from datetime import date, datetime
 from typing import Optional
 
-import httpx
+
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
@@ -17,7 +17,8 @@ from ..agents.ingest import pdf_to_text
 from ..agents.pipeline import run_pipeline
 from ..agents.privacy import mask_pii
 from ..auth import current_user, get_doc_for, require
-from ..db import audit, get_session, sim_today
+from ..voices import speak_text
+from ..db import audit, clock_now, get_session, sim_today
 from ..models import (AuditLog, CallbackRequest, Document, Item, ItemText, ProviderMatch, ReviewQueue, SourceLine,
                       Task, User)
 from .plans import build_ics, build_plan, doc_dict
@@ -68,6 +69,7 @@ def _create(s: Session, user: User, body: DocIn) -> dict:
         city=body.city or meta.get("city") or guess["city"],
         pincode=body.pincode or meta.get("pincode") or guess["pincode"],
         preferred_language=body.preferred_language or user.language,
+        department=meta.get("department") or samples.DEPARTMENT.get(body.sample_key or "") or routing.guess_department(text),
         raw_text=masked, pii_check_passed=True)
     s.add(doc)
     s.commit()
@@ -191,7 +193,7 @@ def patch_task(task_id: int, body: TaskIn, u: User = Depends(require("patient", 
     if body.status not in ("Pending", "Completed"):
         raise HTTPException(422, "status must be Pending or Completed")
     task.status = body.status
-    task.completed_at = datetime.now() if body.status == "Completed" else None
+    task.completed_at = clock_now() if body.status == "Completed" else None
     s.add(task)
     s.commit()
     audit(s, task.document_id, f"user:{u.id}", "task_" + body.status.lower(), {"task_id": task.id, "title": task.title, "role": u.role})
@@ -219,20 +221,14 @@ def audio(item_id: int, lang: str = Query("en", pattern=LANG_PAT), u: User = Dep
         raise HTTPException(409, "This item is waiting for doctor review, so it cannot be read aloud yet")
     texts = {t.language: t for t in s.exec(select(ItemText).where(ItemText.item_id == item.id))}
     t = texts.get(lang) if texts.get(lang) and texts[lang].numbers_verified else texts.get("en")
+    spoken = t.language if t else "en"  # the voice matches the language of the text that is actually read
     text = t.simple_text if t else item.original_text
-    key = os.getenv("ELEVENLABS_API_KEY")
-    if not key:
-        raise HTTPException(503, "Voice is not set up. Add ELEVENLABS_API_KEY to backend/.env")
-    voice = os.getenv("ELEVENLABS_VOICE_ID", "21m00Tcm4TlvDq8ikWAM")
     try:
-        r = httpx.post(f"https://api.elevenlabs.io/v1/text-to-speech/{voice}", timeout=30,
-                       headers={"xi-api-key": key, "accept": "audio/mpeg"},
-                       json={"text": text, "model_id": "eleven_multilingual_v2"})
-        r.raise_for_status()
+        data = speak_text(text, spoken)
     except Exception as e:
         raise HTTPException(502, f"Voice service failed: {type(e).__name__}")
     audit(s, doc.id, f"user:{u.id}", "listened", {"item_id": item.id, "lang": lang})
-    return Response(r.content, media_type="audio/mpeg")
+    return Response(data, media_type="audio/mpeg")
 
 
 class CallbackIn(BaseModel):

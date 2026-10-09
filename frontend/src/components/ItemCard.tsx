@@ -1,13 +1,12 @@
 import { CalendarBlank, CheckCircle, Circle, Flag, Lock, MapPin, PhoneCall, SpeakerHigh } from "@phosphor-icons/react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m as motion } from "motion/react";
 import { useState } from "react";
 import { fmt } from "../i18n/strings";
 import { api } from "../lib/api";
 import { useLang } from "../lib/lang";
 import { fmtDate, useMotionT } from "../lib/motion";
-import { burst } from "../lib/ripple";
 import type { Plan, PlanItem, PlanTask } from "../lib/types";
-import { CategoryIcon, DrawCheck } from "./Fx";
+import { CategoryIcon } from "./Fx";
 import { SLOT_ICON } from "./Icons";
 import { ProviderMap } from "./ProviderMap";
 import { StatusBadge } from "./StatusBadge";
@@ -25,7 +24,7 @@ interface Props {
   large?: boolean;
 }
 
-export function MedicineCard({ item }: { item: PlanItem }) {
+function MedicineCard({ item }: { item: PlanItem }) {
   const { t } = useLang();
   const mt = useMotionT();
   const m = item.med!;
@@ -119,7 +118,7 @@ export function ItemCard({ item, plan, task, onTask, onSource, onRefresh, previe
                 <SpeakerHigh size={16} weight="duotone" aria-hidden /> {t("listen")}
               </button>
               {task && canAct && (
-                <button className={btn} disabled={locked} onClick={(e) => { if (task.status === "Pending") burst(e.currentTarget); onTask!(task.id, task.status === "Pending" ? "Completed" : "Pending"); }}>
+                <button className={btn} disabled={locked} onClick={() => onTask!(task.id, task.status === "Pending" ? "Completed" : "Pending")}>
                   {task.status === "Pending" ? <Circle size={16} aria-hidden /> : <CheckCircle size={16} weight="fill" aria-hidden />}
                   {task.status === "Pending" ? t("markDone") : t("undo")}
                 </button>
@@ -165,7 +164,7 @@ export function ItemCard({ item, plan, task, onTask, onSource, onRefresh, previe
                 <CalendarBlank size={14} weight="duotone" aria-hidden /> {fmtDate(item.date_resolved!, { day: "numeric", month: "short" })}
               </span>
             )}
-            {task?.status === "Completed" && <DrawCheck />}
+            {task?.status === "Completed" && <CheckCircle size={22} weight="fill" className="text-primary" aria-hidden />}
           </div>
 
           {large && actions}

@@ -19,8 +19,9 @@ export default {
       "attention-tint": "var(--attention-tint)",
     },
     fontFamily: {
-      heading: ["Fraunces", "Georgia", "serif"],
-      body: ['"Source Sans 3"', "system-ui", "sans-serif"],
+      heading: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+      mono: ["\"IBM Plex Mono\"", "ui-monospace", "monospace"],
+      body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
     },
     extend: {},
   },

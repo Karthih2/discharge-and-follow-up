@@ -1,9 +1,10 @@
 import { X } from "@phosphor-icons/react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m as motion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { api } from "../lib/api";
-import { useLoad, useMotionT } from "../lib/motion";
-import { Skeleton } from "./Skeleton";
+import { useMotionT } from "../lib/motion";
+import { useQuery } from "../lib/query";
+import { Skeleton } from "./ui";
 
 interface Props {
   docId: number | null;
@@ -15,7 +16,7 @@ interface Props {
 /** Shows the original summary with the cited lines highlighted and scrolled into view. */
 export function SourceDrawer({ docId, cited, title, onClose }: Props) {
   const mt = useMotionT();
-  const { data, error } = useLoad(() => (docId ? api.source(docId) : Promise.resolve([])), [docId]);
+  const { data, error } = useQuery(docId ? `source/${docId}` : null, () => api.source(docId!));
   const first = useRef<HTMLLIElement | null>(null);
 
   useEffect(() => {

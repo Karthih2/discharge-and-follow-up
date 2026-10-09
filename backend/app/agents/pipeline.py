@@ -6,7 +6,7 @@ from datetime import datetime
 from sqlmodel import Session, delete, select
 
 from .. import settings
-from ..db import audit, engine, get_setting
+from ..db import audit, clock_now, get_setting, new_session
 from ..models import (CaregiverAlert, Document, Item, ItemText, PipelineRun, ProviderMatch, Reminder,
                       ReviewQueue, SourceLine, Task)
 from .. import routing
@@ -66,8 +66,7 @@ def step_ingest(s, doc, ctx):
     for no, text in to_lines(doc.raw_text):
         row = SourceLine(document_id=doc.id, line_no=no, text=text)
         s.add(row)
-        s.commit()
-        s.refresh(row)
+        s.flush()
         ctx["lines"][no] = text
         ctx["line_ids"][no] = row.id
     return f"{len(ctx['lines'])} lines numbered", False
@@ -90,8 +89,7 @@ def step_verify(s, doc, ctx):
                     source_line_ids=[ctx["line_ids"][n] for n in v["valid_lines"]], date_raw=ex.date_raw,
                     date_resolved=v["date_resolved"], time_of_day=ex.time_of_day, confidence=ex.confidence)
         s.add(item)
-        s.commit()
-        s.refresh(item)
+        s.flush()
         bad += bool(v["reasons"])
         ctx["dicts"].append({"id": item.id, "category": ex.category, "original_text": ex.original_text,
                              "date_raw": ex.date_raw, "date_resolved": v["date_resolved"],
@@ -179,8 +177,9 @@ FUNCS = {"privacy": step_privacy, "ingest": step_ingest, "extract": step_extract
          "escalate": step_escalate}
 
 
-def run_pipeline(doc_id: int):
-    with Session(engine) as s:
+def run_pipeline(doc_id: int, skip: tuple[str, ...] = ()):
+    """skip: step keys to leave out. The demo seed plans tasks itself, after it has aged the reviews."""
+    with new_session() as s:
         doc = s.get(Document, doc_id)
         if not doc:
             yield {"step": "error", "message": "Document not found"}
@@ -188,8 +187,9 @@ def run_pipeline(doc_id: int):
         reset_document(s, doc_id)
         audit(s, doc_id, "system", "pipeline_started", {"mock": settings.mock_llm()})
         ctx: dict = {}
-        yield {"step": "start", "steps": [{"key": k, "label": l} for k, l in STEPS]}
-        for key, label in STEPS:
+        steps = [(k, l) for k, l in STEPS if k not in skip]
+        yield {"step": "start", "steps": [{"key": k, "label": l} for k, l in steps]}
+        for key, label in steps:
             run = PipelineRun(document_id=doc_id, step=key, state="running")
             s.add(run)
             s.commit()
@@ -199,14 +199,14 @@ def run_pipeline(doc_id: int):
                 message, flagged = FUNCS[key](s, doc, ctx)
             except Exception as e:
                 log.exception("Step %s failed", key)
-                run.state, run.message, run.finished_at = "failed", str(e)[:300], datetime.now()
+                run.state, run.message, run.finished_at = "failed", str(e)[:300], clock_now()
                 s.add(run)
                 s.commit()
                 audit(s, doc_id, "system", "pipeline_failed", {"step": key, "error": str(e)[:300]})
                 yield {"step": key, "state": "failed", "label": label, "message": "This step failed. Please try again."}
                 yield {"step": "error", "message": f"Step '{label}' failed"}
                 return
-            run.state, run.message, run.finished_at = ("flagged" if flagged else "done"), message, datetime.now()
+            run.state, run.message, run.finished_at = ("flagged" if flagged else "done"), message, clock_now()
             s.add(run)
             s.commit()
             n, nr = _counts(s, doc_id)

@@ -7,7 +7,7 @@ import pytest
 PW = "demo1234"
 
 
-STAFF = {"meera", "arjun", "sana", "vikram", "admin"}
+STAFF = {"meera", "arjun", "sana", "vikram", "kavya", "imran", "admin"}
 
 
 def login(client, who):
@@ -88,7 +88,7 @@ def test_register(client):
 # ---------- patient flow ----------
 def test_samples_create_and_masking(client):
     h = login(client, "ramesh")
-    assert [x["key"] for x in client.get("/api/samples", headers=h).json()] == ["a", "b", "c", "d"]
+    assert [x["key"] for x in client.get("/api/samples", headers=h).json()] == list("abcdefgh")
     r = client.post("/api/documents", json={"text": "Patient: Test (synthetic)\nCall 98765 43210 or a@b.com\nTab X 5 mg"}, headers=h)
     assert {m["kind"] for m in r.json()["masked"]} == {"mobile", "email"}
     assert client.post("/api/documents", json={}, headers=h).status_code == 422
@@ -149,7 +149,7 @@ def test_task_status_and_ics(client):
 def test_providers_and_matches(client):
     doc_id, h, _ = make_doc(client, "sunita", "b")
     all_p = client.get("/api/providers", headers=h).json()
-    assert len(all_p) == 60 and all(p["synthetic"] for p in all_p)
+    assert len(all_p) == 150 and all(p["synthetic"] for p in all_p)
     assert all(p["city"] == "Delhi" for p in client.get("/api/providers?city=Delhi", headers=h).json())
     assert all(p["type"] == "lab" for p in client.get("/api/providers?type=lab", headers=h).json())
     plan = client.get(f"/api/documents/{doc_id}/plan", headers=h).json()
@@ -157,14 +157,14 @@ def test_providers_and_matches(client):
     assert 1 <= len(physio["matches"]) <= 3 and physio["matches"][0]["provider"]["type"] == "physio"
 
 
-def test_voice_blocked_until_reviewed_and_needs_key(client, monkeypatch):
-    monkeypatch.delenv("ELEVENLABS_API_KEY", raising=False)
+def test_voice_blocked_until_reviewed(client, monkeypatch):
+    monkeypatch.setattr("app.routes.documents.speak_text", lambda text, lang: b"mp3")
     doc_id, h, _ = make_doc(client)
     plan = client.get(f"/api/documents/{doc_id}/plan", headers=h).json()
     ok = next(i for i in plan["items"] if i["status"] == "Pending")
     held = next(i for i in plan["items"] if i["status"] == "Needs Review")
     assert client.get(f"/api/items/{held['id']}/audio", headers=h).status_code == 409
-    assert client.get(f"/api/items/{ok['id']}/audio", headers=h).status_code == 503  # no key set
+    assert client.get(f"/api/items/{ok['id']}/audio", headers=h).status_code == 200
 
 
 # ---------- doctor review ----------
@@ -178,8 +178,8 @@ def test_doctor_review_flow_and_visibility(client):
     mine = next(x for x in (q1 + q2) if x["item"]["title"] == "Amlodipine 5 mg" and x["document_id"] == doc_id)
     doctor_h = meera if mine in q1 else arjun
     assert mine["item"]["original_text"] and mine["assigned_doctor"]
-    ids = [x["id"] for x in q1]
-    assert ids == sorted(ids)  # oldest first
+    stamps = [x["created_at"] for x in q1]
+    assert stamps == sorted(stamps)  # oldest first
     assert mine["codes"] and mine["reason_plain"]
     # a doctor who is neither assigned nor backup cannot resolve it
     outsider = next(w for w in ("sana", "vikram", "meera", "arjun")
@@ -374,4 +374,4 @@ def test_demo_endpoints_are_off_by_default_and_work_when_on(client, monkeypatch)
     # reset wipes and reloads the demo data
     assert client.post("/api/demo/reset").json()["ok"] is True
     adm = login(client, "admin")
-    assert client.get("/api/admin/overview", headers=adm).json()["plans"] == 2
+    assert client.get("/api/admin/overview", headers=adm).json()["plans"] == 20

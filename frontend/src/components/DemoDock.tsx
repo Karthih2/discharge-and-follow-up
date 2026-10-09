@@ -1,8 +1,9 @@
 import { ArrowsClockwise, CaretUp, FastForward, MaskHappy } from "@phosphor-icons/react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m as motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { api, tokenKey, type Portal } from "../lib/api";
 import { useMotionT } from "../lib/motion";
+import { Button } from ".//ui";
 
 type Persona = { key: string; name: string; role: string; path: string; blurb: string };
 
@@ -75,21 +76,21 @@ export function DemoDock() {
               </div>
             ))}
             <div className="flex flex-wrap gap-2 border-t border-line pt-2">
-              <button className="btn btn-quiet btn-sm" disabled={!!busy} onClick={() => run("clock", async () => { const c = await api.moveClock({ days: 3 }); setToday(c.today); window.dispatchEvent(new Event("cb-plan-refresh")); })}>
+              <Button look="quiet" small disabled={!!busy} onClick={() => run("clock", async () => { const c = await api.moveClock({ days: 3 }); setToday(c.today); window.dispatchEvent(new Event("cb-plan-refresh")); })}>
                 <FastForward size={16} weight="duotone" aria-hidden /> +3 days{today ? ` (${today.slice(5)})` : ""}
-              </button>
-              <button className="btn btn-quiet btn-sm" disabled={!!busy} onClick={() => run("reset", async () => { await api.demoReset(); window.location.href = "/demo"; })}>
+              </Button>
+              <Button look="quiet" small disabled={!!busy} onClick={() => run("reset", async () => { await api.demoReset(); window.location.href = "/demo"; })}>
                 <ArrowsClockwise size={16} weight="duotone" aria-hidden /> Reset
-              </button>
+              </Button>
               <a className="btn btn-quiet btn-sm" href="/demo">Guide</a>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-      <button className="btn btn-sm !bg-ink !text-surface" aria-expanded={open} onClick={() => setOpen(!open)}>
+      <Button small className="!bg-ink !text-surface" aria-expanded={open} onClick={() => setOpen(!open)}>
         <MaskHappy size={18} weight="duotone" aria-hidden /> Demo
         <motion.span animate={{ rotate: open ? 180 : 0 }} transition={mt(0.2)} className="inline-flex"><CaretUp size={14} aria-hidden /></motion.span>
-      </button>
+      </Button>
     </div>
   );
 }

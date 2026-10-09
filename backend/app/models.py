@@ -1,10 +1,17 @@
-from datetime import date, datetime
+from datetime import date
 from typing import Optional
 
 from pydantic import NaiveDatetime
 from sqlalchemy import Column
 from sqlalchemy.types import JSON
 from sqlmodel import Field, SQLModel
+
+
+def _now():
+    """Timestamps follow the demo clock, so history, dashboards and live actions share one timeline."""
+    from .db import clock_now
+
+    return clock_now()
 
 
 class Setting(SQLModel, table=True):
@@ -23,8 +30,9 @@ class Document(SQLModel, table=True):
     city: str
     pincode: str
     preferred_language: str = "en"
+    department: str = Field(default="general medicine", index=True)
     raw_text: str
-    created_at: NaiveDatetime = Field(default_factory=datetime.now)
+    created_at: NaiveDatetime = Field(default_factory=_now)
     pii_check_passed: bool = False
 
 
@@ -96,7 +104,7 @@ class ReviewQueue(SQLModel, table=True):
     fallback_doctor_id: Optional[int] = None
     codes: list = Field(default_factory=list, sa_column=Column(JSON))
     reviewer_note: Optional[str] = None
-    created_at: NaiveDatetime = Field(default_factory=datetime.now)
+    created_at: NaiveDatetime = Field(default_factory=_now)
     resolved_at: Optional[NaiveDatetime] = None
 
 
@@ -107,7 +115,7 @@ class AuditLog(SQLModel, table=True):
     actor: str
     action: str
     detail: dict = Field(default_factory=dict, sa_column=Column(JSON))
-    created_at: NaiveDatetime = Field(default_factory=datetime.now)
+    created_at: NaiveDatetime = Field(default_factory=_now)
 
 
 class Provider(SQLModel, table=True):
@@ -144,7 +152,7 @@ class CaregiverAlert(SQLModel, table=True):
     task_id: int
     message: str
     level: str = "warning"  # warning, urgent
-    created_at: NaiveDatetime = Field(default_factory=datetime.now)
+    created_at: NaiveDatetime = Field(default_factory=_now)
     acknowledged_at: Optional[NaiveDatetime] = None
 
 
@@ -154,7 +162,7 @@ class PipelineRun(SQLModel, table=True):
     document_id: int = Field(index=True)
     step: str
     state: str  # running, done, flagged, failed
-    started_at: NaiveDatetime = Field(default_factory=datetime.now)
+    started_at: NaiveDatetime = Field(default_factory=_now)
     finished_at: Optional[NaiveDatetime] = None
     message: Optional[str] = None
 
@@ -168,7 +176,9 @@ class User(SQLModel, table=True):
     role: str  # patient, manager, family, doctor, management
     language: str = "en"
     elderly: bool = False
-    created_at: NaiveDatetime = Field(default_factory=datetime.now)
+    welcomed: bool = False
+    active: bool = True
+    created_at: NaiveDatetime = Field(default_factory=_now)
 
 
 class FamilyHub(SQLModel, table=True):
@@ -192,7 +202,7 @@ class Consent(SQLModel, table=True):
     patient_id: int = Field(index=True)
     member_id: int = Field(index=True)
     scope: str = "none"  # full, appointments, reminders, none
-    updated_at: NaiveDatetime = Field(default_factory=datetime.now)
+    updated_at: NaiveDatetime = Field(default_factory=_now)
 
 
 class Doctor(SQLModel, table=True):
@@ -202,6 +212,7 @@ class Doctor(SQLModel, table=True):
     specialty: str
     phone: str  # invented
     available: bool = True
+    backup_user_id: Optional[int] = None
 
 
 class Notification(SQLModel, table=True):
@@ -211,7 +222,7 @@ class Notification(SQLModel, table=True):
     document_id: Optional[int] = None
     message: str
     level: str = "info"  # info, warning, urgent
-    created_at: NaiveDatetime = Field(default_factory=datetime.now)
+    created_at: NaiveDatetime = Field(default_factory=_now)
     read: bool = False
 
 
@@ -223,6 +234,8 @@ class CallbackRequest(SQLModel, table=True):
     requested_by: int
     patient_number: str  # masked, invented
     doctor_id: Optional[int] = None
-    state: str = "requested"  # requested, connecting, completed
+    state: str = "requested"  # requested, scheduled, connecting (in progress), completed, no_answer
     note: Optional[str] = None
-    created_at: NaiveDatetime = Field(default_factory=datetime.now)
+    call_notes: Optional[str] = None
+    scheduled_for: Optional[NaiveDatetime] = None
+    created_at: NaiveDatetime = Field(default_factory=_now)

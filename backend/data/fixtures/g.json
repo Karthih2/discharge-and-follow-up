@@ -1,0 +1,225 @@
+{
+  "items": [
+    {
+      "category": "medication",
+      "title": "Paracetamol 650 mg",
+      "original_text": "Tab Paracetamol 650 mg three times daily after food for 5 days",
+      "source_line_numbers": [
+        10
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,afternoon,night",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Paracetamol 650 mg three times a day, after food, for 5 days.",
+        "ta": "Paracetamol 650 mg மாத்திரையை தினமும் மூன்று முறை உணவுக்குப் பிறகு 5 நாட்கள் சாப்பிடவும்.",
+        "hi": "Paracetamol 650 mg की गोली दिन में तीन बार खाने के बाद 5 दिन लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Amoxicillin-clavulanate 625 mg",
+      "original_text": "Tab Amoxicillin-clavulanate 625 mg twice daily after food for 5 days",
+      "source_line_numbers": [
+        11
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,night",
+      "confidence": 0.95,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Amoxicillin-clavulanate 625 mg twice a day, after food, for 5 days.",
+        "ta": "Amoxicillin-clavulanate 625 mg மாத்திரையை தினமும் இரண்டு முறை உணவுக்குப் பிறகு 5 நாட்கள் சாப்பிடவும்.",
+        "hi": "Amoxicillin-clavulanate 625 mg की गोली दिन में दो बार खाने के बाद 5 दिन लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Pantoprazole 40 mg",
+      "original_text": "Tab Pantoprazole 40 mg once daily in the morning before food for 5 days",
+      "source_line_numbers": [
+        12
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Pantoprazole 40 mg once a day in the morning, before food, for 5 days.",
+        "ta": "Pantoprazole 40 mg மாத்திரையை தினமும் ஒரு முறை காலையில் உணவுக்கு முன் 5 நாட்கள் சாப்பிடவும்.",
+        "hi": "Pantoprazole 40 mg की गोली दिन में एक बार सुबह खाने से पहले 5 दिन लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Tramadol 50 mg",
+      "original_text": "Tab Tramadol 50 mg at night as needed for severe pain",
+      "source_line_numbers": [
+        13
+      ],
+      "date_raw": null,
+      "time_of_day": "night",
+      "confidence": 0.85,
+      "expect_review": true,
+      "simple": {
+        "en": "Tramadol 50 mg at night for severe pain. The wording says as needed.",
+        "ta": "கடுமையான வலிக்கு இரவில் Tramadol 50 mg. தேவைப்படும்போது என்று எழுதப்பட்டுள்ளது.",
+        "hi": "तेज़ दर्द में रात को Tramadol 50 mg। लिखा है ज़रूरत पड़ने पर।"
+      }
+    },
+    {
+      "category": "wound_care",
+      "title": "Keep wounds dry",
+      "original_text": "Keep the three small wounds dry and covered for 2 days.",
+      "source_line_numbers": [
+        15
+      ],
+      "date_raw": "after 2 days",
+      "time_of_day": null,
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "Keep the three small wounds dry and covered for 2 days.",
+        "ta": "மூன்று சிறிய காயங்களை 2 நாட்கள் உலர்வாகவும் மூடியும் வைக்கவும்.",
+        "hi": "तीन छोटे घावों को 2 दिन सूखा और ढका रखें।"
+      }
+    },
+    {
+      "category": "wound_care",
+      "title": "Dressing check at the clinic",
+      "original_text": "Dressing check at the clinic on day 3.",
+      "source_line_numbers": [
+        16
+      ],
+      "date_raw": "day 3",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "Have the dressing checked at the clinic on day 3.",
+        "ta": "3 ஆம் நாள் கிளினிக்கில் கட்டை சரிபார்க்கவும்.",
+        "hi": "तीसरे दिन क्लिनिक में पट्टी की जांच कराएं।"
+      }
+    },
+    {
+      "category": "wound_care",
+      "title": "Stitch removal",
+      "original_text": "Stitch removal on day 10.",
+      "source_line_numbers": [
+        17
+      ],
+      "date_raw": "day 10",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "Have the stitches removed on day 10.",
+        "ta": "10 ஆம் நாள் தையல்களை அகற்றவும்.",
+        "hi": "दसवें दिन टांके हटवाएं।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Surgeon review",
+      "original_text": "Review with the surgeon after 2 weeks.",
+      "source_line_numbers": [
+        19
+      ],
+      "date_raw": "after 2 weeks",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "Visit the surgeon after 2 weeks.",
+        "ta": "2 வாரங்களுக்குப் பிறகு அறுவை சிகிச்சை மருத்துவரைப் பார்க்கவும்.",
+        "hi": "2 सप्ताह बाद सर्जन से मिलें।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Biopsy report review",
+      "original_text": "Biopsy report review after 1 week.",
+      "source_line_numbers": [
+        20
+      ],
+      "date_raw": "after 1 week",
+      "time_of_day": null,
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "Review the biopsy report after 1 week.",
+        "ta": "1 வாரத்திற்குப் பிறகு பயாப்ஸி அறிக்கையை மருத்துவருடன் பார்க்கவும்.",
+        "hi": "1 सप्ताह बाद बायोप्सी रिपोर्ट डॉक्टर के साथ देखें।"
+      }
+    },
+    {
+      "category": "activity",
+      "title": "Walk and no heavy lifting",
+      "original_text": "Walk short distances 3 times a day. Do not lift weights above 5 kg for 4 weeks.",
+      "source_line_numbers": [
+        22
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Walk short distances 3 times a day. Do not lift weights above 5 kg for 4 weeks.",
+        "ta": "தினமும் 3 முறை குறுகிய தூரம் நடக்கவும். 4 வாரங்களுக்கு 5 kg க்கு மேல் எடை தூக்க வேண்டாம்.",
+        "hi": "दिन में 3 बार थोड़ी दूरी चलें। 4 सप्ताह तक 5 kg से ज़्यादा वज़न न उठाएं।"
+      }
+    },
+    {
+      "category": "diet",
+      "title": "Light food",
+      "original_text": "Eat light food such as rice, curd and soup. Avoid spicy and oily food for 1 week.",
+      "source_line_numbers": [
+        23
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Eat light food such as rice, curd and soup. Avoid spicy and oily food for 1 week.",
+        "ta": "சாதம், தயிர், சூப் போன்ற இலகுவான உணவு சாப்பிடவும். 1 வாரத்திற்கு காரமான மற்றும் எண்ணெய் உணவைத் தவிர்க்கவும்.",
+        "hi": "चावल, दही और सूप जैसा हल्का खाना खाएं। 1 सप्ताह तक मसालेदार और तला खाना न खाएं।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Fever or wound problem",
+      "original_text": "Fever above 100.4 F, or redness, pus or swelling at a wound.",
+      "source_line_numbers": [
+        25
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Fever above 100.4 F, or redness, pus or swelling at a wound, is a warning sign.",
+        "ta": "100.4 F க்கு மேல் காய்ச்சல், அல்லது காயத்தில் சிவப்பு, சீழ் அல்லது வீக்கம் எச்சரிக்கை அறிகுறி.",
+        "hi": "100.4 F से ऊपर बुखार, या घाव पर लालिमा, मवाद या सूजन चेतावनी का संकेत है।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Severe belly pain or vomiting",
+      "original_text": "Severe belly pain or repeated vomiting.",
+      "source_line_numbers": [
+        26
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Severe belly pain or repeated vomiting is a warning sign.",
+        "ta": "கடுமையான வயிற்று வலி அல்லது தொடர்ந்து வாந்தி எச்சரிக்கை அறிகுறி.",
+        "hi": "पेट में तेज़ दर्द या बार-बार उल्टी चेतावनी का संकेत है।"
+      }
+    }
+  ]
+}

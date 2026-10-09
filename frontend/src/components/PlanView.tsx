@@ -1,16 +1,16 @@
-import { Bell, Clock, Columns, Rows, SquaresFour, WarningCircle } from "@phosphor-icons/react";
-import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { Bell, CheckCircle, Clock, Columns, Rows, SquaresFour, WarningCircle } from "@phosphor-icons/react";
+import { AnimatePresence, LayoutGroup, m as motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { fmt } from "../i18n/strings";
 import { api } from "../lib/api";
 import { useLang } from "../lib/lang";
-import { fmtDate, fmtTime, useLoad, useMotionT } from "../lib/motion";
-import { burst } from "../lib/ripple";
+import { fmtDate, fmtTime, useMotionT } from "../lib/motion";
+import { useQuery } from "../lib/query";
 import type { Alert, AuditRow, Plan, PlanItem, PlanTask } from "../lib/types";
-import { DrawCheck } from "./Fx";
 import { SLOT_ICON } from "./Icons";
 import { ItemCard } from "./ItemCard";
 import { CardView, TimelineView, TwoPanel } from "./Views";
+import { Button, Card } from ".//ui";
 
 interface Props {
   plan: Plan;
@@ -215,7 +215,7 @@ function TaskRow({ task, onTask }: { task: PlanTask; onTask?: (id: number, s: "P
       className={`card flex items-center justify-between gap-3 p-3 ${done ? "text-muted" : ""}`}
     >
       <div className="flex min-w-0 items-center gap-3">
-        {done ? <DrawCheck /> : <Clock size={22} weight="duotone" className={task.overdue ? "text-attention" : "text-primary"} aria-hidden />}
+        {done ? <CheckCircle size={22} weight="fill" className="text-primary" aria-hidden /> : <Clock size={22} weight="duotone" className={task.overdue ? "text-attention" : "text-primary"} aria-hidden />}
         <div className="min-w-0">
           <p className="lang-text font-semibold">{task.title}</p>
           <p className="text-sm text-muted">
@@ -225,9 +225,9 @@ function TaskRow({ task, onTask }: { task: PlanTask; onTask?: (id: number, s: "P
         </div>
       </div>
       {onTask && (
-        <button onClick={(e) => { if (!done) burst(e.currentTarget); onTask(task.id, done ? "Pending" : "Completed"); }} className="btn btn-quiet btn-sm shrink-0">
+        <Button onClick={() => onTask(task.id, done ? "Pending" : "Completed")} look="quiet" small className="shrink-0">
           {done ? t("undo") : t("markDone")}
-        </button>
+        </Button>
       )}
     </motion.li>
   );
@@ -235,7 +235,7 @@ function TaskRow({ task, onTask }: { task: PlanTask; onTask?: (id: number, s: "P
 
 function Activity({ docId }: { docId: number }) {
   const { t } = useLang();
-  const { data } = useLoad(() => api.audit(docId), [docId]);
+  const { data } = useQuery(`audit/${docId}`, () => api.audit(docId));
   const rows: AuditRow[] = (data ?? []).filter((a) => ["viewed_plan", "item_flagged", "callback_requested", "provider_selected", "review_approved", "review_edited", "review_rejected", "task_completed"].includes(a.action)).slice(-8).reverse();
   return (
     <section aria-labelledby="h-act">
@@ -255,11 +255,11 @@ function Activity({ docId }: { docId: number }) {
   );
 }
 
-export function AlertFeed({ alerts, onAck }: { alerts: Alert[]; onAck?: (id: number) => void }) {
+function AlertFeed({ alerts, onAck }: { alerts: Alert[]; onAck?: (id: number) => void }) {
   const { t } = useLang();
   const open = alerts.filter((a) => !a.acknowledged_at);
   return (
-    <section aria-labelledby="h-alerts" className="card p-4">
+    <Card aria-labelledby="h-alerts" as="section" className="p-4">
       <h2 id="h-alerts" className="mb-2 flex items-center gap-2 text-2xl">
         <Bell size={26} weight="duotone" aria-hidden /> {t("alerts")}
       </h2>
@@ -272,11 +272,11 @@ export function AlertFeed({ alerts, onAck }: { alerts: Alert[]; onAck?: (id: num
               {a.level === "urgent" && <strong className="mr-2 text-attention">Urgent</strong>}
               {a.message}
             </span>
-            {onAck && <button className="btn btn-quiet btn-sm" onClick={() => onAck(a.id)}>{t("acknowledge")}</button>}
+            {onAck && <Button look="quiet" small onClick={() => onAck(a.id)}>{t("acknowledge")}</Button>}
           </motion.li>
         ))}
       </ul>
-    </section>
+    </Card>
   );
 }
 

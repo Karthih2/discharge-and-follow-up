@@ -1,6 +1,6 @@
 """Planner: tasks and reminders from items that are not waiting for human review."""
 import re
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
 
 from sqlmodel import Session, select
 
@@ -17,9 +17,9 @@ def slots_of(item: Item) -> list[str]:
     return [s for s in SLOT_ORDER if s in (item.time_of_day or "")]
 
 
-def _med_days(item: Item) -> int:
+def _med_days(item: Item, horizon: int = PLAN_DAYS) -> int:
     m = re.search(r"\bfor (\d+) days?\b", item.original_text, re.I)
-    return min(int(m[1]), PLAN_DAYS) if m else PLAN_DAYS
+    return min(int(m[1]), horizon) if m else horizon
 
 
 def plan_item(session: Session, item: Item) -> int:
@@ -43,7 +43,7 @@ def plan_item(session: Session, item: Item) -> int:
     return 1
 
 
-def plan_medicines(session: Session, doc: Document) -> int:
+def plan_medicines(session: Session, doc: Document, start: date | None = None, horizon: int = PLAN_DAYS) -> int:
     """One task per time of day per day, listing all approved medicines for that slot."""
     # Rebuild: drop still pending medicine tasks, keep completed ones.
     old = session.exec(select(Task).where(Task.document_id == doc.id, Task.title.like("% medicines:%"))).all()
@@ -58,26 +58,24 @@ def plan_medicines(session: Session, doc: Document) -> int:
             if i.status not in ("Needs Review", "Rejected") and slots_of(i)]
     if not meds:
         return 0
-    start = max(doc.discharge_date, sim_today(session))
-    created = 0
-    for day in range(PLAN_DAYS):
+    start = start or max(doc.discharge_date, sim_today(session))
+    new: list[Task] = []
+    for day in range(horizon):
         d = start + timedelta(days=day)
         for slot in SLOT_ORDER:
-            group = [m for m in meds if slot in slots_of(m) and day < _med_days(m)]
+            group = [m for m in meds if slot in slots_of(m) and day < _med_days(m, horizon)]
             if not group:
                 continue
             title = f"{slot.capitalize()} medicines: " + ", ".join(m.title for m in group)
             due = datetime.combine(d, SLOT_TIMES[slot])
             if due in done_keys:
                 continue
-            task = Task(item_id=group[0].id, document_id=doc.id, title=title, due_at=due)
-            session.add(task)
-            session.commit()
-            session.refresh(task)
-            session.add(Reminder(task_id=task.id, remind_at=task.due_at))
-            created += 1
+            new.append(Task(item_id=group[0].id, document_id=doc.id, title=title, due_at=due))
+    session.add_all(new)
+    session.flush()  # one batch insert, then every task has its id
+    session.add_all(Reminder(task_id=t.id, remind_at=t.due_at) for t in new)
     session.commit()
-    return created
+    return len(new)
 
 
 def plan_document(session: Session, doc: Document) -> int:

@@ -1,9 +1,9 @@
 import { ArrowsClockwise, FastForward } from "@phosphor-icons/react";
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Logo } from "../components/Icons";
 import { openAs } from "../components/DemoDock";
-import { Skeleton } from "../components/Skeleton";
+import { Button, Skeleton } from "../components/ui";
 import { api } from "../lib/api";
 import { HOSPITAL_FULL, PRODUCT } from "../lib/brand";
 import { useMotionT } from "../lib/motion";
@@ -58,9 +58,9 @@ export default function DemoPage() {
                   <h2 className="text-xl">{s.title}</h2>
                   <p className="text-muted">{s.what}</p>
                 </div>
-                <button className="btn btn-sm" disabled={!list || !!busy} onClick={() => go(s.who, s.path)}>
+                <Button small disabled={!list || !!busy} onClick={() => go(s.who, s.path)}>
                   {busy === s.who + (s.path ?? "") ? "Opening" : `Open as ${find(s.who)?.name.split(" (")[0].replace("Dr. ", "Dr ") ?? "..."}`}
-                </button>
+                </Button>
               </motion.li>
             ))}
           </ol>
@@ -73,7 +73,7 @@ export default function DemoPage() {
             <ul className="mt-3 divide-y divide-line border-y border-line">
               {list?.map((p) => (
                 <li key={p.key}>
-                  <button className="tab-press flex w-full items-center justify-between gap-3 py-3 text-left hover:bg-surface" onClick={() => go(p.key)} disabled={!!busy}>
+                  <button className="flex w-full items-center justify-between gap-3 py-3 text-left hover:bg-surface" onClick={() => go(p.key)} disabled={!!busy}>
                     <span className="min-w-0"><span className="block font-semibold">{p.name}</span><span className="block text-sm text-muted">{p.blurb}</span></span>
                     <span className="shrink-0 text-sm font-semibold text-primary">Open</span>
                   </button>
@@ -84,12 +84,12 @@ export default function DemoPage() {
           <div className="space-y-3">
             <h2 className="text-2xl">Controls</h2>
             <div className="flex flex-wrap gap-2">
-              <button className="btn btn-quiet" onClick={async () => { const c = await api.moveClock({ days: 3 }); setNote(`Demo date is now ${c.today}. Open a hub manager to see the alerts.`); }}>
+              <Button look="quiet" onClick={async () => { const c = await api.moveClock({ days: 3 }); setNote(`Demo date is now ${c.today}. Open a hub manager to see the alerts.`); }}>
                 <FastForward size={18} weight="duotone" aria-hidden /> Move clock +3 days
-              </button>
-              <button className="btn btn-quiet" onClick={async () => { await api.demoReset(); setNote("Demo data reset."); }}>
+              </Button>
+              <Button look="quiet" onClick={async () => { await api.demoReset(); setNote("Demo data reset."); }}>
                 <ArrowsClockwise size={18} weight="duotone" aria-hidden /> Reset demo
-              </button>
+              </Button>
             </div>
             {note && <p role="status" className="text-primary">{note}</p>}
             <p className="text-sm text-muted">The Demo button at the bottom right of every screen does the same, without leaving the page.</p>

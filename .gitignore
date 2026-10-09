@@ -40,3 +40,21 @@ Thumbs.db
 
 # Claude Code local files
 .claude/
+
+*.db-wal
+*.db-shm
+
+# Design reference images and AI prompt notes (not part of the app)
+desgin/
+CLAUDE_CODE_PROMPT.md
+
+# Generated audio, coverage, backups, uploads
+*.mp3
+.coverage
+htmlcov/
+coverage/
+*.bak
+*.tmp
+backend/uploads/
+.vite/
+frontend/.vite/

@@ -11,3 +11,4 @@ httpx
 reportlab
 python-multipart
 pyjwt
+edge-tts

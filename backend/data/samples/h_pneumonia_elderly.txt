@@ -1,0 +1,28 @@
+SILVERLINE HOSPITAL, CHENNAI
+DISCHARGE SUMMARY (SYNTHETIC DOCUMENT FOR DEMO. NOT A REAL PATIENT.)
+Patient: Mrs. Meenakshi Sundaram (synthetic)
+Age/Sex: 78 / Female
+Date of admission: 04 Oct 2026
+Date of discharge: 12 Oct 2026
+Diagnosis: Pneumonia of the right lung
+
+MEDICATIONS ON DISCHARGE
+Tab Cefuroxime 500 mg twice daily after food for 5 days
+Tab Azithromycin 500 mg once daily after food for 3 days
+Tab Paracetamol 650 mg if required for fever
+Syrup Ambroxol 10 ml three times daily after food for 5 days
+Tab Amlodipine 5 mg once daily in the morning after food
+
+FOLLOW-UP
+Review with the physician after 1 week.
+Blood test (CBC) after 1 week.
+Repeat chest X-ray after 6 weeks.
+Referred to a dietician for a high protein diet after 2 weeks.
+
+CARE AT HOME
+Sit up for meals and for 30 minutes after. Drink fluids through the day.
+Check the oxygen level with a finger monitor 2 times a day. Normal is above 94.
+
+WARNING SIGNS
+Fast breathing, bluish lips, or oxygen level below 92. Call 108 at once.
+Confusion or unusual drowsiness.

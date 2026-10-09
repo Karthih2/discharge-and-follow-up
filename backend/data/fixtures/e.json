@@ -1,0 +1,259 @@
+{
+  "items": [
+    {
+      "category": "medication",
+      "title": "Clopidogrel 75 mg",
+      "original_text": "Tab Clopidogrel 75 mg once daily in the morning after food",
+      "source_line_numbers": [
+        9
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Clopidogrel 75 mg once a day in the morning, after food.",
+        "ta": "Clopidogrel 75 mg மாத்திரையை தினமும் ஒரு முறை காலையில் உணவுக்குப் பிறகு சாப்பிடவும்.",
+        "hi": "Clopidogrel 75 mg की गोली दिन में एक बार सुबह खाने के बाद लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Atorvastatin 40 mg",
+      "original_text": "Tab Atorvastatin 40 mg once daily at night",
+      "source_line_numbers": [
+        10
+      ],
+      "date_raw": null,
+      "time_of_day": "night",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Atorvastatin 40 mg once a day at night.",
+        "ta": "Atorvastatin 40 mg மாத்திரையை தினமும் ஒரு முறை இரவில் சாப்பிடவும்.",
+        "hi": "Atorvastatin 40 mg की गोली दिन में एक बार रात को लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Amlodipine 5 mg",
+      "original_text": "Tab Amlodipine 5 mg once daily in the morning",
+      "source_line_numbers": [
+        11
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Amlodipine 5 mg once a day in the morning.",
+        "ta": "Amlodipine 5 mg மாத்திரையை தினமும் ஒரு முறை காலையில் சாப்பிடவும்.",
+        "hi": "Amlodipine 5 mg की गोली दिन में एक बार सुबह लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Pantoprazole 40 mg",
+      "original_text": "Tab Pantoprazole 40 mg once daily in the morning before food",
+      "source_line_numbers": [
+        12
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Pantoprazole 40 mg once a day in the morning, before food.",
+        "ta": "Pantoprazole 40 mg மாத்திரையை தினமும் ஒரு முறை காலையில் உணவுக்கு முன் சாப்பிடவும்.",
+        "hi": "Pantoprazole 40 mg की गोली दिन में एक बार सुबह खाने से पहले लें।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Neurologist visit",
+      "original_text": "Review with the neurologist after 2 weeks.",
+      "source_line_numbers": [
+        14
+      ],
+      "date_raw": "after 2 weeks",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "Visit the nerve doctor (neurologist) after 2 weeks.",
+        "ta": "2 வாரங்களுக்குப் பிறகு நரம்பியல் மருத்துவரைப் (neurologist) பார்க்கவும்.",
+        "hi": "2 सप्ताह बाद न्यूरोलॉजिस्ट (नस रोग विशेषज्ञ) से मिलें।"
+      }
+    },
+    {
+      "category": "test",
+      "title": "MRI brain and carotid scan",
+      "original_text": "MRI brain and carotid scan after 4 weeks.",
+      "source_line_numbers": [
+        15
+      ],
+      "date_raw": "after 4 weeks",
+      "time_of_day": null,
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "Have the MRI brain and carotid scan done after 4 weeks.",
+        "ta": "4 வாரங்களுக்குப் பிறகு MRI மூளை மற்றும் கரோடிட் ஸ்கேன் எடுக்கவும்.",
+        "hi": "4 सप्ताह बाद मस्तिष्क का MRI और कैरोटिड स्कैन कराएं।"
+      }
+    },
+    {
+      "category": "rehab",
+      "title": "Stroke rehabilitation clinic",
+      "original_text": "Referred to the stroke rehabilitation clinic for physiotherapy after 1 week.",
+      "source_line_numbers": [
+        16
+      ],
+      "date_raw": "after 1 week",
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Go to the stroke rehabilitation clinic for physiotherapy after 1 week.",
+        "ta": "1 வாரத்திற்குப் பிறகு பக்கவாத மறுவாழ்வு கிளினிக்கில் உடற்பயிற்சி சிகிச்சைக்குச் செல்லவும்.",
+        "hi": "1 सप्ताह बाद स्ट्रोक पुनर्वास क्लिनिक में फिजियोथेरेपी के लिए जाएं।"
+      }
+    },
+    {
+      "category": "referral",
+      "title": "Speech therapy review",
+      "original_text": "Speech therapy review after 10 days.",
+      "source_line_numbers": [
+        17
+      ],
+      "date_raw": "after 10 days",
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "Have the speech therapy review after 10 days.",
+        "ta": "10 நாட்களுக்குப் பிறகு பேச்சுப் பயிற்சி மறுபரிசோதனை செய்யவும்.",
+        "hi": "10 दिन बाद स्पीच थेरेपी की जांच कराएं।"
+      }
+    },
+    {
+      "category": "test",
+      "title": "Blood test for lipids and sugar",
+      "original_text": "Blood test for lipids and sugar after 6 weeks.",
+      "source_line_numbers": [
+        18
+      ],
+      "date_raw": "after 6 weeks",
+      "time_of_day": null,
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "Have the blood test for lipids and sugar after 6 weeks.",
+        "ta": "6 வாரங்களுக்குப் பிறகு கொழுப்பு மற்றும் சர்க்கரைக்கான இரத்த பரிசோதனை செய்யவும்.",
+        "hi": "6 सप्ताह बाद वसा और शुगर की खून जांच कराएं।"
+      }
+    },
+    {
+      "category": "rehab",
+      "title": "Arm and leg exercises",
+      "original_text": "Do the arm and leg exercises 3 times a day as the physiotherapist showed you.",
+      "source_line_numbers": [
+        20
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,afternoon,night",
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "Do the arm and leg exercises 3 times a day, as the physiotherapist showed you.",
+        "ta": "பிசியோதெரபிஸ்ட் காட்டியபடி கை மற்றும் கால் பயிற்சிகளை தினமும் 3 முறை செய்யவும்.",
+        "hi": "फिजियोथेरेपिस्ट के बताए अनुसार हाथ और पैर की कसरत दिन में 3 बार करें।"
+      }
+    },
+    {
+      "category": "activity",
+      "title": "Walk with support",
+      "original_text": "Walk with support. Someone should stay with you for all walks.",
+      "source_line_numbers": [
+        21
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "Walk with support. Someone should stay with you for all walks.",
+        "ta": "ஆதரவுடன் நடக்கவும். எல்லா நடைகளிலும் ஒருவர் உங்களுடன் இருக்க வேண்டும்.",
+        "hi": "सहारे के साथ चलें। हर बार चलते समय कोई आपके साथ रहे।"
+      }
+    },
+    {
+      "category": "diet",
+      "title": "Swallow slowly",
+      "original_text": "Swallow slowly. Take small sips and small bites.",
+      "source_line_numbers": [
+        22
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "Swallow slowly. Take small sips and small bites.",
+        "ta": "மெதுவாக விழுங்கவும். சிறிய மிடறுகளும் சிறிய கவளங்களும் எடுக்கவும்.",
+        "hi": "धीरे निगलें। छोटे घूंट और छोटे कौर लें।"
+      }
+    },
+    {
+      "category": "diet",
+      "title": "Low salt diet",
+      "original_text": "Eat a low salt diet. Avoid pickles and fried snacks.",
+      "source_line_numbers": [
+        24
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.93,
+      "expect_review": false,
+      "simple": {
+        "en": "Eat a low salt diet. Avoid pickles and fried snacks.",
+        "ta": "உப்பு குறைந்த உணவு சாப்பிடவும். ஊறுகாய் மற்றும் பொரித்த தின்பண்டங்களைத் தவிர்க்கவும்.",
+        "hi": "कम नमक वाला खाना खाएं। अचार और तले नाश्ते से बचें।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Sudden weakness or trouble speaking",
+      "original_text": "Sudden weakness of the face, arm or leg, trouble speaking, or loss of balance. Call 108 at once.",
+      "source_line_numbers": [
+        26
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Sudden weakness of the face, arm or leg, trouble speaking, or loss of balance is a warning sign. Call 108 at once.",
+        "ta": "முகம், கை அல்லது காலில் திடீர் பலவீனம், பேச சிரமம் அல்லது சமநிலை இழப்பு எச்சரிக்கை அறிகுறி. உடனே 108 ஐ அழைக்கவும்.",
+        "hi": "चेहरे, हाथ या पैर में अचानक कमज़ोरी, बोलने में तकलीफ़ या संतुलन खोना चेतावनी का संकेत है। तुरंत 108 पर कॉल करें।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Severe headache or vomiting",
+      "original_text": "Severe headache or repeated vomiting.",
+      "source_line_numbers": [
+        27
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Severe headache or repeated vomiting is a warning sign.",
+        "ta": "கடுமையான தலைவலி அல்லது தொடர்ந்து வாந்தி எச்சரிக்கை அறிகுறி.",
+        "hi": "तेज़ सिरदर्द या बार-बार उल्टी चेतावनी का संकेत है।"
+      }
+    }
+  ]
+}

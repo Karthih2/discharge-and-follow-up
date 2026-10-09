@@ -1,5 +1,6 @@
 import { Phone } from "@phosphor-icons/react";
 import type { Provider } from "../lib/types";
+import { Card } from ".//ui";
 
 export const TYPE_LABEL: Record<string, string> = {
   hospital: "Hospital",
@@ -13,7 +14,7 @@ const LANG_LABEL: Record<string, string> = { en: "English", ta: "Tamil", hi: "Hi
 
 export function ProviderCard({ p, reasons, rank }: { p: Provider; reasons?: string[]; rank?: number }) {
   return (
-    <div className="card p-4">
+    <Card className="p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h4 className="text-lg">
           {rank ? <span className="mr-2 text-muted">{rank}.</span> : null}
@@ -36,6 +37,6 @@ export function ProviderCard({ p, reasons, rank }: { p: Provider; reasons?: stri
         <Phone size={18} aria-hidden /> {p.phone}
         <span className="ml-1 rounded-sm bg-bg px-1.5 text-xs font-normal text-muted">invented number</span>
       </p>
-    </div>
+    </Card>
   );
 }

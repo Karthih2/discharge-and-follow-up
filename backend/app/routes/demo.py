@@ -7,9 +7,10 @@ from sqlmodel import Session, SQLModel, select
 
 from .. import settings
 from ..auth import make_token
-from ..db import engine, get_session, init_db
+from ..db import engine, get_session, init_db, new_session
 from ..models import User
 from ..seed import load_demo_data, seed_users
+from ..seed_demo import seed_demo_extras
 from .auth_routes import user_dict
 
 router = APIRouter(prefix="/api")
@@ -22,6 +23,9 @@ PERSONAS = [
     ("arun", "arun@code2care.test", "family", "/family", "Family viewer. Appointments only, grey locked cards."),
     ("meera", "meera@code2care.test", "doctor", "/doctor/", "Doctor. Cardiology review queue."),
     ("arjun", "arjun@code2care.test", "doctor", "/doctor/", "Doctor. General medicine queue."),
+    ("kavya", "kavya@code2care.test", "doctor", "/doctor/", "Doctor. Neurology queue."),
+    ("deepak", "deepak@code2care.test", "patient", "/patient", "Patient in Bengaluru. COPD plan, partly shared with a hub."),
+    ("sanjay", "sanjay@code2care.test", "manager", "/family", "Hub manager for the Hegde family."),
     ("admin", "admin@code2care.test", "management", "/management/", "Management. Assign, fallback, callbacks, audit."),
 ]
 
@@ -64,7 +68,8 @@ def demo_reset():
     """Wipes the demo database and loads it again, so a run can start clean."""
     SQLModel.metadata.drop_all(engine)
     init_db()
-    with Session(engine) as s:
+    with new_session() as s:
         seed_users(s)
         load_demo_data(s)
+        seed_demo_extras(s)
     return {"ok": True}

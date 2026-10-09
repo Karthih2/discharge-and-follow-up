@@ -1,7 +1,9 @@
 import csv
 import logging
-from datetime import date, datetime
+import time
+from datetime import date, datetime, timedelta
 
+from sqlalchemy import event
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from . import settings
@@ -11,9 +13,41 @@ log = logging.getLogger("carebridge.db")
 engine = create_engine(settings.DB_URL, connect_args={"check_same_thread": False})
 
 
+@event.listens_for(engine, "connect")
+def _pragmas(conn, _):
+    """WAL with NORMAL sync: many small writes (a pipeline run, the demo seed) stay fast and safe."""
+    cur = conn.cursor()
+    cur.execute("PRAGMA journal_mode=WAL")
+    cur.execute("PRAGMA synchronous=NORMAL")
+    cur.close()
+
+
+def new_session() -> Session:
+    """No expire on commit: objects stay readable after a save, so there is no re-read per row."""
+    return Session(engine, expire_on_commit=False)
+
+
 def get_session():
-    with Session(engine) as session:
+    with new_session() as session:
         yield session
+
+
+_today: date | None = None  # cached demo clock, kept in step by set_setting
+_t0 = time.monotonic()
+
+
+def clock_now() -> datetime:
+    """Simulated now: 07:00 on the simulated day plus the seconds since the clock was set. New rows are stamped with this."""
+    global _today
+    if _today is None:
+        with new_session() as s:
+            _today = date.fromisoformat(get_setting(s, "simulated_today"))
+    return datetime.combine(_today, datetime.min.time()).replace(hour=7) + timedelta(seconds=min(time.monotonic() - _t0, 43200))
+
+
+def pairs(s: Session, stmt) -> dict:
+    """Rows of two columns as a dict."""
+    return {a: b for a, b in s.exec(stmt).all()}
 
 
 def get_setting(session: Session, key: str) -> str:
@@ -22,6 +56,9 @@ def get_setting(session: Session, key: str) -> str:
 
 
 def set_setting(session: Session, key: str, value: str) -> None:
+    global _today, _t0
+    if key == "simulated_today":
+        _today, _t0 = date.fromisoformat(value), time.monotonic()
     row = session.get(Setting, key)
     if row:
         row.value = value
@@ -129,10 +166,42 @@ def _reset_if_old_schema() -> None:
                 conn.exec_driver_sql(f'DROP TABLE IF EXISTS "{t}"')
 
 
+# Every foreign key and every status or date column used in a filter. IF NOT EXISTS lets old databases pick them up.
+INDEXES = {
+    "documents": ["owner_id", "department", "discharge_date"],
+    "items": ["document_id", "status"],
+    "item_texts": ["item_id"],
+    "tasks": ["document_id", "item_id", "status", "due_at"],
+    "reminders": ["task_id"],
+    "review_queue": ["document_id", "item_id", "state", "assigned_doctor_id", "fallback_doctor_id", "created_at", "resolved_at"],
+    "audit_log": ["document_id", "actor", "action", "created_at"],
+    "provider_matches": ["item_id", "provider_id"],
+    "caregiver_alerts": ["document_id", "task_id", "acknowledged_at"],
+    "pipeline_runs": ["document_id"],
+    "hub_members": ["hub_id", "user_id"],
+    "consents": ["patient_id", "member_id"],
+    "doctors": ["user_id"],
+    "notifications": ["user_id"],
+    "callback_requests": ["document_id", "item_id", "doctor_id", "state", "created_at"],
+    "source_lines": ["document_id"],
+    "users": ["role"],
+}
+
+
+def create_indexes() -> None:
+    with engine.begin() as conn:
+        for table, cols in INDEXES.items():
+            for c in cols:
+                conn.exec_driver_sql(f'CREATE INDEX IF NOT EXISTS "ix_{table}_{c}" ON "{table}" ("{c}")')
+
+
 def init_db() -> None:
+    global _today, _t0
+    _today, _t0 = None, time.monotonic()
     _reset_if_old_schema()
     SQLModel.metadata.create_all(engine)
-    with Session(engine) as session:
+    create_indexes()
+    with new_session() as session:
         for k, v in settings.DEFAULT_SETTINGS.items():
             if not session.get(Setting, k):
                 session.add(Setting(key=k, value=v))

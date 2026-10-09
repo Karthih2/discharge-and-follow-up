@@ -25,7 +25,7 @@ def client():
 def session(client):
     from sqlmodel import Session
 
-    from app.db import engine
+    from app.db import new_session
 
-    with Session(engine) as s:
+    with new_session() as s:
         yield s

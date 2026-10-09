@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 from ..auth import check_password, current_user, hash_password, make_token
 from ..db import audit, get_session
 from ..models import FamilyHub, HubMember, User
-from ..seed import DEMO_PASSWORD, USERS
+from ..seed import DEMO_PASSWORD
 
 router = APIRouter(prefix="/api/auth")
 staff = APIRouter(prefix="/api/staff")
@@ -18,7 +18,8 @@ LANGS = ("en", "ta", "hi", "te", "kn", "ml")
 
 
 def user_dict(u: User) -> dict:
-    return {"id": u.id, "name": u.name, "email": u.email, "role": u.role, "language": u.language, "elderly": u.elderly}
+    return {"id": u.id, "name": u.name, "email": u.email, "role": u.role, "language": u.language, "elderly": u.elderly,
+            "welcomed": u.welcomed}
 
 
 class LoginIn(BaseModel):
@@ -38,7 +39,7 @@ class RegisterIn(BaseModel):
 def _login(body: LoginIn, s: Session, roles: tuple[str, ...]) -> dict:
     """Each portal accepts only its own roles. Anyone else gets the same answer as a wrong password."""
     u = s.exec(select(User).where(User.email == body.email.strip().lower())).first()
-    if not u or u.role not in roles or not check_password(body.password, u.password_hash):
+    if not u or not u.active or u.role not in roles or not check_password(body.password, u.password_hash):
         raise HTTPException(401, WRONG)
     if body.language in LANGS:
         u.language = body.language
@@ -48,9 +49,21 @@ def _login(body: LoginIn, s: Session, roles: tuple[str, ...]) -> dict:
     return {"token": make_token(u), "user": user_dict(u)}
 
 
+def _demo_list(s: Session, roles: tuple[str, ...]) -> dict:
+    """Every invented account of these roles (all use @code2care.test), in the order they were created."""
+    q = select(User).where(User.role.in_(roles), User.email.like("%@code2care.test"), User.active == True).order_by(User.id)  # noqa: E712
+    return {"password": DEMO_PASSWORD, "accounts": [{"name": u.name, "email": u.email, "role": u.role} for u in s.exec(q)]}
+
+
 @router.post("/login")
 def login(body: LoginIn, s: Session = Depends(get_session)):
     return _login(body, s, PUBLIC_ROLES)
+
+
+@router.post("/signin")
+def signin(body: LoginIn, s: Session = Depends(get_session)):
+    """One sign in for everyone. The role on the account decides which app opens. The app checks it again on every call."""
+    return _login(body, s, PUBLIC_ROLES + STAFF_ROLES)
 
 
 @staff.post("/login")
@@ -59,10 +72,9 @@ def staff_login(body: LoginIn, s: Session = Depends(get_session)):
 
 
 @staff.get("/demo-accounts")
-def staff_demo_accounts():
+def staff_demo_accounts(s: Session = Depends(get_session)):
     """Invented staff logins, for the demo sign in pages of the two staff portals."""
-    return {"password": DEMO_PASSWORD,
-            "accounts": [{"name": n, "email": e, "role": r} for _, n, e, r, _ in USERS if r in STAFF_ROLES]}
+    return _demo_list(s, STAFF_ROLES)
 
 
 @router.post("/register")
@@ -86,6 +98,15 @@ def register(body: RegisterIn, s: Session = Depends(get_session)):
         s.commit()
     audit(s, None, f"user:{u.id}", "registered", {"role": u.role})
     return {"token": make_token(u), "user": user_dict(u)}
+
+
+@router.post("/welcomed")
+def welcomed(u: User = Depends(current_user), s: Session = Depends(get_session)):
+    """The first-sign-in welcome was shown or skipped. It does not come back."""
+    u.welcomed = True
+    s.add(u)
+    s.commit()
+    return user_dict(u)
 
 
 @router.get("/me")
@@ -112,7 +133,6 @@ def set_language(body: PrefIn, u: User = Depends(current_user), s: Session = Dep
 
 
 @router.get("/demo-accounts")
-def demo_accounts():
+def demo_accounts(s: Session = Depends(get_session)):
     """Synthetic demo logins, listed on the sign in page so the demo is one click per role."""
-    return {"password": DEMO_PASSWORD,
-            "accounts": [{"name": n, "email": e, "role": r} for _, n, e, r, _ in USERS if r in PUBLIC_ROLES]}
+    return _demo_list(s, PUBLIC_ROLES)

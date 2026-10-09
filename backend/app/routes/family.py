@@ -5,12 +5,13 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from sqlalchemy import func, or_
 from sqlmodel import Session, select
 
 from .. import routing
 from ..agents.escalation import run_escalation
 from ..auth import current_user, hash_password, require
-from ..db import audit, set_setting, sim_today, get_session
+from ..db import audit, clock_now, set_setting, sim_today, get_session
 from ..models import (CaregiverAlert, Consent, Document, FamilyHub, HubMember, Item, Notification, Provider, User)
 from ..seed import DEMO_PASSWORD
 from .auth_routes import user_dict
@@ -42,9 +43,28 @@ def my_hub(u: User = Depends(require("patient", "manager", "family")), s: Sessio
 
 
 class MemberIn(BaseModel):
-    name: str
-    email: str
-    role: str  # patient, family, manager
+    user_id: Optional[int] = None  # someone who already has an account (found with the search)
+    name: str = ""
+    email: str = ""
+    role: str = "family"  # patient, family, manager. Ignored when user_id is given: the account's own role is used.
+
+
+@router.get("/hub/search")
+def search_people(q: str = "", u: User = Depends(require("manager")), s: Session = Depends(get_session)):
+    """Find people who already have an account and are not in this hub yet. Patients, family viewers and hub managers only."""
+    hub = _hub_of(s, u)
+    q = q.strip().lower()
+    if not hub or len(q) < 3:
+        return []
+    like = q.replace("\\", "\\\\").replace("%", "\%").replace("_", "\_")  # a typed % or _ is a letter, not a wildcard
+    inside = select(HubMember.user_id).where(HubMember.hub_id == hub.id)
+    rows = s.exec(select(User).where(User.role.in_(["patient", "family", "manager"]), User.active == True, User.id.not_in(inside),  # noqa: E712
+                                     or_(func.lower(User.name).like(f"%{like}%", escape="\\"), func.lower(User.email).like(f"%{like}%", escape="\\"))).order_by(User.name).limit(8)).all()
+    def mask(email: str) -> str:  # the full address is never listed, so the search is no address book
+        name, _, host = email.partition("@")
+        return f"{name[:1]}***@{host}"
+
+    return [{"id": r.id, "name": r.name, "email": mask(r.email), "role": r.role} for r in rows]
 
 
 @router.post("/hub/members")
@@ -52,22 +72,29 @@ def add_member(body: MemberIn, u: User = Depends(require("manager")), s: Session
     hub = _hub_of(s, u)
     if not hub:
         raise HTTPException(404, "No hub yet")
-    if body.role not in ("patient", "family", "manager"):
-        raise HTTPException(422, "Role must be patient, family or manager")
-    email = body.email.strip().lower()
-    mu = s.exec(select(User).where(User.email == email)).first()
-    if not mu:
-        mu = User(name=body.name.strip(), email=email, password_hash=hash_password(DEMO_PASSWORD), role=body.role)
-        s.add(mu)
-        s.commit()
-        s.refresh(mu)
-    elif mu.role != body.role:
-        raise HTTPException(409, f"This email already belongs to a {mu.role}")
+    if body.user_id:
+        mu = s.get(User, body.user_id)
+        if not mu or mu.role not in ("patient", "family", "manager") or not mu.active:
+            raise HTTPException(404, "Person not found")
+        role = mu.role
+    else:
+        role = body.role
+        if role not in ("patient", "family", "manager"):
+            raise HTTPException(422, "Role must be patient, family or manager")
+        email = body.email.strip().lower()
+        mu = s.exec(select(User).where(User.email == email)).first()
+        if not mu:
+            mu = User(name=body.name.strip(), email=email, password_hash=hash_password(DEMO_PASSWORD), role=role)
+            s.add(mu)
+            s.commit()
+            s.refresh(mu)
+        elif mu.role != role:
+            raise HTTPException(409, f"This email already belongs to a {mu.role}")
     if s.exec(select(HubMember).where(HubMember.hub_id == hub.id, HubMember.user_id == mu.id)).first():
         raise HTTPException(409, "Already in the hub")
-    s.add(HubMember(hub_id=hub.id, user_id=mu.id, role=body.role))
+    s.add(HubMember(hub_id=hub.id, user_id=mu.id, role=role))
     s.commit()
-    audit(s, None, f"user:{u.id}", "hub_member_added", {"member": mu.id, "role": body.role})
+    audit(s, None, f"user:{u.id}", "hub_member_added", {"member": mu.id, "role": role})
     routing.notify(s, mu.id, None, f"{u.name} added you to the {hub.name} hub")
     return user_dict(mu)
 
@@ -89,7 +116,7 @@ def set_consent(body: ConsentIn, u: User = Depends(require("patient")), s: Sessi
     c = s.exec(select(Consent).where(Consent.patient_id == u.id, Consent.member_id == body.member_id)).first()
     if not c:
         c = Consent(patient_id=u.id, member_id=body.member_id)
-    c.scope, c.updated_at = body.scope, datetime.now()
+    c.scope, c.updated_at = body.scope, clock_now()
     s.add(c)
     s.commit()
     audit(s, None, f"user:{u.id}", "consent_changed", {"member": body.member_id, "scope": body.scope})
@@ -118,7 +145,7 @@ def ack_alert(alert_id: int, u: User = Depends(require("manager")), s: Session =
     c = s.exec(select(Consent).where(Consent.patient_id == doc.owner_id, Consent.member_id == u.id)).first() if doc else None
     if not a or not c or c.scope not in ("full", "reminders"):
         raise HTTPException(404, "Alert not found")
-    a.acknowledged_at = datetime.now()
+    a.acknowledged_at = clock_now()
     s.add(a)
     s.commit()
     audit(s, a.document_id, f"user:{u.id}", "alert_acknowledged", {"alert_id": a.id})

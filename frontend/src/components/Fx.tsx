@@ -2,9 +2,9 @@ import {
   Bandaids, Barbell, FirstAidKit, ForkKnife, Hospital, Notepad, PersonSimpleWalk, Pill, Stethoscope, TestTube, Warning,
   type Icon,
 } from "@phosphor-icons/react";
-import { animate, motion, useInView, useMotionValue, useTransform } from "motion/react";
-import { useEffect, useRef } from "react";
+import { m as motion } from "motion/react";
 import { useMotionT } from "../lib/motion";
+import { CountUp } from "./CountUp";
 
 const ICON: Record<string, Icon> = {
   appointment: Stethoscope,
@@ -35,22 +35,6 @@ export function CategoryIcon({ category, size = 28, locked = false }: { category
   );
 }
 
-/** Number that counts up once when it scrolls into view. */
-export function CountUp({ to, className = "" }: { to: number; className?: string }) {
-  const mt = useMotionT();
-  const ref = useRef<HTMLSpanElement>(null);
-  const seen = useInView(ref, { once: true });
-  const v = useMotionValue(0);
-  const text = useTransform(v, (n) => Math.round(n).toString());
-  useEffect(() => {
-    if (!seen) return;
-    const t = mt(0.9);
-    const c = animate(v, to, { duration: t.duration, ease: "easeOut" });
-    return () => c.stop();
-  }, [seen, to, v, mt]);
-  return <motion.span ref={ref} className={className}>{text}</motion.span>;
-}
-
 /** Circular progress. The arc draws in, then follows value changes. */
 export function ProgressRing({ value, total, size = 96, label }: { value: number; total: number; size?: number; label?: string }) {
   const mt = useMotionT();
@@ -72,30 +56,5 @@ export function ProgressRing({ value, total, size = 96, label }: { value: number
         <span className="text-xs text-muted">of {total}</span>
       </div>
     </div>
-  );
-}
-
-/** Check mark that draws itself when it appears. */
-export function DrawCheck({ size = 22 }: { size?: number }) {
-  const mt = useMotionT();
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <motion.circle cx="12" cy="12" r="10" fill="var(--secondary)" initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={mt(0.25)} style={{ originX: "50%", originY: "50%" }} />
-      <motion.path d="M7 12.5l3.2 3.2L17 9" stroke="var(--ink)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={mt(0.35, 0.15)} />
-    </svg>
-  );
-}
-
-/** Custom medicine capsule graphic for empty and hero states. */
-export function Capsule({ size = 56 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden>
-      <g transform="rotate(-35 32 32)">
-        <rect x="8" y="22" width="48" height="20" rx="10" fill="var(--surface)" stroke="var(--primary)" strokeWidth="3" />
-        <path d="M32 22h14a10 10 0 0 1 0 20H32z" fill="var(--secondary)" />
-        <rect x="8" y="22" width="48" height="20" rx="10" fill="none" stroke="var(--primary)" strokeWidth="3" />
-        <path d="M32 22v20" stroke="var(--primary)" strokeWidth="3" />
-      </g>
-    </svg>
   );
 }

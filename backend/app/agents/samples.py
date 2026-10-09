@@ -16,10 +16,20 @@ def sample_text(key: str) -> str:
     return (SAMPLES_DIR / meta["file"]).read_text(encoding="utf-8")
 
 
+DEPARTMENT = {"a": "cardiology", "b": "orthopaedics", "c": "diabetology", "d": "general medicine",
+              "e": "neurology", "f": "pulmonology", "g": "general medicine", "h": "pulmonology"}
+_PERSONAL = ("Patient:", "Date of admission:", "Date of discharge:")
+
+
+def _core(text: str) -> list[str]:
+    """Lines that decide which fixture applies. The hospital line, name and dates may differ per patient."""
+    return [t for n, t in to_lines(text) if n > 1 and not t.startswith(_PERSONAL)]
+
+
 def match_sample(text: str) -> str | None:
-    n = to_lines(text)
+    n = _core(text)
     for s in sample_index():
-        if to_lines(sample_text(s["key"])) == n:
+        if _core(sample_text(s["key"])) == n:
             return s["key"]
     return None
 

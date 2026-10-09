@@ -9,6 +9,7 @@ export interface User {
   role: Role;
   language: Lang;
   elderly?: boolean;
+  welcomed?: boolean;
 }
 
 export interface Doc {
@@ -139,6 +140,8 @@ export interface ReviewEntry {
   item_id: number;
   document_id: number;
   patient_alias: string;
+  department: string;
+  resolved_at: string | null;
   reason: string;
   severity: "high" | "medium" | "low";
   state: string;
@@ -154,6 +157,7 @@ export interface ReviewEntry {
     title: string;
     approved_fields?: Record<string, unknown>;
     original_text?: string;
+    source_line_nos?: number[];
     date_raw: string | null;
     date_resolved: string | null;
     time_of_day: string | null;
@@ -166,6 +170,7 @@ export interface AuditRow {
   id: number;
   document_id?: number | null;
   actor: string;
+  actor_key?: string;
   action: string;
   detail: Record<string, unknown>;
   created_at: string;
@@ -188,13 +193,6 @@ export interface HubMember {
   scope?: Scope;
 }
 
-export interface FamilyPatient {
-  patient: { id: number; name: string };
-  scope: Scope;
-  documents: Doc[];
-  open_alerts: number;
-}
-
 export interface Overview {
   patients: number;
   plans: number;
@@ -213,30 +211,147 @@ export interface Overview {
 export interface DoctorRow {
   id: number;
   name: string;
+  email: string;
   specialty: string;
   available: boolean;
+  active: boolean;
+  backup: DoctorRef | null;
   open_items: number;
+  overdue_items: number;
 }
 
-export interface CallbackRow {
+export type CallbackState = "requested" | "scheduled" | "connecting" | "completed" | "no_answer";
+
+/** One callback request. Doctors and management see the same row. */
+export interface Callback {
   id: number;
+  document_id: number;
   patient_alias: string;
+  department: string;
   item_title: string;
   masked_number: string;
-  state: string;
+  state: CallbackState;
   note: string | null;
+  call_notes: string | null;
+  doctor: DoctorRef | null;
+  scheduled_for: string | null;
   created_at: string;
 }
 
-export interface AdminCallback {
-  id: number;
-  patient_alias: string;
-  item_title: string;
-  state: "requested" | "connecting" | "completed";
-  masked_number: string;
-  doctor: string | null;
-  created_at: string;
+export interface Page<T> {
+  rows: T[];
+  total: number;
 }
+
+export interface TodayMed {
+  task_id: number;
+  document_id: number;
+  status: "Pending" | "Completed";
+  due_at: string;
+  medicines: string[];
+}
+
+export interface TodayEvent {
+  task_id: number;
+  item_id: number;
+  document_id: number;
+  title: string;
+  due_at: string;
+  status: string;
+  category: string | null;
+  place: string;
+}
+
+export interface Today {
+  today: string;
+  name: string;
+  plan: { id: number; title: string; discharge_date: string } | null;
+  plans: number;
+  medicines: Record<"morning" | "afternoon" | "night", TodayMed[]>;
+  next_event: TodayEvent | null;
+  needs_review: { item_id: number; document_id: number; title: string; reason: string }[];
+  needs_review_count: number;
+  progress: { done: number; due: number; overdue: number; total: number };
+  upcoming: TodayEvent[];
+  open_callbacks: number;
+}
+
+export interface FamilyHomeRow {
+  patient: { id: number; name: string };
+  scope: Scope;
+  plans: { id: number; title: string }[];
+  locked: { status: boolean; alerts: boolean };
+  next_event: { title: string; due_at: string } | null;
+  today?: { done: number; total: number };
+  overdue?: number;
+  open_alerts?: number;
+  needs_review?: number;
+}
+
+export interface FamilyAlert extends Alert {
+  patient: string;
+  document_id: number;
+  can_ack: boolean;
+}
+
+export interface DoctorHome {
+  name: string;
+  specialty: string;
+  available: boolean;
+  backup: DoctorRef | null;
+  open_reviews: number;
+  overdue_reviews: number;
+  callbacks_waiting: number;
+  patients_overdue: number;
+}
+
+export interface DoctorPatient {
+  document_id: number;
+  patient_alias: string;
+  title: string;
+  department: string;
+  discharge_date: string;
+  open_reviews: number;
+  reviewed: number;
+  overdue_tasks: number;
+}
+
+export interface Stats {
+  days: number;
+  department: string | null;
+  today: string;
+  departments: string[];
+  numbers: {
+    plans_created: number;
+    needing_review: number;
+    median_clear_hours: number | null;
+    reviews_overdue: number;
+    task_completion_rate: number;
+    overdue_tasks: number;
+    callbacks_completed: number;
+    open_alerts: number;
+  };
+  reviews_per_day: { date: string; opened: number; cleared: number }[];
+  load_per_doctor: { doctor: string; open: number; cleared: number }[];
+  reasons: { reason: string; count: number }[];
+  completion_by_department: { department: string; completed: number; due: number; overdue: number; rate: number }[];
+}
+
+export interface PatientRow {
+  id: number;
+  alias: string;
+  city: string | null;
+  language: Lang;
+  plans: number;
+  completion_rate: number;
+  overdue_tasks: number;
+  last_activity: string | null;
+}
+
+export type SettingsMap = Record<
+  "reviewer_threshold_hours" | "caregiver_threshold_hours" | "remind_threshold_hours" | "enabled_languages" | "extract_model" | "rewrite_model",
+  string
+>;
 
 export interface MedFields {
   dose: string;
@@ -255,4 +370,16 @@ export interface StepEvent {
   flagged?: number;
   steps?: { key: string; label: string }[];
   document_id?: number;
+}
+
+export interface CalTask {
+  id: number;
+  document_id: number;
+  patient: string;
+  title: string;
+  due_at: string;
+  status: "Pending" | "Completed";
+  overdue: boolean;
+  kind: string;
+  can_tick: boolean;
 }

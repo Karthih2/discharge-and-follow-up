@@ -10,27 +10,31 @@ export function useMotionT() {
   );
 }
 
-/** Small async loader: data, error, reload. Keeps old data while reloading. */
-export function useLoad<T>(fn: () => Promise<T>, deps: unknown[]) {
-  const [data, setData] = useState<T | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [tick, setTick] = useState(0);
-  useEffect(() => {
-    let live = true;
-    fn()
-      .then((d) => live && (setData(d), setError(null)))
-      .catch((e: Error) => live && setError(e.message));
-    return () => {
-      live = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [...deps, tick]);
-  const reload = useCallback(() => setTick((n) => n + 1), []);
-  return { data, error, reload, setData };
-}
-
 export const fmtDate = (iso: string, opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short", year: "numeric" }) =>
   new Date(iso.length === 10 ? iso + "T00:00:00" : iso).toLocaleDateString("en-IN", opts);
 
 export const fmtTime = (iso: string) =>
   new Date(iso).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true });
+
+// Lists reveal with a short staggered fade and rise the first time they appear, not on every refresh.
+const revealed = new Set<string>();
+
+export function useStagger(id: string) {
+  const mt = useMotionT();
+  const [fresh] = useState(() => !revealed.has(id));
+  useEffect(() => {
+    revealed.add(id);
+  }, [id]);
+  return (i: number) => ({
+    initial: fresh ? { opacity: 0, y: 8 } : false,
+    animate: { opacity: 1, y: 0 },
+    transition: mt(0.18, Math.min(i, 10) * 0.04),
+  });
+}
+
+/** "3 h", "2 d": how long ago, for queues. */
+export function ago(hours: number): string {
+  if (hours < 1) return "under 1 h";
+  if (hours < 48) return `${Math.round(hours)} h`;
+  return `${Math.round(hours / 24)} d`;
+}

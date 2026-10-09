@@ -1,0 +1,31 @@
+LUNG AND CHEST HOSPITAL, CHENNAI
+DISCHARGE SUMMARY (SYNTHETIC DOCUMENT FOR DEMO. NOT A REAL PATIENT.)
+Patient: Mr. Joseph Fernandes (synthetic)
+Age/Sex: 69 / Male
+Date of admission: 03 Oct 2026
+Date of discharge: 12 Oct 2026
+Diagnosis: Flare-up of chronic obstructive pulmonary disease (COPD)
+
+MEDICATIONS ON DISCHARGE
+Tab Prednisolone 30 mg once daily in the morning after food for 5 days
+Tab Montelukast 10 mg once daily at night
+Tiotropium 18 mcg inhaler capsule once daily in the morning
+Salbutamol inhaler 2 puffs as needed for breathlessness
+
+HOME OXYGEN
+Use oxygen at 2 litres per minute for 12 hours a day. Adjust the flow only as the doctor advises.
+
+FOLLOW-UP
+Review with the chest physician after 1 week.
+Lung function test (spirometry) after 4 weeks.
+Referred to pulmonary rehabilitation after 3 weeks.
+Flu vaccination at the clinic after 2 weeks.
+
+CARE AT HOME
+Do the breathing exercises 3 times a day.
+Do not smoke. Stay away from smoke and dust.
+Eat small meals more often. Drink warm water through the day.
+
+WARNING SIGNS
+Breathlessness not relieved by the inhaler. Call your doctor at once.
+Lips turning blue, or fever above 100.4 F.

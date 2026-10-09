@@ -1,12 +1,13 @@
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../lib/api";
 import { useLang } from "../lib/lang";
-import { fmtDate, useLoad, useMotionT } from "../lib/motion";
+import { fmtDate, useMotionT } from "../lib/motion";
+import { useQuery } from "../lib/query";
 import type { Plan, PlanItem, PlanTask } from "../lib/types";
 import { ItemCard } from "./ItemCard";
-import { Skeleton } from "./Skeleton";
+import { Button, Card, Skeleton } from "./ui";
 
 export interface ViewProps {
   plan: Plan;
@@ -46,9 +47,9 @@ export function CardView(p: ViewProps) {
   return (
     <div>
       <div className="mb-3 flex items-center justify-between gap-3">
-        <button className="btn btn-quiet btn-sm" onClick={() => go(-1)} disabled={idx === 0} aria-label={t("previous")}>
+        <Button look="quiet" small onClick={() => go(-1)} disabled={idx === 0} aria-label={t("previous")}>
           <CaretLeft size={18} aria-hidden /> {t("previous")}
-        </button>
+        </Button>
         <div className="flex flex-wrap justify-center gap-1.5" role="tablist" aria-label="Cards">
           {p.items.map((it, k) => (
             <button
@@ -61,9 +62,9 @@ export function CardView(p: ViewProps) {
             />
           ))}
         </div>
-        <button className="btn btn-quiet btn-sm" onClick={() => go(1)} disabled={idx === n - 1} aria-label={t("next")}>
+        <Button look="quiet" small onClick={() => go(1)} disabled={idx === n - 1} aria-label={t("next")}>
           {t("next")} <CaretRight size={18} aria-hidden />
-        </button>
+        </Button>
       </div>
       <p className="mb-2 text-sm text-muted">{idx + 1} / {n}</p>
       <motion.div key={item.id} initial={{ opacity: 0, x: dir * 40 }} animate={{ opacity: 1, x: 0 }} transition={mt(0.3)}>
@@ -78,7 +79,7 @@ const HL = (c: string) => (c === "medication" ? "hl-med" : c === "warning_sign" 
 /** Left: the original summary with colour highlights. Right: the tasks. Clicking a task flashes its lines. */
 export function TwoPanel(p: ViewProps) {
   const full = p.plan.viewer.scope === "full";
-  const { data: lines } = useLoad(() => (full && !p.preview ? api.source(p.plan.document.id) : Promise.resolve(null)), [p.plan.document.id, full]);
+  const { data: lines } = useQuery(full && !p.preview ? `source/${p.plan.document.id}` : null, () => api.source(p.plan.document.id));
   const [flash, setFlash] = useState<{ lines: number[]; n: number }>({ lines: [], n: 0 });
   const refs = useRef(new Map<number, HTMLLIElement>());
   const cat = useMemo(() => {
@@ -95,7 +96,7 @@ export function TwoPanel(p: ViewProps) {
 
   return (
     <div className="grid gap-5 lg:grid-cols-2">
-      <section aria-label="Original summary" className="card max-h-[70vh] overflow-y-auto p-3">
+      <Card aria-label="Original summary" as="section" className="max-h-[70vh] overflow-y-auto p-3">
         <div className="mb-2 flex flex-wrap gap-2 text-xs">
           <span className="hl-appt rounded-sm px-2 py-0.5">Appointments and tests</span>
           <span className="hl-med rounded-sm px-2 py-0.5">Medicines</span>
@@ -119,7 +120,7 @@ export function TwoPanel(p: ViewProps) {
             );
           })}
         </ol>
-      </section>
+      </Card>
       <section aria-label="Tasks" className="max-h-[70vh] space-y-3 overflow-y-auto">
         {p.items.map((it) => (
           <div key={it.id} onClickCapture={() => pick(it)}>

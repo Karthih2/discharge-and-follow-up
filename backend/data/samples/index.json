@@ -42,5 +42,53 @@
     "pincode": "600042",
     "preferred_language": "en",
     "blurb": "Vague wording, a missing date and conflicting lines, so many items go to a reviewer."
+  },
+  {
+    "key": "e",
+    "file": "e_stroke_rehab.txt",
+    "title": "Stroke with rehabilitation",
+    "patient_alias": "Mr. A. Pillai (synthetic)",
+    "discharge_date": "2026-10-12",
+    "city": "Chennai",
+    "pincode": "600040",
+    "preferred_language": "en",
+    "department": "neurology",
+    "blurb": "Stroke medicines, a brain scan, physiotherapy and speech therapy."
+  },
+  {
+    "key": "f",
+    "file": "f_copd_flareup.txt",
+    "title": "COPD flare-up with home oxygen",
+    "patient_alias": "Mr. J. Fernandes (synthetic)",
+    "discharge_date": "2026-10-12",
+    "city": "Chennai",
+    "pincode": "600004",
+    "preferred_language": "en",
+    "department": "pulmonology",
+    "blurb": "Inhalers, home oxygen, a lung function test and breathing exercises."
+  },
+  {
+    "key": "g",
+    "file": "g_appendectomy.txt",
+    "title": "Appendectomy with wound care",
+    "patient_alias": "Ms. D. Menon (synthetic)",
+    "discharge_date": "2026-10-12",
+    "city": "Chennai",
+    "pincode": "600032",
+    "preferred_language": "en",
+    "department": "general medicine",
+    "blurb": "Pain medicine, wound care, stitch removal and a surgeon review."
+  },
+  {
+    "key": "h",
+    "file": "h_pneumonia_elderly.txt",
+    "title": "Pneumonia in an older adult",
+    "patient_alias": "Mrs. M. Sundaram (synthetic)",
+    "discharge_date": "2026-10-12",
+    "city": "Chennai",
+    "pincode": "600010",
+    "preferred_language": "en",
+    "department": "pulmonology",
+    "blurb": "Antibiotics, oxygen checks at home, a repeat chest X-ray and a diet referral."
   }
 ]

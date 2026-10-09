@@ -2,6 +2,7 @@ import { CalendarBlank } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import { fmtDate } from "../lib/motion";
+import { Button } from ".//ui";
 
 /** Demo control: moves the simulated "today" so escalation can be shown. */
 export function DemoClock({ stack = false }: { stack?: boolean }) {
@@ -33,9 +34,9 @@ export function DemoClock({ stack = false }: { stack?: boolean }) {
       <span>
         Demo date: <strong>{fmtDate(today, { day: "numeric", month: "short" })}</strong>
       </span>
-      <button disabled={busy} onClick={() => move({ days: 1 })} className="btn btn-quiet btn-sm">+1 day</button>
-      <button disabled={busy} onClick={() => move({ days: 3 })} className="btn btn-quiet btn-sm">+3 days</button>
-      <button disabled={busy} onClick={() => move({ date: "2026-10-12" })} className="btn btn-quiet btn-sm">Reset</button>
+      <Button disabled={busy} onClick={() => move({ days: 1 })} look="quiet" small>+1 day</Button>
+      <Button disabled={busy} onClick={() => move({ days: 3 })} look="quiet" small>+3 days</Button>
+      <Button disabled={busy} onClick={() => move({ date: "2026-10-12" })} look="quiet" small>Reset</Button>
     </div>
   );
 }

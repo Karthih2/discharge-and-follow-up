@@ -6,15 +6,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 
 from . import llm, settings
-from .db import engine, get_setting, init_db
+from .db import get_setting, init_db, new_session
 from pathlib import Path
 
 from fastapi import HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from .routes import admin, auth_routes, clinical, demo, documents, family
+from .routes import admin, auth_routes, clinical, demo, documents, family, home
 from .seed import load_demo_data, seed_users
+from .seed_demo import seed_demo_extras
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("carebridge")
@@ -23,22 +24,23 @@ log = logging.getLogger("carebridge")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
-    with Session(engine) as s:
+    with new_session() as s:
         seed_users(s)
         if demo.demo_on():
             load_demo_data(s)
+            seed_demo_extras(s)
             log.warning("DEMO mode: demo accounts and plans are loaded. Open http://localhost:8000")
     if settings.mock_llm():
         log.warning("MOCK mode: using fixtures for the sample summaries. Add GROQ_API_KEY to backend/.env for real runs.")
     else:
-        with Session(engine) as s:
+        with new_session() as s:
             llm.check_models([get_setting(s, "extract_model"), get_setting(s, "rewrite_model")])
     yield
 
 
 app = FastAPI(title="CareBridge", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"], allow_methods=["*"], allow_headers=["*"])
-for r in (auth_routes, documents, family, clinical, admin, demo):
+for r in (auth_routes, documents, family, home, clinical, admin, demo):
     app.include_router(r.router)
 app.include_router(auth_routes.staff)
 

@@ -1,0 +1,32 @@
+NEURO CARE CENTRE, CHENNAI
+DISCHARGE SUMMARY (SYNTHETIC DOCUMENT FOR DEMO. NOT A REAL PATIENT.)
+Patient: Mr. Anand Pillai (synthetic)
+Age/Sex: 66 / Male
+Date of admission: 28 Sep 2026
+Date of discharge: 12 Oct 2026
+Diagnosis: Ischaemic stroke affecting the left side, now stable
+
+MEDICATIONS ON DISCHARGE
+Tab Clopidogrel 75 mg once daily in the morning after food
+Tab Atorvastatin 40 mg once daily at night
+Tab Amlodipine 5 mg once daily in the morning
+Tab Pantoprazole 40 mg once daily in the morning before food
+
+FOLLOW-UP
+Review with the neurologist after 2 weeks.
+MRI brain and carotid scan after 4 weeks.
+Referred to the stroke rehabilitation clinic for physiotherapy after 1 week.
+Speech therapy review after 10 days.
+Blood test for lipids and sugar after 6 weeks.
+
+REHAB AND ACTIVITY
+Do the arm and leg exercises 3 times a day as the physiotherapist showed you.
+Walk with support. Someone should stay with you for all walks.
+Swallow slowly. Take small sips and small bites.
+
+DIET
+Eat a low salt diet. Avoid pickles and fried snacks.
+
+WARNING SIGNS
+Sudden weakness of the face, arm or leg, trouble speaking, or loss of balance. Call 108 at once.
+Severe headache or repeated vomiting.

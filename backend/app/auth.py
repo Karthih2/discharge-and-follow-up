@@ -38,7 +38,7 @@ def _user_from_token(token: str, s: Session) -> User:
         user = s.get(User, int(data["sub"]))
     except Exception:
         user = None
-    if not user:
+    if not user or not user.active:
         raise HTTPException(401, "Please sign in again")
     return user
 

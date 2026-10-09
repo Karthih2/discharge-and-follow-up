@@ -1,26 +1,29 @@
 import { CalendarPlus, Printer, ShareNetwork, TextAa } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { PlanView } from "../components/PlanView";
-import { PlanSkeleton } from "../components/Skeleton";
+import { Button, LinkButton, PlanSkeleton } from "../components/ui";
 import { SourceDrawer } from "../components/SourceDrawer";
 import { api } from "../lib/api";
 import { useLang } from "../lib/lang";
-import { fmtDate, useLoad } from "../lib/motion";
+import { fmtDate } from "../lib/motion";
+import { useAuth } from "../lib/auth";
+import { invalidate, useQuery } from "../lib/query";
+import { toast } from "../lib/toast";
 import type { PlanItem } from "../lib/types";
 
-const SCOPE_NOTE = {
-  appointments: "The patient shared appointments only.",
-  reminders: "The patient shared reminders only.",
-  full: "",
-  none: "",
-};
 
 /** One plan screen for every role. The server decides what each viewer may see. */
 export default function Plan() {
   const id = Number(useParams().id);
   const { lang, t } = useLang();
-  const { data: plan, error, reload } = useLoad(() => api.plan(id, lang), [id, lang]);
+  const { user } = useAuth();
+  const q = useQuery(`plan/${id}/${lang}`, () => api.plan(id, lang));
+  const plan = q.data;
+  // A patient opens the source lines and the activity log too. Ask for all three together, not one after another.
+  useQuery(user?.role === "patient" ? `source/${id}` : null, () => api.source(id));
+  useQuery(user?.role === "patient" ? `audit/${id}` : null, () => api.audit(id));
+  const reload = () => { invalidate(`plan/${id}`); invalidate("today"); invalidate("family"); };
   const [source, setSource] = useState<PlanItem | null>(null);
   const [big, setBig] = useState<boolean | null>(null);
 
@@ -39,7 +42,7 @@ export default function Plan() {
     }
   }, [plan, id]);
 
-  if (error) return <p className="text-attention">Could not open this plan. {error}</p>;
+  if (q.error && !plan) return <p role="alert" className="text-attention">{t("couldNotOpen")} {q.error}</p>;
   if (!plan) return <PlanSkeleton />;
 
   const role = plan.viewer.role;
@@ -47,6 +50,7 @@ export default function Plan() {
   const elderly = big ?? plan.patient.elderly;
   const setTask = async (taskId: number, status: "Pending" | "Completed") => {
     await api.setTask(taskId, status);
+    toast(t(status === "Completed" ? "toastDone" : "toastNotDone"));
     reload();
   };
 
@@ -54,7 +58,7 @@ export default function Plan() {
     <div className={`space-y-8 ${elderly ? "elderly" : ""}`}>
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          {!mine && <p className="text-muted">Viewing as {role === "manager" ? "hub manager" : role === "family" ? "family viewer" : role}. {SCOPE_NOTE[plan.viewer.scope]}</p>}
+          {!mine && <p className="text-muted">{t("viewingAs")} {role === "manager" ? t("roleManager") : role === "family" ? t("roleFamily") : role}. {plan.viewer.scope === "appointments" ? t("scopeApptsNote") : plan.viewer.scope === "reminders" ? t("scopeRemNote") : ""}</p>}
           <h1 className="text-4xl">{mine ? t("planTitle") : plan.document.patient_alias}</h1>
           <p className="lang-text text-muted">
             {mine && `${plan.document.patient_alias}. `}
@@ -64,20 +68,20 @@ export default function Plan() {
       </header>
       {plan.viewer.scope !== "none" && (
         <div className="no-print flex flex-wrap gap-2">
-          <button className="btn btn-quiet" onClick={() => api.downloadIcs(id, lang)}>
+          <Button look="quiet" onClick={() => api.downloadIcs(id, lang)}>
             <CalendarPlus size={20} aria-hidden /> {t("downloadReminders")}
-          </button>
+          </Button>
           {mine && (
             <>
-              <Link className="btn btn-quiet" to={`/plan/${id}/print`}>
+              <LinkButton look="quiet" to={`/plan/${id}/print`}>
                 <Printer size={20} aria-hidden /> {t("fridgeSheet")}
-              </Link>
-              <button className="btn btn-quiet" aria-pressed={elderly} onClick={() => { setBig(!elderly); api.setElderly(!elderly).catch(() => undefined); }}>
+              </LinkButton>
+              <Button look="quiet" aria-pressed={elderly} onClick={() => { setBig(!elderly); api.setElderly(!elderly).catch(() => undefined); }}>
                 <TextAa size={20} weight="duotone" aria-hidden /> {t("bigText")}
-              </button>
-              <Link className="btn btn-quiet" to="/patient/sharing">
+              </Button>
+              <LinkButton look="quiet" to="/patient/sharing">
                 <ShareNetwork size={20} aria-hidden /> {t("sharing")}
-              </Link>
+              </LinkButton>
             </>
           )}
         </div>
@@ -90,6 +94,7 @@ export default function Plan() {
         onSource={setSource}
         onAck={async (aid) => {
           await api.ackAlert(aid);
+          toast(t("toastAck"));
           reload();
         }}
       />

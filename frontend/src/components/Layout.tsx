@@ -1,42 +1,50 @@
 import { Bell, List, SignOut, X, type Icon } from "@phosphor-icons/react";
-import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
-import { useEffect, useState, type ReactNode } from "react";
+import { AnimatePresence, m as motion } from "motion/react";
+import { Suspense, useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { ROLE_LABEL, useAuth } from "../lib/auth";
+import { useLang } from "../lib/lang";
+import type { StringKey } from "../i18n/strings";
 import { HOSPITAL, HOSPITAL_FULL, PRODUCT } from "../lib/brand";
 import { useMotionT } from "../lib/motion";
 import type { Notice, Role } from "../lib/types";
 import { Logo } from "./Icons";
+import { Button, LinkButton, ListSkeleton } from "./ui";
 import { LangToggle } from "./LangToggle";
 
-const link = "tab-press relative whitespace-nowrap rounded-sm px-2.5 py-1.5 text-ink hover:underline aria-[current=page]:font-semibold aria-[current=page]:text-primary";
+const link = "relative whitespace-nowrap rounded-sm px-2.5 py-1.5 text-ink hover:underline aria-[current=page]:font-semibold aria-[current=page]:text-primary";
 
-const NAV: Partial<Record<Role, { to: string; label: string }[]>> = {
+const NAV: Partial<Record<Role, { to: string; label: StringKey }[]>> = {
   patient: [
-    { to: "/patient", label: "My plans" },
-    { to: "/patient/upload", label: "Add summary" },
-    { to: "/patient/sharing", label: "Sharing" },
-    { to: "/providers", label: "Providers" },
+    { to: "/patient", label: "navPlans" },
+    { to: "/calendar", label: "calendar" },
+    { to: "/patient/upload", label: "navAdd" },
+    { to: "/patient/sharing", label: "sharing" },
+    { to: "/providers", label: "navProviders" },
   ],
   manager: [
-    { to: "/family", label: "My family" },
-    { to: "/family/hub", label: "Hub" },
+    { to: "/family", label: "myFamily" },
+    { to: "/calendar", label: "calendar" },
+    { to: "/family/hub", label: "familyHub" },
   ],
-  family: [{ to: "/family", label: "My family" }],
+  family: [{ to: "/family", label: "myFamily" }, { to: "/calendar", label: "calendar" }],
 };
 
-const SITE_LINKS = [
-  { href: "/#process", label: "How it works" },
-  { href: "/#people", label: "Who it is for" },
-  { href: "/#safety", label: "Safety" },
-  { href: "/#faq", label: "Questions" },
+const SITE_LINKS: { href: string; label: StringKey }[] = [
+  { href: "/#how", label: "howItWorks" },
+  { href: "/#safety", label: "safety" },
 ];
 
-export function BellMenu({ dark = false }: { dark?: boolean }) {
+
+function BellMenu({ dark = false }: { dark?: boolean }) {
   const [list, setList] = useState<Notice[]>([]);
   const [open, setOpen] = useState(false);
-  const load = () => api.notifications().then(setList).catch(() => undefined);
+  let failed = 0;
+  const load = () => {
+    if (document.hidden || failed >= 3) return; // stop polling once the server is gone
+    api.notifications().then((l) => { failed = 0; setList(l); }).catch(() => { failed++; });
+  };
   useEffect(() => {
     load();
     const id = window.setInterval(load, 20000);
@@ -88,14 +96,12 @@ export function Header() {
   const nav = useNavigate();
   const loc = useLocation();
   const [menu, setMenu] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const bar = useSpring(scrollYProgress, { stiffness: 140, damping: 28 });
   useEffect(() => setMenu(false), [loc.pathname, loc.hash]);
+  const { t } = useLang();
   const items = user ? NAV[user.role] ?? [] : [];
   return (
     <header className="no-print sticky top-0 z-20 border-b border-line bg-surface">
-      <motion.div className="absolute inset-x-0 bottom-[-1px] h-[3px] origin-left bg-secondary" style={{ scaleX: bar }} aria-hidden />
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3">
+      <div className="mx-auto flex max-w-[1480px] items-center justify-between gap-3 px-5 py-3">
         <Link to={user ? (user.role === "patient" ? "/patient" : "/family") : "/"} className="flex min-w-0 items-center gap-2 text-ink no-underline hover:no-underline">
           <Logo size={32} />
           <span className="min-w-0 leading-tight">
@@ -105,8 +111,8 @@ export function Header() {
         </Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
           {user
-            ? items.map((n) => <NavLink key={n.to} to={n.to} end className={link}>{n.label}</NavLink>)
-            : SITE_LINKS.map((n) => <a key={n.href} href={n.href} className={link.replace("aria-[current=page]:font-semibold aria-[current=page]:text-primary", "")}>{n.label}</a>)}
+            ? items.map((n) => <NavLink key={n.to} to={n.to} end className={link}>{t(n.label)}</NavLink>)
+            : SITE_LINKS.map((n) => <a key={n.href} href={n.href} className={link.replace("aria-[current=page]:font-semibold aria-[current=page]:text-primary", "")}>{t(n.label)}</a>)}
         </nav>
         <div className="hidden items-center gap-2 lg:flex">
           {user && <LangToggle compact />}
@@ -114,36 +120,36 @@ export function Header() {
             <>
               <BellMenu />
               <span className="whitespace-nowrap text-sm leading-tight"><strong>{user.name}</strong><span className="block text-xs text-muted">{ROLE_LABEL[user.role]}</span></span>
-              <button className="btn btn-quiet btn-sm whitespace-nowrap" onClick={() => { signOut(); nav("/"); }}><SignOut size={16} aria-hidden /> Sign out</button>
+              <Button look="quiet" small className="whitespace-nowrap" onClick={() => { signOut(); nav("/"); }}><SignOut size={16} aria-hidden /> {t("signOut")}</Button>
             </>
           ) : (
             <>
-              <Link to="/login" className="btn btn-quiet btn-sm">Sign in</Link>
-              <Link to="/register" className="btn btn-sm">Create account</Link>
+              <LinkButton to="/login" look="quiet" small>{t("signIn")}</LinkButton>
+              <LinkButton to="/register" small>{t("createAccount")}</LinkButton>
             </>
           )}
         </div>
         <div className="flex items-center gap-2 lg:hidden">
           {user && <BellMenu />}
-          <button className="btn btn-quiet btn-sm" aria-expanded={menu} aria-label="Menu" onClick={() => setMenu(!menu)}>
+          <Button look="quiet" small aria-expanded={menu} aria-label="Menu" onClick={() => setMenu(!menu)}>
             {menu ? <X size={20} aria-hidden /> : <List size={20} aria-hidden />}
-          </button>
+          </Button>
         </div>
       </div>
       <AnimatePresence>
         {menu && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t border-line lg:hidden">
-            <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-3">
+            <div className="mx-auto flex max-w-[1480px] flex-col gap-1 px-5 py-3">
               {user ? (
                 <>
-                  {items.map((n) => <NavLink key={n.to} to={n.to} end className={link}>{n.label}</NavLink>)}
+                  {items.map((n) => <NavLink key={n.to} to={n.to} end className={link}>{t(n.label)}</NavLink>)}
                   <div className="flex flex-wrap items-center gap-2 py-2"><LangToggle compact /></div>
-                  <button className="btn btn-quiet btn-sm w-fit" onClick={() => { signOut(); nav("/"); }}><SignOut size={16} aria-hidden /> Sign out ({user.name})</button>
+                  <Button look="quiet" small className="w-fit" onClick={() => { signOut(); nav("/"); }}><SignOut size={16} aria-hidden /> Sign out ({user.name})</Button>
                 </>
               ) : (
                 <>
-                  {SITE_LINKS.map((n) => <a key={n.href} href={n.href} className="px-2.5 py-2">{n.label}</a>)}
-                  <div className="flex gap-2 py-2"><Link to="/login" className="btn btn-quiet btn-sm">Sign in</Link><Link to="/register" className="btn btn-sm">Create account</Link></div>
+                  {SITE_LINKS.map((n) => <a key={n.href} href={n.href} className="px-2.5 py-2">{t(n.label)}</a>)}
+                  <div className="flex gap-2 py-2"><LinkButton to="/login" look="quiet" small>{t("signIn")}</LinkButton><LinkButton to="/register" small>{t("createAccount")}</LinkButton></div>
                 </>
               )}
             </div>
@@ -155,32 +161,33 @@ export function Header() {
 }
 
 export function Footer() {
+  const { t } = useLang();
   return (
     <footer className="no-print mt-20 border-t border-line bg-surface">
-      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-10 md:grid-cols-[1.4fr_1fr]">
+      <div className="mx-auto grid max-w-[1480px] gap-8 px-5 py-10 md:grid-cols-[1.4fr_1fr]">
         <div className="max-w-xl space-y-2">
           <p className="font-heading text-xl">{PRODUCT} <span className="text-muted">by {HOSPITAL_FULL}</span></p>
           <p className="text-muted">
-            This tool organizes your discharge instructions. It does not give medical advice. Ask your doctor about anything unclear.
+            {t("footerNote")}
           </p>
           <p className="text-sm text-muted">{HOSPITAL} Hospital owns and runs this service. Its doctors and staff are added by the hospital's management team. All data in this demo is synthetic.</p>
         </div>
         <nav className="flex flex-col gap-1 md:items-end" aria-label="Legal">
-          <Link to="/terms">Terms of Use</Link>
-          <Link to="/privacy">Privacy Policy</Link>
-          <Link to="/safety">Safety &amp; Limitations</Link>
+          <Link to="/terms">{t("terms")}</Link>
+          <Link to="/privacy">{t("privacy")}</Link>
+          <Link to="/safety">{t("safetyLimits")}</Link>
         </nav>
       </div>
     </footer>
   );
 }
 
-export interface StaffNavItem { to: string; label: string; Icon: Icon; end?: boolean }
+interface StaffNavItem { to: string; label: string; Icon: Icon; end?: boolean }
 
 /** Sidebar shell used by the doctor workspace and the management console. */
 export function StaffShell({ variant, title, nav, extra }: { variant: "doctor" | "admin"; title: string; nav: StaffNavItem[]; extra?: ReactNode }) {
   const { user, signOut } = useAuth();
-  const go = useNavigate();
+  const { t } = useLang();
   const loc = useLocation();
   const mt = useMotionT();
   const dark = variant === "admin";
@@ -197,7 +204,7 @@ export function StaffShell({ variant, title, nav, extra }: { variant: "doctor" |
         </div>
         <nav className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible" aria-label={title}>
           {nav.map(({ to, label, Icon, end }) => (
-            <NavLink key={to} to={to} end={end} className="side-link tab-press relative whitespace-nowrap rounded-sm px-3 py-2">
+            <NavLink key={to} to={to} end={end} className="side-link relative whitespace-nowrap rounded-sm px-3 py-2">
               {({ isActive }) => (
                 <>
                   {isActive && <motion.span layoutId={`side-${variant}`} className="absolute inset-0 rounded-sm" style={{ background: "rgba(246,252,250,0.22)" }} transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
@@ -213,18 +220,20 @@ export function StaffShell({ variant, title, nav, extra }: { variant: "doctor" |
             <span className="min-w-0 text-sm leading-tight"><strong className="block truncate">{user?.name}</strong><span className="text-xs opacity-80">{user ? ROLE_LABEL[user.role] : ""}</span></span>
             <BellMenu dark />
           </div>
-          <button className="btn btn-sm btn-ghost-dark w-full justify-center" onClick={() => { signOut(); go("/login"); }}><SignOut size={16} aria-hidden /> Sign out</button>
+          <Button small className="btn-ghost-dark w-full justify-center" onClick={() => { signOut(); window.location.assign("/login"); }}><SignOut size={16} aria-hidden /> {t("signOut")}</Button>
         </div>
       </aside>
       <main className="min-w-0 flex-1 px-5 py-8 md:px-10">
         <div className="mb-4 flex items-center justify-between gap-3 md:hidden no-print">
           <span className="text-sm">{user?.name}</span>
-          <button className="btn btn-quiet btn-sm" onClick={() => { signOut(); go("/login"); }}><SignOut size={16} aria-hidden /> Sign out</button>
+          <Button look="quiet" small onClick={() => { signOut(); window.location.assign("/login"); }}><SignOut size={16} aria-hidden /> {t("signOut")}</Button>
         </div>
-        <motion.div key={loc.pathname} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={mt(0.25)} className="mx-auto max-w-5xl">
-          <Outlet />
+        <motion.div key={loc.pathname} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={mt(0.15)} className="mx-auto max-w-[1480px]">
+          <Suspense fallback={<ListSkeleton rows={4} />}>
+            <Outlet />
+          </Suspense>
         </motion.div>
-        <p className="mx-auto mt-12 max-w-5xl text-xs text-muted">{HOSPITAL_FULL} staff workspace. Synthetic data only. This tool organizes instructions and gives no medical advice.</p>
+        <p className="mx-auto mt-12 max-w-[1480px] text-xs text-muted">{HOSPITAL_FULL} staff workspace. Synthetic data only. This tool organizes instructions and gives no medical advice.</p>
       </main>
     </div>
   );

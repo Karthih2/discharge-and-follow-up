@@ -5,8 +5,9 @@ from datetime import date
 
 from sqlmodel import Session, select
 
+from .agents.samples import DEPARTMENT
 from .auth import hash_password
-from .models import Consent, Doctor, Document, FamilyHub, HubMember, User
+from .models import Consent, Doctor, Document, FamilyHub, HubMember, User  # noqa: F401
 
 DEMO_PASSWORD = "demo1234"  # shown on the sign in page for the demo only
 
@@ -33,8 +34,9 @@ def seed_users(s: Session) -> None:
     if s.exec(select(User)).first():
         return
     ids = {}
+    pw = hash_password(DEMO_PASSWORD)  # one salt for every demo account: instant, and the demo password is public anyway
     for key, name, email, role, lang in USERS:
-        u = User(name=name, email=email, password_hash=hash_password(DEMO_PASSWORD), role=role, language=lang)
+        u = User(name=name, email=email, password_hash=pw, role=role, language=lang)
         s.add(u)
         s.commit()
         s.refresh(u)
@@ -88,7 +90,7 @@ def _load(s: Session) -> list[int]:
         doc = Document(owner_id=owner.id, title=meta["title"], patient_alias=meta["patient_alias"],
                        discharge_date=date.fromisoformat(meta["discharge_date"]), city=meta["city"],
                        pincode=meta["pincode"], preferred_language=owner.language, raw_text=sample_text(key),
-                       pii_check_passed=True)
+                       department=DEPARTMENT[key], pii_check_passed=True)
         s.add(doc)
         s.commit()
         s.refresh(doc)

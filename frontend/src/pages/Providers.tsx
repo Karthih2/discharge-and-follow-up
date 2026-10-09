@@ -1,14 +1,14 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ProviderCard, TYPE_LABEL } from "../components/ProviderCard";
-import { ListSkeleton } from "../components/Skeleton";
+import { ListSkeleton } from "../components/ui";
 import { api } from "../lib/api";
-import { useLoad } from "../lib/motion";
+import { useQuery } from "../lib/query";
 
 export default function Providers() {
   const id = Number(useParams().id) || null;
-  const { data: all, error } = useLoad(() => api.providers(), []);
-  const { data: plan } = useLoad(() => (id ? api.plan(id, "en") : Promise.resolve(null)), [id]);
+  const { data: all, error } = useQuery("providers", api.providers);
+  const { data: plan } = useQuery(id ? `plan/${id}/en` : null, () => api.plan(id!, "en"));
   const [city, setCity] = useState("");
   const [type, setType] = useState("");
   const [q, setQ] = useState("");

@@ -1,24 +1,30 @@
+import type { StringKey } from "../i18n/strings";
+import { useLang } from "../lib/lang";
 import { useState } from "react";
-import { ListSkeleton } from "../components/Skeleton";
+import { Card, ListSkeleton } from "../components/ui";
 import { api } from "../lib/api";
-import { useLoad } from "../lib/motion";
+import { toast } from "../lib/toast";
+import { invalidate, useQuery } from "../lib/query";
 import type { Scope } from "../lib/types";
 
-const SCOPES: { v: Scope; label: string; help: string }[] = [
-  { v: "none", label: "Nothing", help: "They cannot see your plan." },
-  { v: "reminders", label: "Reminders only", help: "Tasks and alerts. No medicines or notes." },
-  { v: "appointments", label: "Appointments only", help: "Visits, tests and referrals. Read only." },
-  { v: "full", label: "Full plan", help: "Everything in your plan, with the original lines." },
+const SCOPES: { v: Scope; label: StringKey; help: StringKey }[] = [
+  { v: "none", label: "shareNothing", help: "shareNothingHelp" },
+  { v: "reminders", label: "scopeReminders", help: "shareRemindersHelp" },
+  { v: "appointments", label: "scopeAppointments", help: "shareApptsHelp" },
+  { v: "full", label: "scopeFull", help: "shareFullHelp" },
 ];
 
 export default function Sharing() {
-  const { data, error, reload } = useLoad(() => api.hub(), []);
+  const { t } = useLang();
+  const { data, error } = useQuery("hub", api.hub);
   const [msg, setMsg] = useState<string | null>(null);
 
   const change = async (id: number, scope: Scope) => {
     await api.setConsent(id, scope);
-    setMsg("Saved. The change applies right away.");
-    reload();
+    setMsg(t("sharingSaved"));
+    toast(t("sharingSaved"));
+    invalidate("hub");
+    invalidate("family");
   };
 
   return (
@@ -40,7 +46,7 @@ export default function Sharing() {
             {data.members
               .filter((m) => m.role !== "patient")
               .map((m) => (
-                <li key={m.member_id} className="card space-y-2 p-4">
+                <Card key={m.member_id} as="li" className="space-y-2 p-4">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p>
                       <strong>{m.name}</strong> <span className="text-muted">{m.role === "manager" ? "Hub manager" : "Family viewer"}, {m.email}</span>
@@ -49,13 +55,13 @@ export default function Sharing() {
                       <span className="sr-only">What {m.name} can see</span>
                       <select className="field w-auto" value={m.scope ?? "none"} onChange={(e) => change(m.member_id, e.target.value as Scope)}>
                         {SCOPES.map((s) => (
-                          <option key={s.v} value={s.v}>{s.label}</option>
+                          <option key={s.v} value={s.v}>{t(s.label)}</option>
                         ))}
                       </select>
                     </label>
                   </div>
-                  <p className="text-sm text-muted">{SCOPES.find((s) => s.v === (m.scope ?? "none"))?.help}</p>
-                </li>
+                  <p className="text-sm text-muted">{t(SCOPES.find((s) => s.v === (m.scope ?? "none"))!.help)}</p>
+                </Card>
               ))}
           </ul>
           {msg && <p role="status" className="text-primary">{msg}</p>}

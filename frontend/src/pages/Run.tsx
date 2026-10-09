@@ -1,9 +1,12 @@
+import { STRINGS, type StringKey } from "../i18n/strings";
+import { useLang } from "../lib/lang";
 import { CheckCircle, Circle, SpinnerGap, WarningCircle, XCircle } from "@phosphor-icons/react";
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { CountUp } from "../components/Fx";
-import { Skeleton } from "../components/Skeleton";
+import { useParams } from "react-router-dom";
+import { invalidate } from "../lib/query";
+import { CountUp } from "../components/CountUp";
+import { Button, LinkButton, Skeleton } from "../components/ui";
 import { api } from "../lib/api";
 import { useMotionT } from "../lib/motion";
 import type { StepEvent } from "../lib/types";
@@ -17,6 +20,7 @@ interface Row {
 }
 
 export default function Run() {
+  const { t, lang } = useLang();
   const id = Number(useParams().id);
   const mt = useMotionT();
   const [rows, setRows] = useState<Row[]>([]);
@@ -32,6 +36,7 @@ export default function Run() {
         setRows(ev.steps.map((s) => ({ ...s, state: "waiting" as State })));
       } else if (ev.step === "complete") {
         setFinished(true);
+        for (const k of ["today", "documents", "calendar", "plan", "family"]) invalidate(k); // the new plan shows up on every screen, family hub included
         setCounts({ items: ev.items ?? 0, flagged: ev.flagged ?? 0 });
         es.close();
       } else if (ev.step === "error") {
@@ -55,8 +60,8 @@ export default function Run() {
   return (
     <div className="max-w-3xl space-y-8">
       <header>
-        <h1 className="text-4xl">{finished ? "Your plan is ready" : "Reading the summary"}</h1>
-        <p className="text-muted">Small helpers work in order. Each one writes down what it did.</p>
+        <h1 className="text-4xl">{finished ? t("planReady") : t("readingSummary")}</h1>
+        <p className="text-muted">{t("helpersIntro")}</p>
       </header>
 
       <div className="flex gap-6">
@@ -86,8 +91,8 @@ export default function Run() {
                 {r.state === "failed" && <XCircle size={24} weight="fill" className="text-attention" aria-label="Failed" />}
               </span>
               <div>
-                <p className="font-semibold">{r.label}</p>
-                {r.message && <p className={r.state === "flagged" || r.state === "failed" ? "text-attention" : "text-muted"}>{r.message}</p>}
+                <p className="font-semibold">{(`step_${r.key}` in STRINGS ? t(`step_${r.key}` as StringKey) : r.label)}</p>
+                {r.message && lang === "en" && <p className={r.state === "flagged" || r.state === "failed" ? "text-attention" : "text-muted"}>{r.message}</p>}
               </div>
             </motion.li>
           ))}
@@ -95,24 +100,24 @@ export default function Run() {
       </div>
 
       <p className="text-lg" aria-live="polite">
-        Instructions found: <strong className="font-heading text-2xl"><CountUp to={counts.items} /></strong>. Sent to a doctor: <strong className={`font-heading text-2xl ${counts.flagged ? "text-attention" : ""}`}><CountUp to={counts.flagged} /></strong>.
+        {t("instrFound")}: <strong className="font-heading text-2xl"><CountUp to={counts.items} /></strong>. {t("sentToDoctor")}: <strong className={`font-heading text-2xl ${counts.flagged ? "text-attention" : ""}`}><CountUp to={counts.flagged} /></strong>.
       </p>
 
       {error && (
         <div role="alert" className="space-y-3 rounded-sm border border-attention bg-attention-tint p-4">
           <p className="text-attention">{error}</p>
-          <p className="text-sm">Nothing was lost. You can try again, or type the summary in by hand.</p>
+          <p className="text-sm">{t("nothingLost")}</p>
           <div className="flex gap-2">
-            <button className="btn btn-sm" onClick={() => window.location.reload()}>Try again</button>
-            <Link to="/patient/upload" className="btn btn-quiet btn-sm">Enter it by hand</Link>
+            <Button small onClick={() => window.location.reload()}>{t("tryAgain")}</Button>
+            <LinkButton to="/patient/upload" look="quiet" small>{t("enterByHand")}</LinkButton>
           </div>
         </div>
       )}
 
       {finished && (
         <div className="flex flex-wrap gap-3">
-          <Link to={`/plan/${id}`} className="btn">Open the plan</Link>
-          {counts.flagged > 0 && <p className="self-center text-muted">A doctor will check the flagged items. You will get a notice when they do.</p>}
+          <LinkButton to={`/plan/${id}`} >{t("openThePlan")}</LinkButton>
+          {counts.flagged > 0 && <p className="self-center text-muted">{t("doctorWillCheck")}</p>}
         </div>
       )}
     </div>

@@ -29,33 +29,123 @@ Dawn Scan and Lab Centre,lab,radiology;pathology,Chennai,600017,13.03983,80.2402
 Cedar Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Chennai,600042,12.97315,80.21774,en;ta;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,044-5550-0127,true
 Aster Medicals,pharmacy,pharmacy,Chennai,600032,12.99564,80.22464,en;ta,CGHS;Private,Mon-Sat,044-5550-0128,true
 Lily Home Care Services,home_care,home nursing;wound care,Chennai,600020,13.00755,80.25825,en;ta;hi,Ayushman Bharat;Private,Mon-Sun,044-5550-0129,true
-Lotus General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Delhi,110075,28.60111,77.04153,en;hi,Ayushman Bharat;CGHS;Private,Mon-Fri,011-5550-0130,true
-Palm Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Delhi,110005,28.65659,77.19316,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0131,true
-Kaveri Diabetes Clinic,clinic,diabetology;endocrinology;dietetics,Delhi,110001,28.63342,77.21565,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0132,true
-Banyan Eye Care Clinic,clinic,ophthalmology,Delhi,110085,28.75766,77.06717,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sun,011-5550-0133,true
-Amber Bone and Joint Clinic,clinic,orthopaedics,Delhi,110070,28.51938,77.16294,en;hi;ta,CGHS;Private,Mon-Fri,011-5550-0134,true
-Jasmine Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Delhi,110024,28.55716,77.24814,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0135,true
-Neem Scan and Lab Centre,lab,radiology;pathology,Delhi,110017,28.52803,77.21843,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0136,true
-Coral Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Delhi,110058,28.62963,77.08263,en;hi;ta,CGHS;Private,Mon-Sun,011-5550-0137,true
-Sandal Medicals,pharmacy,pharmacy,Delhi,110075,28.58936,77.05005,en;hi,Ayushman Bharat;Private,Mon-Fri,011-5550-0138,true
-Mango Home Care Services,home_care,home nursing;wound care,Delhi,110005,28.64044,77.18998,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0139,true
-Peacock General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Delhi,110024,28.55973,77.23411,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0140,true
-Ashoka Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Delhi,110017,28.51391,77.21304,en;hi,Ayushman Bharat;Private,Mon-Sun,011-5550-0141,true
-Tulsi Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;general medicine,Delhi,110058,28.613,77.08174,en;hi,Ayushman Bharat;CGHS;Private,Mon-Fri,011-5550-0142,true
-Maple Eye Care Clinic,clinic,ophthalmology,Delhi,110075,28.58948,77.05491,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0143,true
-Willow Bone and Joint Clinic,clinic,orthopaedics,Delhi,110005,28.64183,77.18968,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0144,true
-Saffron Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Delhi,110001,28.63269,77.2259,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sun,011-5550-0145,true
-Teak Scan and Lab Centre,lab,radiology;pathology,Delhi,110085,28.75716,77.06524,en;hi;ta,CGHS;Private,Mon-Fri,011-5550-0146,true
-Orchid Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Delhi,110070,28.51468,77.15697,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0147,true
-Harmony Medicals,pharmacy,pharmacy,Delhi,110024,28.56431,77.25252,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0148,true
-Pearl Home Care Services,home_care,home nursing;wound care,Delhi,110017,28.53549,77.19822,en;hi;ta,CGHS;Private,Mon-Sun,011-5550-0149,true
-Silver Oak General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Delhi,110001,28.62373,77.21027,en;hi,Ayushman Bharat;Private,Mon-Fri,011-5550-0150,true
-Blue Lotus Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Delhi,110085,28.7431,77.05614,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0151,true
-Green Valley Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;pulmonology,Delhi,110070,28.52214,77.15331,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0152,true
-Riverside Eye Care Clinic,clinic,ophthalmology;dietetics;pulmonology,Delhi,110024,28.5558,77.24135,en;hi,Ayushman Bharat;Private,Mon-Sun,011-5550-0153,true
-Hillview Bone and Joint Clinic,clinic,orthopaedics,Delhi,110017,28.52136,77.20819,en;hi,Ayushman Bharat;CGHS;Private,Mon-Fri,011-5550-0154,true
-Sunrise Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Delhi,110058,28.63277,77.09237,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0155,true
-Dawn Scan and Lab Centre,lab,radiology;pathology,Delhi,110075,28.59247,77.04882,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0156,true
-Cedar Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Delhi,110005,28.65613,77.1802,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sun,011-5550-0157,true
-Aster Medicals,pharmacy,pharmacy,Delhi,110001,28.64109,77.22342,en;hi;ta,CGHS;Private,Mon-Fri,011-5550-0158,true
-Lily Home Care Services,home_care,home nursing;wound care,Delhi,110085,28.75849,77.06365,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0159,true
+Lotus General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Bengaluru,560001,12.98531,77.59883,en;kn,Ayushman Bharat;CGHS;Private,Mon-Fri,080-5550-0130,true
+Palm Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Bengaluru,560038,12.98309,77.64306,en;kn;ta,CGHS;Private,Mon-Sat,080-5550-0131,true
+Kaveri Diabetes Clinic,clinic,diabetology;endocrinology;dietetics,Bengaluru,560001,12.97822,77.60225,en;kn,Ayushman Bharat;Private,Mon-Sat,080-5550-0132,true
+Banyan Eye Care Clinic,clinic,ophthalmology,Bengaluru,560038,12.98656,77.65147,en;kn;ta,Ayushman Bharat;CGHS;Private,Mon-Sun,080-5550-0133,true
+Amber Bone and Joint Clinic,clinic,orthopaedics,Bengaluru,560001,12.97568,77.60724,en;kn,CGHS;Private,Mon-Fri,080-5550-0134,true
+Jasmine Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Bengaluru,560038,12.96786,77.64564,en;kn;ta,Ayushman Bharat;Private,Mon-Sat,080-5550-0135,true
+Neem Scan and Lab Centre,lab,radiology;pathology,Bengaluru,560001,12.97983,77.61513,en;kn,Ayushman Bharat;CGHS;Private,Mon-Sat,080-5550-0136,true
+Coral Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Bengaluru,560038,12.98613,77.63563,en;kn;ta,CGHS;Private,Mon-Sun,080-5550-0137,true
+Sandal Medicals,pharmacy,pharmacy,Bengaluru,560001,12.97356,77.60735,en;kn,Ayushman Bharat;Private,Mon-Fri,080-5550-0138,true
+Mango Home Care Services,home_care,home nursing;wound care,Bengaluru,560038,12.96694,77.63988,en;kn;ta,Ayushman Bharat;CGHS;Private,Mon-Sat,080-5550-0139,true
+Peacock General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Bengaluru,560034,12.92723,77.61531,en;kn,CGHS;Private,Mon-Sat,080-5550-0140,true
+Ashoka Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Bengaluru,560011,12.91441,77.60024,en;kn;ta,Ayushman Bharat;Private,Mon-Sun,080-5550-0141,true
+Tulsi Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;general medicine,Bengaluru,560034,12.9263,77.61844,en;kn,Ayushman Bharat;CGHS;Private,Mon-Fri,080-5550-0142,true
+Maple Eye Care Clinic,clinic,ophthalmology,Bengaluru,560011,12.92238,77.60271,en;kn;ta,CGHS;Private,Mon-Sat,080-5550-0143,true
+Willow Bone and Joint Clinic,clinic,orthopaedics,Bengaluru,560034,12.92513,77.62328,en;kn,Ayushman Bharat;Private,Mon-Sat,080-5550-0144,true
+Saffron Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Bengaluru,560011,12.92619,77.603,en;kn;ta,Ayushman Bharat;CGHS;Private,Mon-Sun,080-5550-0145,true
+Teak Scan and Lab Centre,lab,radiology;pathology,Bengaluru,560034,12.94286,77.63324,en;kn,CGHS;Private,Mon-Fri,080-5550-0146,true
+Orchid Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Bengaluru,560011,12.91968,77.59177,en;kn;ta,Ayushman Bharat;Private,Mon-Sat,080-5550-0147,true
+Harmony Medicals,pharmacy,pharmacy,Bengaluru,560034,12.93181,77.63372,en;kn,Ayushman Bharat;CGHS;Private,Mon-Sat,080-5550-0148,true
+Pearl Home Care Services,home_care,home nursing;wound care,Bengaluru,560011,12.93599,77.58542,en;kn;ta,CGHS;Private,Mon-Sun,080-5550-0149,true
+Silver Oak General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Bengaluru,560066,12.96203,77.74357,en;kn,Ayushman Bharat;Private,Mon-Fri,080-5550-0150,true
+Blue Lotus Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Bengaluru,560078,12.8999,77.58534,en;kn;ta,Ayushman Bharat;CGHS;Private,Mon-Sat,080-5550-0151,true
+Green Valley Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;pulmonology,Bengaluru,560066,12.97194,77.74431,en;kn,CGHS;Private,Mon-Sat,080-5550-0152,true
+Riverside Eye Care Clinic,clinic,ophthalmology;dietetics;pulmonology,Bengaluru,560078,12.8944,77.58375,en;kn;ta,Ayushman Bharat;Private,Mon-Sun,080-5550-0153,true
+Hillview Bone and Joint Clinic,clinic,orthopaedics,Bengaluru,560066,12.96666,77.75159,en;kn,Ayushman Bharat;CGHS;Private,Mon-Fri,080-5550-0154,true
+Sunrise Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Bengaluru,560078,12.91717,77.59027,en;kn;ta,CGHS;Private,Mon-Sat,080-5550-0155,true
+Dawn Scan and Lab Centre,lab,radiology;pathology,Bengaluru,560066,12.97017,77.75282,en;kn,Ayushman Bharat;Private,Mon-Sat,080-5550-0156,true
+Cedar Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Bengaluru,560078,12.91053,77.575,en;kn;ta,Ayushman Bharat;CGHS;Private,Mon-Sun,080-5550-0157,true
+Aster Medicals,pharmacy,pharmacy,Bengaluru,560066,12.97939,77.75672,en;kn,CGHS;Private,Mon-Fri,080-5550-0158,true
+Lily Home Care Services,home_care,home nursing;wound care,Bengaluru,560078,12.91529,77.59285,en;kn;ta,Ayushman Bharat;Private,Mon-Sat,080-5550-0159,true
+Lotus General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Hyderabad,500001,17.38242,78.48428,en;te,Ayushman Bharat;CGHS;Private,Mon-Sat,040-5550-0160,true
+Palm Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Hyderabad,500016,17.42798,78.45152,en;te;hi,CGHS;Private,Mon-Sun,040-5550-0161,true
+Kaveri Diabetes Clinic,clinic,diabetology;endocrinology;dietetics,Hyderabad,500001,17.37449,78.47632,en;te,Ayushman Bharat;Private,Mon-Fri,040-5550-0162,true
+Banyan Eye Care Clinic,clinic,ophthalmology,Hyderabad,500016,17.43051,78.4402,en;te;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,040-5550-0163,true
+Amber Bone and Joint Clinic,clinic,orthopaedics,Hyderabad,500001,17.38116,78.47596,en;te,CGHS;Private,Mon-Sat,040-5550-0164,true
+Jasmine Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Hyderabad,500016,17.42551,78.43993,en;te;hi,Ayushman Bharat;Private,Mon-Sun,040-5550-0165,true
+Neem Scan and Lab Centre,lab,radiology;pathology,Hyderabad,500001,17.37544,78.48343,en;te,Ayushman Bharat;CGHS;Private,Mon-Fri,040-5550-0166,true
+Coral Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Hyderabad,500016,17.42611,78.45728,en;te;hi,CGHS;Private,Mon-Sat,040-5550-0167,true
+Sandal Medicals,pharmacy,pharmacy,Hyderabad,500001,17.38774,78.47827,en;te,Ayushman Bharat;Private,Mon-Sat,040-5550-0168,true
+Mango Home Care Services,home_care,home nursing;wound care,Hyderabad,500016,17.43155,78.44464,en;te;hi,Ayushman Bharat;CGHS;Private,Mon-Sun,040-5550-0169,true
+Peacock General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Hyderabad,500034,17.40934,78.39805,en;te,CGHS;Private,Mon-Fri,040-5550-0170,true
+Ashoka Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Hyderabad,500032,17.44847,78.36073,en;te;hi,Ayushman Bharat;Private,Mon-Sat,040-5550-0171,true
+Tulsi Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;general medicine,Hyderabad,500034,17.41178,78.40671,en;te,Ayushman Bharat;CGHS;Private,Mon-Sat,040-5550-0172,true
+Maple Eye Care Clinic,clinic,ophthalmology,Hyderabad,500032,17.43016,78.33935,en;te;hi,CGHS;Private,Mon-Sun,040-5550-0173,true
+Willow Bone and Joint Clinic,clinic,orthopaedics,Hyderabad,500034,17.40882,78.40145,en;te,Ayushman Bharat;Private,Mon-Fri,040-5550-0174,true
+Saffron Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Hyderabad,500032,17.44799,78.34077,en;te;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,040-5550-0175,true
+Teak Scan and Lab Centre,lab,radiology;pathology,Hyderabad,500034,17.40115,78.41792,en;te,CGHS;Private,Mon-Sat,040-5550-0176,true
+Orchid Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Hyderabad,500032,17.44078,78.34042,en;te;hi,Ayushman Bharat;Private,Mon-Sun,040-5550-0177,true
+Harmony Medicals,pharmacy,pharmacy,Hyderabad,500034,17.41364,78.39575,en;te,Ayushman Bharat;CGHS;Private,Mon-Fri,040-5550-0178,true
+Pearl Home Care Services,home_care,home nursing;wound care,Hyderabad,500032,17.44077,78.36038,en;te;hi,CGHS;Private,Mon-Sat,040-5550-0179,true
+Silver Oak General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Hyderabad,500081,17.45222,78.38191,en;te,Ayushman Bharat;Private,Mon-Sat,040-5550-0180,true
+Blue Lotus Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Hyderabad,500020,17.40077,78.474,en;te;hi,Ayushman Bharat;CGHS;Private,Mon-Sun,040-5550-0181,true
+Green Valley Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;pulmonology,Hyderabad,500081,17.43551,78.38373,en;te,CGHS;Private,Mon-Fri,040-5550-0182,true
+Riverside Eye Care Clinic,clinic,ophthalmology;dietetics;pulmonology,Hyderabad,500020,17.40728,78.4839,en;te;hi,Ayushman Bharat;Private,Mon-Sat,040-5550-0183,true
+Hillview Bone and Joint Clinic,clinic,orthopaedics,Hyderabad,500081,17.43941,78.37055,en;te,Ayushman Bharat;CGHS;Private,Mon-Sat,040-5550-0184,true
+Sunrise Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Hyderabad,500020,17.41398,78.48884,en;te;hi,CGHS;Private,Mon-Sun,040-5550-0185,true
+Dawn Scan and Lab Centre,lab,radiology;pathology,Hyderabad,500081,17.45196,78.38455,en;te,Ayushman Bharat;Private,Mon-Fri,040-5550-0186,true
+Cedar Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Hyderabad,500020,17.41414,78.48296,en;te;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,040-5550-0187,true
+Aster Medicals,pharmacy,pharmacy,Hyderabad,500081,17.43694,78.37762,en;te,CGHS;Private,Mon-Sat,040-5550-0188,true
+Lily Home Care Services,home_care,home nursing;wound care,Hyderabad,500020,17.40303,78.4659,en;te;hi,Ayushman Bharat;Private,Mon-Sun,040-5550-0189,true
+Lotus General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Kochi,682001,9.91987,76.26201,en;ml,Ayushman Bharat;CGHS;Private,Mon-Fri,0484-5550-0190,true
+Palm Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Kochi,682024,10.01012,76.34652,en;ml;ta,CGHS;Private,Mon-Sat,0484-5550-0191,true
+Kaveri Diabetes Clinic,clinic,diabetology;endocrinology;dietetics,Kochi,682001,9.94216,76.26603,en;ml,Ayushman Bharat;Private,Mon-Sat,0484-5550-0192,true
+Banyan Eye Care Clinic,clinic,ophthalmology,Kochi,682024,10.02639,76.35361,en;ml;ta,Ayushman Bharat;CGHS;Private,Mon-Sun,0484-5550-0193,true
+Amber Bone and Joint Clinic,clinic,orthopaedics,Kochi,682001,9.94212,76.26405,en;ml,CGHS;Private,Mon-Fri,0484-5550-0194,true
+Jasmine Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Kochi,682024,10.00919,76.33534,en;ml;ta,Ayushman Bharat;Private,Mon-Sat,0484-5550-0195,true
+Neem Scan and Lab Centre,lab,radiology;pathology,Kochi,682001,9.92392,76.2602,en;ml,Ayushman Bharat;CGHS;Private,Mon-Sat,0484-5550-0196,true
+Coral Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Kochi,682024,10.01888,76.35151,en;ml;ta,CGHS;Private,Mon-Sun,0484-5550-0197,true
+Sandal Medicals,pharmacy,pharmacy,Kochi,682001,9.93937,76.26681,en;ml,Ayushman Bharat;Private,Mon-Fri,0484-5550-0198,true
+Mango Home Care Services,home_care,home nursing;wound care,Kochi,682024,10.01957,76.34909,en;ml;ta,Ayushman Bharat;CGHS;Private,Mon-Sat,0484-5550-0199,true
+Peacock General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Kochi,682016,9.97163,76.30375,en;ml,CGHS;Private,Mon-Sat,0484-5550-0200,true
+Ashoka Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Kochi,682030,9.93503,76.32478,en;ml;ta,Ayushman Bharat;Private,Mon-Sun,0484-5550-0201,true
+Tulsi Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;general medicine,Kochi,682016,9.9876,76.29937,en;ml,Ayushman Bharat;CGHS;Private,Mon-Fri,0484-5550-0202,true
+Maple Eye Care Clinic,clinic,ophthalmology,Kochi,682030,9.91748,76.32494,en;ml;ta,CGHS;Private,Mon-Sat,0484-5550-0203,true
+Willow Bone and Joint Clinic,clinic,orthopaedics,Kochi,682016,9.97758,76.30712,en;ml,Ayushman Bharat;Private,Mon-Sat,0484-5550-0204,true
+Saffron Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Kochi,682030,9.93652,76.3155,en;ml;ta,Ayushman Bharat;CGHS;Private,Mon-Sun,0484-5550-0205,true
+Teak Scan and Lab Centre,lab,radiology;pathology,Kochi,682016,9.97923,76.31062,en;ml,CGHS;Private,Mon-Fri,0484-5550-0206,true
+Orchid Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Kochi,682030,9.9306,76.31008,en;ml;ta,Ayushman Bharat;Private,Mon-Sat,0484-5550-0207,true
+Harmony Medicals,pharmacy,pharmacy,Kochi,682016,9.97265,76.29153,en;ml,Ayushman Bharat;CGHS;Private,Mon-Sat,0484-5550-0208,true
+Pearl Home Care Services,home_care,home nursing;wound care,Kochi,682030,9.93492,76.32536,en;ml;ta,CGHS;Private,Mon-Sun,0484-5550-0209,true
+Silver Oak General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Kochi,682020,9.95891,76.25194,en;ml,Ayushman Bharat;Private,Mon-Fri,0484-5550-0210,true
+Blue Lotus Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Kochi,682036,9.95153,76.28377,en;ml;ta,Ayushman Bharat;CGHS;Private,Mon-Sat,0484-5550-0211,true
+Green Valley Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;pulmonology,Kochi,682020,9.96381,76.24527,en;ml,CGHS;Private,Mon-Sat,0484-5550-0212,true
+Riverside Eye Care Clinic,clinic,ophthalmology;dietetics;pulmonology,Kochi,682036,9.93114,76.26834,en;ml;ta,Ayushman Bharat;Private,Mon-Sun,0484-5550-0213,true
+Hillview Bone and Joint Clinic,clinic,orthopaedics,Kochi,682020,9.9787,76.24769,en;ml,Ayushman Bharat;CGHS;Private,Mon-Fri,0484-5550-0214,true
+Sunrise Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Kochi,682036,9.94064,76.29041,en;ml;ta,CGHS;Private,Mon-Sat,0484-5550-0215,true
+Dawn Scan and Lab Centre,lab,radiology;pathology,Kochi,682020,9.96581,76.25302,en;ml,Ayushman Bharat;Private,Mon-Sat,0484-5550-0216,true
+Cedar Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Kochi,682036,9.94783,76.27307,en;ml;ta,Ayushman Bharat;CGHS;Private,Mon-Sun,0484-5550-0217,true
+Aster Medicals,pharmacy,pharmacy,Kochi,682020,9.96144,76.23913,en;ml,CGHS;Private,Mon-Fri,0484-5550-0218,true
+Lily Home Care Services,home_care,home nursing;wound care,Kochi,682036,9.93377,76.28207,en;ml;ta,Ayushman Bharat;Private,Mon-Sat,0484-5550-0219,true
+Lotus General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Delhi,110001,28.62572,77.21476,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0220,true
+Palm Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Delhi,110085,28.74065,77.06634,en;hi;ta,CGHS;Private,Mon-Sun,011-5550-0221,true
+Kaveri Diabetes Clinic,clinic,diabetology;endocrinology;dietetics,Delhi,110070,28.51649,77.158,en;hi,Ayushman Bharat;Private,Mon-Fri,011-5550-0222,true
+Banyan Eye Care Clinic,clinic,ophthalmology,Delhi,110024,28.5697,77.253,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0223,true
+Amber Bone and Joint Clinic,clinic,orthopaedics,Delhi,110017,28.5226,77.21663,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0224,true
+Jasmine Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Delhi,110058,28.62194,77.08856,en;hi,Ayushman Bharat;Private,Mon-Sun,011-5550-0225,true
+Neem Scan and Lab Centre,lab,radiology;pathology,Delhi,110075,28.59266,77.03445,en;hi,Ayushman Bharat;CGHS;Private,Mon-Fri,011-5550-0226,true
+Coral Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Delhi,110005,28.65046,77.18329,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0227,true
+Sandal Medicals,pharmacy,pharmacy,Delhi,110001,28.61959,77.22388,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0228,true
+Mango Home Care Services,home_care,home nursing;wound care,Delhi,110085,28.74164,77.05586,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sun,011-5550-0229,true
+Peacock General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Delhi,110058,28.6273,77.08916,en;hi;ta,CGHS;Private,Mon-Fri,011-5550-0230,true
+Ashoka Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Delhi,110075,28.58792,77.04644,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0231,true
+Tulsi Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;general medicine,Delhi,110005,28.65323,77.19772,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0232,true
+Maple Eye Care Clinic,clinic,ophthalmology,Delhi,110001,28.62205,77.21815,en;hi;ta,CGHS;Private,Mon-Sun,011-5550-0233,true
+Willow Bone and Joint Clinic,clinic,orthopaedics,Delhi,110085,28.74346,77.05115,en;hi,Ayushman Bharat;Private,Mon-Fri,011-5550-0234,true
+Saffron Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Delhi,110070,28.52653,77.15919,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0235,true
+Teak Scan and Lab Centre,lab,radiology;pathology,Delhi,110024,28.56918,77.24954,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0236,true
+Orchid Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Delhi,110017,28.5344,77.20524,en;hi,Ayushman Bharat;Private,Mon-Sun,011-5550-0237,true
+Harmony Medicals,pharmacy,pharmacy,Delhi,110058,28.6246,77.08793,en;hi,Ayushman Bharat;CGHS;Private,Mon-Fri,011-5550-0238,true
+Pearl Home Care Services,home_care,home nursing;wound care,Delhi,110075,28.59239,77.05063,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0239,true
+Silver Oak General Hospital,hospital,cardiology;orthopaedics;general medicine;pulmonology;diabetology,Delhi,110070,28.51886,77.1598,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0240,true
+Blue Lotus Heart Centre,hospital,cardiology;cardiac rehabilitation;cardiac diagnostics,Delhi,110024,28.56717,77.2539,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sun,011-5550-0241,true
+Green Valley Diabetes Clinic,clinic,diabetology;endocrinology;dietetics;pulmonology,Delhi,110017,28.52928,77.21564,en;hi;ta,CGHS;Private,Mon-Fri,011-5550-0242,true
+Riverside Eye Care Clinic,clinic,ophthalmology;dietetics;pulmonology,Delhi,110058,28.63251,77.08203,en;hi,Ayushman Bharat;Private,Mon-Sat,011-5550-0243,true
+Hillview Bone and Joint Clinic,clinic,orthopaedics,Delhi,110075,28.59353,77.05664,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0244,true
+Sunrise Diagnostics Lab,lab,pathology;radiology;cardiac diagnostics,Delhi,110005,28.66006,77.18219,en;hi;ta,CGHS;Private,Mon-Sun,011-5550-0245,true
+Dawn Scan and Lab Centre,lab,radiology;pathology,Delhi,110001,28.62242,77.21531,en;hi,Ayushman Bharat;Private,Mon-Fri,011-5550-0246,true
+Cedar Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Delhi,110085,28.73924,77.05028,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0247,true
+Aster Medicals,pharmacy,pharmacy,Delhi,110070,28.50975,77.16307,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0248,true
+Lily Home Care Services,home_care,home nursing;wound care,Delhi,110024,28.57451,77.25283,en;hi,Ayushman Bharat;Private,Mon-Sun,011-5550-0249,true

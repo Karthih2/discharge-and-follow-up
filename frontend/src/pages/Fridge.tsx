@@ -3,10 +3,11 @@ import { QRCodeSVG } from "qrcode.react";
 import { Link, useParams } from "react-router-dom";
 import { CalendarIcon, Logo, SLOT_ICON } from "../components/Icons";
 import { LangToggle } from "../components/LangToggle";
-import { Skeleton } from "../components/Skeleton";
+import { Button, Skeleton } from "../components/ui";
 import { api } from "../lib/api";
 import { useLang } from "../lib/lang";
-import { fmtDate, useLoad } from "../lib/motion";
+import { fmtDate } from "../lib/motion";
+import { useQuery } from "../lib/query";
 
 const SLOTS = ["morning", "afternoon", "night"] as const;
 
@@ -21,7 +22,7 @@ function Dot() {
 export default function Fridge() {
   const id = Number(useParams().id);
   const { lang, t } = useLang();
-  const { data: plan, error } = useLoad(() => api.plan(id, lang), [id, lang]);
+  const { data: plan, error } = useQuery(`plan/${id}/${lang}`, () => api.plan(id, lang));
 
   if (error) return <p className="text-attention">Could not load this plan.</p>;
   if (!plan)
@@ -48,9 +49,9 @@ export default function Fridge() {
         <Link to={`/plan/${id}`}>Back to the plan</Link>
         <div className="flex flex-wrap items-center gap-3">
           <LangToggle />
-          <button className="btn" onClick={() => window.print()}>
+          <Button  onClick={() => window.print()}>
             <Printer size={20} aria-hidden /> {t("printSave")}
-          </button>
+          </Button>
         </div>
       </div>
 

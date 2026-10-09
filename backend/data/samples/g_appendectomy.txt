@@ -1,0 +1,31 @@
+CITY SURGICAL HOSPITAL, CHENNAI
+DISCHARGE SUMMARY (SYNTHETIC DOCUMENT FOR DEMO. NOT A REAL PATIENT.)
+Patient: Ms. Divya Menon (synthetic)
+Age/Sex: 28 / Female
+Date of admission: 09 Oct 2026
+Date of discharge: 12 Oct 2026
+Diagnosis: Acute appendicitis
+Procedure: Laparoscopic appendectomy on 10 Oct 2026
+
+MEDICATIONS ON DISCHARGE
+Tab Paracetamol 650 mg three times daily after food for 5 days
+Tab Amoxicillin-clavulanate 625 mg twice daily after food for 5 days
+Tab Pantoprazole 40 mg once daily in the morning before food for 5 days
+Tab Tramadol 50 mg at night as needed for severe pain
+
+WOUND CARE
+Keep the three small wounds dry and covered for 2 days.
+Dressing check at the clinic on day 3.
+Stitch removal on day 10.
+
+FOLLOW-UP
+Review with the surgeon after 2 weeks.
+Biopsy report review after 1 week.
+
+ACTIVITY AND DIET
+Walk short distances 3 times a day. Do not lift weights above 5 kg for 4 weeks.
+Eat light food such as rice, curd and soup. Avoid spicy and oily food for 1 week.
+
+WARNING SIGNS
+Fever above 100.4 F, or redness, pus or swelling at a wound.
+Severe belly pain or repeated vomiting.

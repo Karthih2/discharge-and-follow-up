@@ -1,0 +1,225 @@
+{
+  "items": [
+    {
+      "category": "medication",
+      "title": "Cefuroxime 500 mg",
+      "original_text": "Tab Cefuroxime 500 mg twice daily after food for 5 days",
+      "source_line_numbers": [
+        9
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,night",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Cefuroxime 500 mg twice a day, after food, for 5 days.",
+        "ta": "Cefuroxime 500 mg மாத்திரையை தினமும் இரண்டு முறை உணவுக்குப் பிறகு 5 நாட்கள் சாப்பிடவும்.",
+        "hi": "Cefuroxime 500 mg की गोली दिन में दो बार खाने के बाद 5 दिन लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Azithromycin 500 mg",
+      "original_text": "Tab Azithromycin 500 mg once daily after food for 3 days",
+      "source_line_numbers": [
+        10
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Azithromycin 500 mg once a day, after food, for 3 days.",
+        "ta": "Azithromycin 500 mg மாத்திரையை தினமும் ஒரு முறை உணவுக்குப் பிறகு 3 நாட்கள் சாப்பிடவும்.",
+        "hi": "Azithromycin 500 mg की गोली दिन में एक बार खाने के बाद 3 दिन लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Paracetamol 650 mg",
+      "original_text": "Tab Paracetamol 650 mg if required for fever",
+      "source_line_numbers": [
+        11
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.85,
+      "expect_review": true,
+      "simple": {
+        "en": "Paracetamol 650 mg for fever. The wording says if required.",
+        "ta": "காய்ச்சலுக்கு Paracetamol 650 mg. தேவைப்பட்டால் என்று எழுதப்பட்டுள்ளது.",
+        "hi": "बुखार के लिए Paracetamol 650 mg। लिखा है ज़रूरत हो तो।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Ambroxol 10 ml",
+      "original_text": "Syrup Ambroxol 10 ml three times daily after food for 5 days",
+      "source_line_numbers": [
+        12
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,afternoon,night",
+      "confidence": 0.95,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Ambroxol syrup 10 ml three times a day, after food, for 5 days.",
+        "ta": "Ambroxol சிரப் 10 ml தினமும் மூன்று முறை உணவுக்குப் பிறகு 5 நாட்கள் குடிக்கவும்.",
+        "hi": "Ambroxol सिरप 10 ml दिन में तीन बार खाने के बाद 5 दिन लें।"
+      }
+    },
+    {
+      "category": "medication",
+      "title": "Amlodipine 5 mg",
+      "original_text": "Tab Amlodipine 5 mg once daily in the morning after food",
+      "source_line_numbers": [
+        13
+      ],
+      "date_raw": null,
+      "time_of_day": "morning",
+      "confidence": 0.96,
+      "expect_review": false,
+      "simple": {
+        "en": "Take Amlodipine 5 mg once a day in the morning, after food.",
+        "ta": "Amlodipine 5 mg மாத்திரையை தினமும் ஒரு முறை காலையில் உணவுக்குப் பிறகு சாப்பிடவும்.",
+        "hi": "Amlodipine 5 mg की गोली दिन में एक बार सुबह खाने के बाद लें।"
+      }
+    },
+    {
+      "category": "appointment",
+      "title": "Physician visit",
+      "original_text": "Review with the physician after 1 week.",
+      "source_line_numbers": [
+        15
+      ],
+      "date_raw": "after 1 week",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "Visit the physician after 1 week.",
+        "ta": "1 வாரத்திற்குப் பிறகு மருத்துவரைப் பார்க்கவும்.",
+        "hi": "1 सप्ताह बाद फिजिशियन से मिलें।"
+      }
+    },
+    {
+      "category": "test",
+      "title": "Blood test (CBC)",
+      "original_text": "Blood test (CBC) after 1 week.",
+      "source_line_numbers": [
+        16
+      ],
+      "date_raw": "after 1 week",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "Have the blood test (CBC) after 1 week.",
+        "ta": "1 வாரத்திற்குப் பிறகு இரத்த பரிசோதனை (CBC) செய்யவும்.",
+        "hi": "1 सप्ताह बाद खून की जांच (CBC) कराएं।"
+      }
+    },
+    {
+      "category": "test",
+      "title": "Repeat chest X-ray",
+      "original_text": "Repeat chest X-ray after 6 weeks.",
+      "source_line_numbers": [
+        17
+      ],
+      "date_raw": "after 6 weeks",
+      "time_of_day": null,
+      "confidence": 0.94,
+      "expect_review": false,
+      "simple": {
+        "en": "Have a repeat chest X-ray after 6 weeks.",
+        "ta": "6 வாரங்களுக்குப் பிறகு மீண்டும் மார்பு X-ray எடுக்கவும்.",
+        "hi": "6 सप्ताह बाद छाती का X-ray दोबारा कराएं।"
+      }
+    },
+    {
+      "category": "referral",
+      "title": "Dietician visit",
+      "original_text": "Referred to a dietician for a high protein diet after 2 weeks.",
+      "source_line_numbers": [
+        18
+      ],
+      "date_raw": "after 2 weeks",
+      "time_of_day": null,
+      "confidence": 0.92,
+      "expect_review": false,
+      "simple": {
+        "en": "See a dietician for a high protein diet after 2 weeks.",
+        "ta": "2 வாரங்களுக்குப் பிறகு அதிக புரத உணவுக்காக உணவு நிபுணரைப் பார்க்கவும்.",
+        "hi": "2 सप्ताह बाद उच्च प्रोटीन आहार के लिए आहार विशेषज्ञ से मिलें।"
+      }
+    },
+    {
+      "category": "activity",
+      "title": "Sit up for meals",
+      "original_text": "Sit up for meals and for 30 minutes after. Drink fluids through the day.",
+      "source_line_numbers": [
+        20
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "Sit up for meals and for 30 minutes after. Drink fluids through the day.",
+        "ta": "உணவின்போதும் அதற்குப் பிறகு 30 நிமிடங்களும் நிமிர்ந்து அமரவும். நாள் முழுவதும் திரவங்கள் குடிக்கவும்.",
+        "hi": "खाने के समय और उसके 30 मिनट बाद सीधे बैठें। दिन भर तरल पदार्थ पिएं।"
+      }
+    },
+    {
+      "category": "other",
+      "title": "Check oxygen level",
+      "original_text": "Check the oxygen level with a finger monitor 2 times a day. Normal is above 94.",
+      "source_line_numbers": [
+        21
+      ],
+      "date_raw": null,
+      "time_of_day": "morning,night",
+      "confidence": 0.9,
+      "expect_review": false,
+      "simple": {
+        "en": "Check the oxygen level with a finger monitor 2 times a day. Normal is above 94.",
+        "ta": "விரல் மானிட்டரால் ஆக்சிஜன் அளவை தினமும் 2 முறை பார்க்கவும். இயல்பு அளவு 94 க்கு மேல்.",
+        "hi": "फिंगर मॉनिटर से ऑक्सीजन स्तर दिन में 2 बार देखें। सामान्य स्तर 94 से ऊपर है।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Fast breathing or low oxygen",
+      "original_text": "Fast breathing, bluish lips, or oxygen level below 92. Call 108 at once.",
+      "source_line_numbers": [
+        23
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Fast breathing, bluish lips, or an oxygen level below 92 is a warning sign. Call 108 at once.",
+        "ta": "வேகமான சுவாசம், நீல உதடுகள் அல்லது 92 க்கு கீழ் ஆக்சிஜன் அளவு எச்சரிக்கை அறிகுறி. உடனே 108 ஐ அழைக்கவும்.",
+        "hi": "तेज़ सांस, नीले होंठ या 92 से नीचे ऑक्सीजन स्तर चेतावनी का संकेत है। तुरंत 108 पर कॉल करें।"
+      }
+    },
+    {
+      "category": "warning_sign",
+      "title": "Confusion or drowsiness",
+      "original_text": "Confusion or unusual drowsiness.",
+      "source_line_numbers": [
+        24
+      ],
+      "date_raw": null,
+      "time_of_day": null,
+      "confidence": 0.95,
+      "expect_review": true,
+      "simple": {
+        "en": "Confusion or unusual drowsiness is a warning sign.",
+        "ta": "குழப்பம் அல்லது வழக்கத்திற்கு மாறான தூக்கக் கலக்கம் எச்சரிக்கை அறிகுறி.",
+        "hi": "भ्रम या असामान्य सुस्ती चेतावनी का संकेत है।"
+      }
+    }
+  ]
+}

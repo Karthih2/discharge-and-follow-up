@@ -4,10 +4,11 @@ import { LangToggle } from "../components/LangToggle";
 import { api } from "../lib/api";
 import { HOME, useAuth } from "../lib/auth";
 import { useLang } from "../lib/lang";
+import { Button } from "../components/ui";
 
 export default function Register() {
   const { signIn } = useAuth();
-  const { lang } = useLang();
+  const { lang, t } = useLang();
   const nav = useNavigate();
   const [f, setF] = useState({ name: "", email: "", password: "", role: "patient" });
   const [err, setErr] = useState<string | null>(null);
@@ -31,32 +32,32 @@ export default function Register() {
         }
       }}
     >
-      <h1 className="text-4xl">Create an account</h1>
-      <p className="text-muted">Use invented details only. Doctors and management accounts are created by management.</p>
+      <h1 className="text-4xl">{t("createAnAccount")}</h1>
+      <p className="text-muted">{t("registerIntro")}</p>
       <label className="block">
-        <span className="mb-1 block font-semibold">Name</span>
+        <span className="mb-1 block font-semibold">{t("name")}</span>
         <input className="field" value={f.name} onChange={set("name")} required minLength={2} />
       </label>
       <label className="block">
-        <span className="mb-1 block font-semibold">Email</span>
+        <span className="mb-1 block font-semibold">{t("email")}</span>
         <input className="field" type="email" value={f.email} onChange={set("email")} required />
       </label>
       <label className="block">
-        <span className="mb-1 block font-semibold">Password (6 or more characters)</span>
+        <span className="mb-1 block font-semibold">{t("password6")}</span>
         <input className="field" type="password" value={f.password} onChange={set("password")} required minLength={6} autoComplete="new-password" />
       </label>
       <label className="block">
-        <span className="mb-1 block font-semibold">I am a</span>
+        <span className="mb-1 block font-semibold">{t("iAmA")}</span>
         <select className="field" value={f.role} onChange={set("role")}>
-          <option value="patient">Patient</option>
-          <option value="manager">Family hub manager (caregiver)</option>
+          <option value="patient">{t("rolePatient")}</option>
+          <option value="manager">{t("managerCaregiver")}</option>
         </select>
       </label>
       <LangToggle />
       {err && <p role="alert" className="text-attention">{err}</p>}
       <div className="flex items-center gap-3">
-        <button className="btn" disabled={busy}>Create account</button>
-        <Link to="/login">I already have an account</Link>
+        <Button type="submit" disabled={busy}>{t("createAnAccount")}</Button>
+        <Link to="/login">{t("haveAccount")}</Link>
       </div>
     </form>
   );

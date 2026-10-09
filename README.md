@@ -9,10 +9,12 @@ It organizes and explains. It never diagnoses, changes a medicine, recommends tr
 ## Run the demo (one command, one address)
 
 ```powershell
-.un_demo.bat
+.
+un_demo.bat
 ```
 
-It sets everything up the first time (Python packages, app packages, build), starts one server and opens **http://localhost:8000/demo**. Close the window to stop. Add `rebuild` (`.un_demo.bat rebuild`) after changing the frontend.
+It sets everything up the first time (Python packages, app packages, build), starts one server and opens **http://localhost:8000/demo**. Close the window to stop. Add `rebuild` (`.
+un_demo.bat rebuild`) after changing the frontend.
 
 Demo mode loads two sample plans, so every screen has content, and adds two helpers:
 
@@ -29,34 +31,35 @@ Demo mode loads two sample plans, so every screen has content, and adds two help
 
 They are separate apps. Each has its own sign in page and keeps its own login (a separate storage key), so one browser can hold a patient, a doctor and management at once. The patient site never links to the staff apps, the staff sign in pages accept only staff, and the patient sign in rejects staff with the same "wrong email or password" message. The API checks the role on every doctor and management route, and there is no staff sign up. The Demo button and /demo exist only when the server starts with `DEMO=1` (what `run_demo.bat` does).
 
-For development with hot reload, run `.un_backend.bat` and `.un_frontend.bat` (http://localhost:5173, same paths).
+For development with hot reload, run `.
+un_backend.bat` and `.
+un_frontend.bat` (http://localhost:5173, same paths).
 
 ## What each app has
 
-- **Patient and hub site:** a website landing page (process, who it is for, plan preview, safety, questions), then create account (patient or hub manager only). Signed in: plans, add summary, live run, plan with **Cards / Two panels / Timeline** displays, large text mode, medicine cards, locked Needs Review cards, listen, callback, flag, provider map, fridge sheet, sharing controls, activity log. Hub managers and family viewers see only what the patient shares.
-- **Doctor workspace:** review queue (oldest first, reason codes, unclear words marked, a form to fill missing medicine values, safety gate re-check), callbacks, availability toggle.
-- **Management console:** overview, review queue assignment, reviewers (create doctors with a starting password, availability and backup handling), callbacks (start call, mark completed), audit log. It never shows clinical text.
+- **Patient and family site:** sign in with demo chips, a three step welcome on first sign in, a **Today** home (medicines by morning, afternoon and night with tap to mark taken, next visit and place, items waiting for a doctor, progress, next 7 days, quick actions), plans, live run, three plan displays, medicine cards, locked Needs Review cards, listen, callback, provider map, fridge sheet and sharing. Hub managers and family viewers get a hub home (status, overdue count, open alerts per patient) and an alert list, limited by what each patient shares.
+- **Doctor workspace:** **My day** (open, overdue, callbacks, patients with late tasks, availability and backup), a two pane review queue (source lines marked beside the extracted item, Confirm, Correct, Send back with note, keys J K C E S, filters and search), patients (read only plan and review history) and callbacks (notes, completed, no answer, reschedule). The safety gate re-check is unchanged.
+- **Management console:** overview with 7, 30 and 90 day ranges and a department filter (8 numbers and 4 charts, each with a plain table, all from SQL), review assignment and bulk reassign, doctors (create, department, availability, backup, deactivate, reset password), callbacks (assign, start, complete, no answer), patients (no clinical text), settings and an audit log with filters and CSV export. Every action is audited. It never shows clinical text.
 
-Statuses are only **Pending**, **Completed** and **Needs Review**.
+Statuses are only **Pending**, **Completed** and **Needs Review**. Review states show as Open, Confirmed, Corrected and Sent back.
 
 ## Demo accounts (invented people)
 
-Password for all: `demo1234`.
+Password for all: `demo1234`. Emails end in `@code2care.test`.
 
-- Patients: `ramesh@code2care.test`, `sunita@…`, `karthik@…`, `lakshmi@…`
-- Hub manager: `priya@code2care.test`. Family viewer: `arun@code2care.test`
-- Doctors (doctor app): `meera@`, `arjun@`, `sana@`, `vikram@code2care.test`
-- Management (management app): `admin@code2care.test`
+- Patients: ramesh, sunita, karthik, lakshmi, and ten more in Chennai, Bengaluru, Hyderabad, Kochi and Delhi (murugan, kavitha, deepak, shreya, venkat, farah, thomas, reshma, rohit, neha)
+- Hub managers: priya, sanjay, latha. Family viewers: arun, pooja, kiran
+- Doctors: meera, arjun, sana, vikram (away, backup arjun), kavya (neurology), imran (pulmonology)
+- Management: admin
+
+Demo mode seeds a month of history (about 20 plans, reviews in every state, callbacks in every state, alerts, 30 days of audit). It is deterministic, takes about 2.5 seconds and is rebuilt by **Reset**.
 
 ## Demo script
 
-1. Open /demo and follow the seven steps. Management already has demo plans loaded.
-2. Patient site: sign in as Ramesh. Open the plan, try the three displays, switch language, **Show original**, **Listen**, **Request callback**, **Ask a doctor to check**, **Find provider**.
-3. Sharing: Priya has the full plan, Arun appointments only.
-4. Sign in as Priya, then Arun, to see the filtered views and the grey locked cards.
-5. Doctor workspace: confirm one item and correct a medicine. The patient plan updates.
-6. Mark a doctor unavailable. Their items move to the backup.
-7. Move the demo clock +3 days. Priya gets alerts. Management runs a callback.
+1. Patient site: sign in as ramesh (Today view), priya (hub home, alerts) and arun (appointments only, grey locked cards).
+2. /doctor: sign in as meera. Open the queue and clear three reviews with C, E and S.
+3. /management: sign in as admin. Reassign a review, create a doctor, export the audit log.
+4. Move the demo clock +3 days. Alerts and dashboard numbers change.
 
 ## Keys (`backend\.env`)
 
@@ -71,7 +74,7 @@ Models live in the SQLite `settings` table (`openai/gpt-oss-120b` for extraction
 ## Tests
 
 ```powershell
-cd backend; .venv\Scripts\python -m pytest     # 51 tests, including portal separation
+cd backend; .venv\Scripts\python -m pytest     # 67 tests, including role separation and seed determinism
 cd ..\frontend; npm run build                  # builds all three apps, zero TypeScript errors
 ```
 
@@ -84,3 +87,14 @@ Regenerate samples, fixtures and the 60 invented providers with `backend\.venv\S
 - Callback is a simulation with invented masked numbers. No real call or SMS.
 - Telugu, Kannada, Malayalam (and the Tamil and Hindi UI text) need a native speaker check.
 - Demo accounts share one published password. Do not deploy as is.
+
+## Speed (before and after)
+
+| Measure | Before | After |
+|---|---|---|
+| Patient site first page JS (gzip) | about 180 KB | about 135 KB |
+| Doctor workspace first page JS (gzip) | about 180 KB | about 140 KB |
+| Management first page JS (gzip, with Recharts) | n/a | about 225 KB |
+| List endpoints, demo data | not measured | under 25 ms each |
+
+Every screen is its own chunk, so the patient site never downloads doctor or management code. Lists are paged (X-Total-Count header), related rows load in batches, and SQLite has indexes on every foreign key and filter column.

@@ -1,11 +1,12 @@
 import { MapPin, NavigationArrow } from "@phosphor-icons/react";
-import { motion } from "motion/react";
+import { m as motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { api } from "../lib/api";
 import { useLang } from "../lib/lang";
 import { useMotionT } from "../lib/motion";
 import type { Match } from "../lib/types";
 import { ProviderCard } from "./ProviderCard";
+import { Button } from ".//ui";
 
 // Known areas for the synthetic pincodes: state, district, area, centre.
 const AREAS = [
@@ -94,9 +95,9 @@ export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: 
             {AREAS.filter((a) => a.state === state).map((a) => <option key={a.pin} value={a.pin}>{a.area} {a.pin}</option>)}
           </select>
         </label>
-        <button className="btn btn-quiet btn-sm" onClick={useGps}>
+        <Button look="quiet" small onClick={useGps}>
           <NavigationArrow size={16} weight="duotone" aria-hidden /> Use my location
-        </button>
+        </Button>
       </div>
       {note && <p role="status" className="text-sm text-muted">{note}</p>}
 
@@ -143,9 +144,9 @@ export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: 
             className={m.selected ? "rounded-md outline outline-2 outline-primary" : ""}>
             <ProviderCard p={m.provider} reasons={[...m.reasons, `${km(origin, [m.provider.lat, m.provider.lng]).toFixed(1)} km from the chosen spot`]} rank={i + 1} />
             {canSelect && (
-              <button className="btn btn-quiet btn-sm mt-1" disabled={m.selected} onClick={() => pick(m.provider.id)}>
+              <Button look="quiet" small className="mt-1" disabled={m.selected} onClick={() => pick(m.provider.id)}>
                 <MapPin size={16} weight="duotone" aria-hidden /> {m.selected ? t("selected") : t("selectProvider")}
-              </button>
+              </Button>
             )}
           </div>
         ))}

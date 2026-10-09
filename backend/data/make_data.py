@@ -437,6 +437,13 @@ ITEMS = {
 }
 
 
+import extra_samples  # noqa: E402  (e to h: stroke, COPD, appendectomy, pneumonia)
+
+TEXT.update(extra_samples.TEXT)
+META.extend(extra_samples.META)
+ITEMS.update(extra_samples.ITEMS)
+
+
 def build_samples_and_fixtures():
     (D / "samples").mkdir(exist_ok=True)
     (D / "fixtures").mkdir(exist_ok=True)
@@ -475,6 +482,12 @@ AREAS = {
     "Chennai": [("600017", 13.0418, 80.2341), ("600020", 13.0012, 80.2565), ("600040", 13.0850, 80.2101),
                 ("600042", 12.9815, 80.2180), ("600004", 13.0368, 80.2676), ("600045", 12.9249, 80.1000),
                 ("600032", 13.0067, 80.2206), ("600010", 13.0827, 80.2420)],
+    "Bengaluru": [("560001", 12.9763, 77.6033), ("560034", 12.9352, 77.6245), ("560066", 12.9698, 77.7500),
+                  ("560038", 12.9784, 77.6408), ("560011", 12.9250, 77.5938), ("560078", 12.9063, 77.5857)],
+    "Hyderabad": [("500001", 17.3850, 78.4867), ("500034", 17.4126, 78.4071), ("500081", 17.4435, 78.3772),
+                  ("500016", 17.4375, 78.4483), ("500032", 17.4401, 78.3489), ("500020", 17.4065, 78.4772)],
+    "Kochi": [("682001", 9.9312, 76.2673), ("682016", 9.9816, 76.2999), ("682020", 9.9674, 76.2441),
+              ("682024", 10.0159, 76.3419), ("682030", 9.9252, 76.3180), ("682036", 9.9400, 76.2800)],
     "Delhi": [("110001", 28.6315, 77.2167), ("110024", 28.5677, 77.2433), ("110075", 28.5921, 77.0460),
               ("110085", 28.7495, 77.0565), ("110017", 28.5245, 77.2066), ("110005", 28.6519, 77.1909),
               ("110070", 28.5200, 77.1590), ("110058", 28.6219, 77.0878)],
@@ -504,7 +517,7 @@ def build_providers():
         for rep in range(3):
             for kind, suffix, specs in TEMPLATES:
                 pin, lat, lng = areas[(n * 3 + rep) % len(areas)]
-                langs = ["en;ta;hi", "en;ta", "en;ta;hi"][n % 3] if city == "Chennai" else ["en;hi", "en;hi;ta", "en;hi"][n % 3]
+                langs = ["en;ta;hi", "en;ta", "en;ta;hi"][n % 3] if city == "Chennai" else ["en;te", "en;te;hi"][n % 2] if city == "Hyderabad" else ["en;kn", "en;kn;ta"][n % 2] if city == "Bengaluru" else ["en;ml", "en;ml;ta"][n % 2] if city == "Kochi" else ["en;hi", "en;hi;ta", "en;hi"][n % 3]
                 if kind == "clinic" and "dietetics" in specs and rep == 1:
                     specs += ";general medicine"
                 if kind == "clinic" and "ophthalmology" in specs and rep == 2:
@@ -516,7 +529,7 @@ def build_providers():
                     "pincode": pin, "lat": round(lat + rnd.uniform(-.012, .012), 5), "lng": round(lng + rnd.uniform(-.012, .012), 5),
                     "languages": langs, "insurance": ["Ayushman Bharat;CGHS;Private", "CGHS;Private", "Ayushman Bharat;Private"][n % 3],
                     "open_days": ["Mon-Sat", "Mon-Sun", "Mon-Fri", "Mon-Sat"][n % 4],
-                    "phone": ("044-5550-" if city == "Chennai" else "011-5550-") + f"{100 + n:04d}"[-4:],
+                    "phone": ({"Chennai": "044-5550-", "Delhi": "011-5550-", "Bengaluru": "080-5550-", "Hyderabad": "040-5550-", "Kochi": "0484-5550-"}[city]) + f"{100 + n:04d}"[-4:],
                     "synthetic": "true"})
                 n += 1
     with open(D / "providers.csv", "w", newline="", encoding="utf-8") as f:
