@@ -1,100 +1,194 @@
-# CareBridge by Code2Care Hospital
+<div align="center">
 
-CareBridge turns a **synthetic** discharge summary into a trackable follow-up plan: tasks, dates, reminders, a timeline, medicine cards, six languages, provider suggestions and a printable fridge sheet. Anything unclear is held for a hospital doctor.
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0ea5e9,100:10b981&height=220&section=header&text=CareBridge&fontSize=70&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=From%20Discharge%20to%20Recovery&descAlignY=58&descSize=20" width="100%"/>
 
-It organizes and explains. It never diagnoses, changes a medicine, recommends treatment, or promises that a provider is available. Every item shows the exact source line. All data is synthetic.
+<a href="https://git.io/typing-svg">
+<img src="https://readme-typing-svg.demolab.com?font=Poppins&weight=600&size=24&pause=1000&color=0EA5E9&center=true&vCenter=true&width=700&lines=AI-powered+discharge+follow-up+%F0%9F%8F%A5;Safe+%E2%80%A2+Simple+%E2%80%A2+Multilingual+%F0%9F%8C%90;Every+item+traced+to+its+source+%E2%9C%85;Doctors+review+anything+unclear+%F0%9F%A9%BA" alt="Typing SVG" />
+</a>
 
-**Code2Care Hospital owns the system.** Its management team creates the doctors and assigns the reviews. Only patients and family hubs can sign up.
+<br/>
 
-## Run the demo (one command, one address)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-AI-F55036?style=for-the-badge)
+
+</div>
+
+---
+
+## 📖 About
+
+CareBridge turns a hospital discharge summary into a simple, trackable follow-up plan with tasks, medicine reminders, appointments and alerts, in 6 Indian languages. Anything unclear is held for a doctor to review before the patient sees it.
+
+> ⚠️ It organizes and explains. It never diagnoses, changes a medicine or recommends treatment. All data is synthetic.
+
+## ✨ Features
+
+- 🤖 **AI extraction** pulls instructions from text or PDF summaries, and each one links to its exact source line
+- 🚦 **Safety first:** vague, risky or conflicting items are locked until a doctor reviews them
+- 🌐 **6 languages:** English, Tamil, Hindi, Telugu, Kannada, Malayalam, with read-aloud
+- 💊 **Medicine schedule** split into morning, afternoon and night slots, with tap to mark taken
+- 🔔 **Reminders and escalation** go to the patient, then family, then a doctor when tasks are missed
+- 📍 **Provider suggestions** list nearby labs and clinics by specialty, distance, language and insurance
+- 🧾 **Printable fridge sheet** with a QR code
+
+## 🏥 Three apps, one server
+
+| App | Users | Path |
+|---|---|---|
+| 👤 Patient & Family | Patients, family hubs | `/` |
+| 🩺 Doctor Workspace | Hospital doctors | `/doctor` |
+| 📊 Management Console | Hospital admin | `/management` |
+
+## 🛠️ Tech stack
+
+| Layer | Tools |
+|---|---|
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS, React Router, Recharts, Motion |
+| Backend | Python, FastAPI, Uvicorn, SQLModel, Pydantic |
+| Database | SQLite (WAL mode) |
+| AI | Groq API (`gpt-oss-120b` for extraction, `gpt-oss-20b` for rewriting and translation) |
+| Other | pdfplumber, ReportLab, edge-tts, PyJWT, pytest |
+
+## 🔄 Agent pipeline
+
+```
+Privacy Guard → Read → Extract (AI) → Verify → Safety Check
+   → Plan → Simplify & Translate (AI) → Match Providers → Escalate
+```
+
+1. 🔒 **Privacy Guard** masks Aadhaar, PAN, phone numbers and emails
+2. 📖 **Read** numbers every line of the summary
+3. 🤖 **Extract** finds the instructions and quotes them word for word
+4. ✅ **Verify** confirms each quote exists in the source and works out the dates
+5. 🚦 **Safety Check** uses rules to flag vague, risky or conflicting items for doctor review
+6. 📅 **Plan** creates tasks and reminders
+7. 🌐 **Simplify** rewrites in plain language and translates (medicines use a fixed template)
+8. 📍 **Match** suggests nearby providers
+9. 🔔 **Escalate** sends overdue reminders, then a family alert, then a doctor alert
+
+## 🚀 Getting started
+
+### Prerequisites
+- Python 3.10+
+- Node.js 18+
+
+### Setup
+
+```bash
+git clone https://github.com/<your-username>/carebridge.git
+cd carebridge
+```
+
+Create `backend/.env`:
+
+```env
+GROQ_API_KEY=your_groq_key   # optional, mock mode runs without it
+MOCK_LLM=0
+JWT_SECRET=your_long_random_secret
+```
+
+### Run (Windows, one command)
 
 ```powershell
-.
-un_demo.bat
+.\run_demo.bat
 ```
 
-It sets everything up the first time (Python packages, app packages, build), starts one server and opens **http://localhost:8000/demo**. Close the window to stop. Add `rebuild` (`.
-un_demo.bat rebuild`) after changing the frontend.
+Opens **http://localhost:8000/demo**
 
-Demo mode loads two sample plans, so every screen has content, and adds two helpers:
+### Run (development)
 
-- **/demo** is a guide: seven steps, each one signs you in as the right person and opens the right screen, plus Move clock +3 days and Reset.
-- **Demo button** (bottom right of every screen) switches between people in one click without leaving the page.
+```bash
+# Backend
+cd backend
+python -m venv .venv
+.venv\Scripts\activate        # Linux/Mac: source .venv/bin/activate
+pip install -r requirements.txt
+set DEMO=1                    # Linux/Mac: export DEMO=1
+uvicorn app.main:app --reload --port 8000
 
-## Three apps, one address
-
-| App | Who | Path |
-|---|---|---|
-| Patient and hub site | Patients, hub managers, family viewers | `/` |
-| Doctor workspace | Hospital doctors | `/doctor` |
-| Management console | Hospital management | `/management` |
-
-They are separate apps. Each has its own sign in page and keeps its own login (a separate storage key), so one browser can hold a patient, a doctor and management at once. The patient site never links to the staff apps, the staff sign in pages accept only staff, and the patient sign in rejects staff with the same "wrong email or password" message. The API checks the role on every doctor and management route, and there is no staff sign up. The Demo button and /demo exist only when the server starts with `DEMO=1` (what `run_demo.bat` does).
-
-For development with hot reload, run `.
-un_backend.bat` and `.
-un_frontend.bat` (http://localhost:5173, same paths).
-
-## What each app has
-
-- **Patient and family site:** sign in with demo chips, a three step welcome on first sign in, a **Today** home (medicines by morning, afternoon and night with tap to mark taken, next visit and place, items waiting for a doctor, progress, next 7 days, quick actions), plans, live run, three plan displays, medicine cards, locked Needs Review cards, listen, callback, provider map, fridge sheet and sharing. Hub managers and family viewers get a hub home (status, overdue count, open alerts per patient) and an alert list, limited by what each patient shares.
-- **Doctor workspace:** **My day** (open, overdue, callbacks, patients with late tasks, availability and backup), a two pane review queue (source lines marked beside the extracted item, Confirm, Correct, Send back with note, keys J K C E S, filters and search), patients (read only plan and review history) and callbacks (notes, completed, no answer, reschedule). The safety gate re-check is unchanged.
-- **Management console:** overview with 7, 30 and 90 day ranges and a department filter (8 numbers and 4 charts, each with a plain table, all from SQL), review assignment and bulk reassign, doctors (create, department, availability, backup, deactivate, reset password), callbacks (assign, start, complete, no answer), patients (no clinical text), settings and an audit log with filters and CSV export. Every action is audited. It never shows clinical text.
-
-Statuses are only **Pending**, **Completed** and **Needs Review**. Review states show as Open, Confirmed, Corrected and Sent back.
-
-## Demo accounts (invented people)
-
-Password for all: `demo1234`. Emails end in `@code2care.test`.
-
-- Patients: ramesh, sunita, karthik, lakshmi, and ten more in Chennai, Bengaluru, Hyderabad, Kochi and Delhi (murugan, kavitha, deepak, shreya, venkat, farah, thomas, reshma, rohit, neha)
-- Hub managers: priya, sanjay, latha. Family viewers: arun, pooja, kiran
-- Doctors: meera, arjun, sana, vikram (away, backup arjun), kavya (neurology), imran (pulmonology)
-- Management: admin
-
-Demo mode seeds a month of history (about 20 plans, reviews in every state, callbacks in every state, alerts, 30 days of audit). It is deterministic, takes about 2.5 seconds and is rebuilt by **Reset**.
-
-## Demo script
-
-1. Patient site: sign in as ramesh (Today view), priya (hub home, alerts) and arun (appointments only, grey locked cards).
-2. /doctor: sign in as meera. Open the queue and clear three reviews with C, E and S.
-3. /management: sign in as admin. Reassign a review, create a doctor, export the audit log.
-4. Move the demo clock +3 days. Alerts and dashboard numbers change.
-
-## Keys (`backend\.env`)
-
-```
-GROQ_API_KEY=        # extraction, safety check, translation. No key or MOCK_LLM=1 uses fixtures for the samples.
-ELEVENLABS_API_KEY=  # optional. Voice reads approved text aloud. Without it the browser voice is used.
-JWT_SECRET=          # set a long random value for anything beyond a demo
+# Frontend (new terminal)
+cd frontend
+npm install
+npm run dev
 ```
 
-Models live in the SQLite `settings` table (`openai/gpt-oss-120b` for extraction, `openai/gpt-oss-20b` for rewriting). Medicine lines never use the model: they come from a fixed template.
+Frontend: **http://localhost:5173**
 
-## Tests
+## 🔑 Demo accounts
 
-```powershell
-cd backend; .venv\Scripts\python -m pytest     # 67 tests, including role separation and seed determinism
-cd ..\frontend; npm run build                  # builds all three apps, zero TypeScript errors
+Password: `demo1234`. All emails end in `@code2care.test`.
+
+| Role | Accounts |
+|---|---|
+| Patient | `ramesh`, `sunita`, `karthik`, `lakshmi` |
+| Hub Manager | `priya`, `sanjay`, `latha` |
+| Family Viewer | `arun`, `pooja`, `kiran` |
+| Doctor | `meera`, `arjun`, `sana`, `kavya` |
+| Management | `admin` |
+
+## 📁 Project structure
+
+```
+carebridge/
+├── backend/
+│   ├── app/
+│   │   ├── agents/      # 9-step AI pipeline
+│   │   ├── routes/      # API endpoints
+│   │   ├── auth.py      # JWT + role-based access
+│   │   ├── db.py        # SQLite setup
+│   │   └── main.py      # FastAPI app
+│   ├── data/            # Synthetic samples & providers
+│   └── tests/           # pytest suite
+├── frontend/
+│   └── src/
+│       ├── apps/        # Patient, Doctor, Management
+│       ├── components/
+│       ├── i18n/        # Translations
+│       └── pages/
+└── run_demo.bat
 ```
 
-Regenerate samples, fixtures and the 60 invented providers with `backend\.venv\Scripts\python backend\data\make_data.py`. An older demo database is recreated automatically.
+## 🧪 Tests
 
-## Limits
+```bash
+cd backend
+pytest
+```
 
-- SQLite, no encryption and no row level security. Access is checked in the API.
-- Groq instead of Claude. No Celery, Redis or Docker: reminders and escalation run in the backend and are safe to repeat.
-- Callback is a simulation with invented masked numbers. No real call or SMS.
-- Telugu, Kannada, Malayalam (and the Tamil and Hindi UI text) need a native speaker check.
-- Demo accounts share one published password. Do not deploy as is.
+## ⚠️ Limitations
 
-## Speed (before and after)
+- SQLite with no encryption; access is checked in the API
+- Callbacks are simulated, with no real calls or SMS
+- Regional-language translations need a native speaker review
+- Demo accounts share one password, so **do not deploy as is**
 
-| Measure | Before | After |
-|---|---|---|
-| Patient site first page JS (gzip) | about 180 KB | about 135 KB |
-| Doctor workspace first page JS (gzip) | about 180 KB | about 140 KB |
-| Management first page JS (gzip, with Recharts) | n/a | about 225 KB |
-| List endpoints, demo data | not measured | under 25 ms each |
+---
 
-Every screen is its own chunk, so the patient site never downloads doctor or management code. Lists are paged (X-Total-Count header), related rows load in batches, and SQLite has indexes on every foreign key and filter column.
+## 👥 Team
+
+<div align="center">
+
+<img src="https://readme-typing-svg.demolab.com?font=Poppins&weight=700&size=22&pause=800&color=10B981&center=true&vCenter=true&width=500&lines=Karthikeyan+S;Karthick+S;Vidhursh+Kumar+V;Giridharan+R;Janani+V+R" alt="Team" />
+
+<br/>
+
+| 👨‍💻 | 👨‍💻 | 👨‍💻 | 👨‍💻 | 👩‍💻 |
+|:---:|:---:|:---:|:---:|:---:|
+| **Karthikeyan S** | **Karthick S** | **Vidhursh Kumar V** | **Giridharan R** | **Janani V R** |
+
+<br/>
+
+**Made with ❤️ for better patient care**
+
+</div>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:10b981,100:0ea5e9&height=120&section=footer" width="100%"/>
+
+## 📄 License
+
+MIT
