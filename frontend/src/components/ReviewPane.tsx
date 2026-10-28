@@ -15,7 +15,7 @@ const SLOTS = ["morning", "afternoon", "night"] as const;
 function Marked({ text }: { text: string }) {
   return (
     <>
-      {text.split(FLAGGED).map((p, i) => (i % 2 === 1 ? <mark key={i} className="hl-warn rounded-sm px-0.5 font-semibold text-attention">{p}</mark> : <Fragment key={i}>{p}</Fragment>))}
+      {text.split(FLAGGED).map((p, i) => (i % 2 === 1 ? <mark key={i} className="hl-warn rounded-md px-0.5 font-semibold text-attention">{p}</mark> : <Fragment key={i}>{p}</Fragment>))}
     </>
   );
 }
@@ -44,7 +44,7 @@ function SourceLines({ docId, marked }: { docId: number; marked: number[] }) {
         const hot = marked.includes(l.line_no);
         return (
           <li key={l.line_no} ref={hot && !rows.slice(0, i).some((x) => marked.includes(x.line_no)) ? first : undefined}
-            className={`grid grid-cols-[2rem_1fr] gap-2 rounded-sm px-1 ${hot ? "hl-warn" : "text-muted"}`}>
+            className={`grid grid-cols-[2rem_1fr] gap-2 rounded-md px-1 ${hot ? "hl-warn" : "text-muted"}`}>
             <span className="text-right tnum opacity-70">{l.line_no}</span>
             <span>{hot ? <Marked text={l.text} /> : l.text}</span>
           </li>
@@ -73,7 +73,7 @@ export const ReviewPane = forwardRef<ReviewPaneHandle, { r: ReviewEntry; onAct: 
   const isOpen = r.state === "open";
   const med = r.item?.category === "medication";
   const hot = (code: string) => r.codes.includes(code);
-  const mark = (flag: boolean) => (flag ? "hl-warn rounded-sm px-1 font-semibold text-attention" : "");
+  const mark = (flag: boolean) => (flag ? "hl-warn rounded-md px-1 font-semibold text-attention" : "");
 
   const run = async (kind: string, body: Parameters<typeof api.resolve>[1]) => {
     setErr(null);
@@ -125,11 +125,11 @@ export const ReviewPane = forwardRef<ReviewPaneHandle, { r: ReviewEntry; onAct: 
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <section className="rounded-sm border border-line bg-bg p-3" aria-label={t("originalSummary")}>
+        <section className="rounded-lg border border-line bg-bg p-3" aria-label={t("originalSummary")}>
           <p className="mb-2 text-sm text-muted">{t("originalSummary")}</p>
           <SourceLines docId={r.document_id} marked={r.item?.source_line_nos ?? []} />
         </section>
-        <section className="rounded-sm border border-line p-3" aria-label={t("extractedItem")}>
+        <section className="rounded-lg border border-line p-3" aria-label={t("extractedItem")}>
           <p className="mb-2 text-sm text-muted">{t("extractedItem")}</p>
           {r.item && (
             <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-[0.95rem]">
@@ -146,7 +146,7 @@ export const ReviewPane = forwardRef<ReviewPaneHandle, { r: ReviewEntry; onAct: 
       </div>
 
       {isOpen && mode === "correct" && med && (
-        <fieldset className="grid gap-3 rounded-sm border border-line p-3 md:grid-cols-2">
+        <fieldset className="grid gap-3 rounded-lg border border-line p-3 md:grid-cols-2">
           <legend className="px-1 text-sm font-semibold">{t("fillMedValues")}</legend>
           <Input ref={firstField} label={t("doseHint")} value={dose} onChange={(e) => setDose(e.target.value)} />
           <Select label={t("timesADay")} value={freq} onChange={(e) => setFreq(Number(e.target.value))}>

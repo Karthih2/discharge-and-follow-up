@@ -1,5 +1,5 @@
 import type {
-  AuditRow, Callback, DoctorHome, DoctorPatient, DoctorRow, Doc, FamilyAlert, FamilyHomeRow, HubMember, Lang, Masked, MedFields, Notice,
+  AuditRow, Callback, DoctorCalEvent, DoctorHome, DoctorPatient, DoctorRow, Doc, FamilyAlert, FamilyHomeRow, HubMember, Lang, Masked, MedFields, Notice,
   CalTask, Page, PatientRow, Plan, Provider, ReviewEntry, SampleMeta, Scope, SettingsMap, Stats, Today, User,
 } from "./types";
 
@@ -86,17 +86,10 @@ export const api = {
   login: (email: string, password: string, language?: Lang) => req<AuthOut>("/auth/login", post({ email, password, language })),
   signin: (email: string, password: string, language?: Lang) => req<AuthOut>("/auth/signin", post({ email, password, language })),
   staffLogin: (email: string, password: string) => req<AuthOut>("/staff/login", post({ email, password })),
-  staffDemo: () => req<{ password: string; accounts: { name: string; email: string; role: string }[] }>("/staff/demo-accounts"),
   register: (b: { name: string; email: string; password: string; role: string; language: Lang }) => req<AuthOut>("/auth/register", post(b)),
   me: () => req<User>("/auth/me"),
   setLanguage: (language: Lang) => req<User>("/auth/me", patch({ language })),
   setElderly: (elderly: boolean) => req<User>("/auth/me", patch({ elderly })),
-  demoAccounts: () => req<{ password: string; accounts: { name: string; email: string; role: string }[] }>("/auth/demo-accounts"),
-  // demo (only answers when the server runs in demo mode)
-  meta: () => req<{ hospital: string; demo: boolean; mock_llm: boolean }>("/meta"),
-  personas: () => req<{ key: string; name: string; role: string; path: string; blurb: string }[]>("/demo/personas"),
-  demoLogin: (key: string) => req<AuthOut & { path: string }>("/demo/login", post({ key })),
-  demoReset: () => req<{ ok: boolean }>("/demo/reset", post()),
   // patient
   samples: () => req<SampleMeta[]>("/samples"),
   createDocument: (body: { sample_key?: string; text?: string; preferred_language?: Lang }) => req<Created>("/documents", post(body)),
@@ -107,6 +100,10 @@ export const api = {
   },
   documents: () => req<Doc[]>("/documents"),
   runUrl: (id: number) => `/api/documents/${id}/run?token=${encodeURIComponent(getToken() ?? "")}`,
+  getRunUrl: async (id: number) => {
+    const { ticket } = await req<{ ticket: string }>(`/documents/${id}/run-ticket`, post({}));
+    return `/api/documents/${id}/run?ticket=${encodeURIComponent(ticket)}`;
+  },
   plan: (id: number, lang: Lang) => req<Plan>(`/documents/${id}/plan?lang=${lang}`),
   source: (id: number) => req<{ line_no: number; text: string }[]>(`/documents/${id}/source`),
   audit: (id: number) => req<AuditRow[]>(`/documents/${id}/audit`),
@@ -143,6 +140,10 @@ export const api = {
   callbacks: (state?: string) => reqPage<Callback>(`/doctor/callbacks${qs({ state })}`),
   callbackAct: (id: number, body: { action: "complete" | "no_answer" | "reschedule" | "notes"; call_notes?: string; scheduled_for?: string }) =>
     req<Callback>(`/doctor/callbacks/${id}`, post(body)),
+  markChecked: (docId: number) => req<{ plan_state: string; checked_by: number }>(`/documents/${docId}/mark-checked`, post({})),
+  doctorCalendar: (month: string) => req<{ month: string; today: string; events: DoctorCalEvent[] }>(`/doctor/calendar?month=${month}`),
+  availableDoctors: () => req<{ id: number; name: string; specialty: string }[]>("/doctor/available-doctors"),
+  redirectPatient: (docId: number, toDoctorId: number) => req<{ moved: number; to_doctor: { id: number; name: string } }>(`/doctor/patients/${docId}/redirect`, post({ to_doctor_id: toDoctorId })),
   // admin
   stats: (days: number, department?: string) => req<Stats>(`/admin/stats${qs({ days, department })}`),
   adminQueue: (o: { state?: string; doctor_id?: number; unassigned?: boolean; overdue?: boolean; q?: string; limit?: number; offset?: number } = {}) =>
@@ -167,7 +168,4 @@ export const api = {
     reqPage<AuditRow>(`/admin/audit${qs({ limit: 50, ...o })}`),
   auditFilters: () => req<{ actors: { key: string; label: string }[]; actions: string[] }>("/admin/audit/filters"),
   downloadAudit: (o: { actor?: string; action?: string; date_from?: string; date_to?: string }) => download(`/admin/audit.csv${qs(o)}`, "carebridge-audit.csv"),
-  // demo clock
-  clock: () => req<{ today: string }>("/demo/clock"),
-  moveClock: (body: { days?: number; date?: string }) => req<{ today: string }>("/demo/clock", post(body)),
 };

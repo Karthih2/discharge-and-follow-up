@@ -21,7 +21,7 @@ const AREAS = [
   { state: "Delhi", district: "New Delhi", area: "Saket", pin: "110017", at: [28.5245, 77.2066] },
 ] as const;
 
-const km = (a: readonly number[], b: readonly number[]) => {
+export const km = (a: readonly number[], b: readonly number[]) => {
   const r = Math.PI / 180;
   const h = Math.sin(((b[0] - a[0]) * r) / 2) ** 2 + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(((b[1] - a[1]) * r) / 2) ** 2;
   return 12742 * Math.asin(Math.sqrt(h));
@@ -39,8 +39,13 @@ interface Props {
 export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: Props) {
   const { t } = useLang();
   const mt = useMotionT();
-  const start = AREAS.find((a) => a.pin === pincode) ?? AREAS[0];
-  const [origin, setOrigin] = useState<readonly number[]>(start.at);
+  // Pincodes outside the known list (other cities) start from the middle of the suggested providers.
+  const known = AREAS.find((a) => a.pin === pincode);
+  const start = known ?? AREAS[0];
+  const centre = matches.length
+    ? [matches.reduce((t, m) => t + m.provider.lat, 0) / matches.length, matches.reduce((t, m) => t + m.provider.lng, 0) / matches.length]
+    : start.at;
+  const [origin, setOrigin] = useState<readonly number[]>(known ? start.at : centre);
   const [state, setState] = useState<string>(start.state);
   const [area, setArea] = useState<string>(start.pin);
   const [hover, setHover] = useState<number | null>(null);
@@ -74,7 +79,7 @@ export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: 
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-end gap-2">
-        <label className="text-sm">
+        {known && <label className="text-sm">
           <span className="block font-semibold">State</span>
           <select className="field w-auto py-1" value={state} onChange={(e) => {
             setState(e.target.value);
@@ -84,8 +89,8 @@ export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: 
           }}>
             {[...new Set(AREAS.map((a) => a.state))].map((s) => <option key={s}>{s}</option>)}
           </select>
-        </label>
-        <label className="text-sm">
+        </label>}
+        {known && <label className="text-sm">
           <span className="block font-semibold">Area</span>
           <select className="field w-auto py-1" value={area} onChange={(e) => {
             setArea(e.target.value);
@@ -94,7 +99,7 @@ export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: 
           }}>
             {AREAS.filter((a) => a.state === state).map((a) => <option key={a.pin} value={a.pin}>{a.area} {a.pin}</option>)}
           </select>
-        </label>
+        </label>}
         <Button look="quiet" small onClick={useGps}>
           <NavigationArrow size={16} weight="duotone" aria-hidden /> Use my location
         </Button>

@@ -8,6 +8,8 @@ _tmp = tempfile.mkdtemp()
 os.environ["CB_DB_URL"] = f"sqlite:///{Path(_tmp, 'test.db').as_posix()}"
 os.environ["MOCK_LLM"] = "1"
 os.environ["PIPELINE_DELAY"] = "0"
+os.environ["DEMO"] = "1"
+os.environ["JWT_SECRET"] = "test-secret-that-is-at-least-32-characters-long"
 
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402

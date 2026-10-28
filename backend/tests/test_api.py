@@ -22,8 +22,8 @@ def make_doc(client, who="ramesh", key="a"):
     r = client.post("/api/documents", json={"sample_key": key}, headers=h)
     assert r.status_code == 200, r.text
     doc_id = r.json()["document"]["id"]
-    token = h["Authorization"].split()[1]
-    with client.stream("GET", f"/api/documents/{doc_id}/run?token={token}") as resp:
+    ticket = client.post(f"/api/documents/{doc_id}/run-ticket", headers=h).json()["ticket"]
+    with client.stream("GET", f"/api/documents/{doc_id}/run?ticket={ticket}") as resp:
         events = [json.loads(l[6:]) for l in resp.iter_lines() if l.startswith("data: ")]
     assert events[-1]["step"] == "complete"
     return doc_id, h, events
@@ -32,6 +32,8 @@ def make_doc(client, who="ramesh", key="a"):
 @pytest.fixture(autouse=True)
 def reset_state(client):
     """Doctors available and clock at the start date before each test."""
+    from app import rate_limit
+    rate_limit.reset()
     h = login(client, "admin")
     for d in client.get("/api/admin/doctors", headers=h).json():
         client.put(f"/api/admin/doctors/{d['id']}/availability", json={"available": True}, headers=h)
@@ -76,11 +78,11 @@ def test_portals_are_separate(client):
 
 
 def test_register(client):
-    r = client.post("/api/auth/register", json={"name": "New Patient", "email": "new@x.test", "password": "secret12"})
+    r = client.post("/api/auth/register", json={"name": "New Patient", "email": "new@x.test", "password": "secretpw12"})
     assert r.status_code == 200 and r.json()["user"]["role"] == "patient"
-    assert client.post("/api/auth/register", json={"name": "New Patient", "email": "new@x.test", "password": "secret12"}).status_code == 409
-    assert client.post("/api/auth/register", json={"name": "Doc Tor", "email": "d@x.test", "password": "secret12", "role": "doctor"}).status_code == 422
-    m = client.post("/api/auth/register", json={"name": "Mana Ger", "email": "m@x.test", "password": "secret12", "role": "manager"}).json()
+    assert client.post("/api/auth/register", json={"name": "New Patient", "email": "new@x.test", "password": "secretpw12"}).status_code == 409
+    assert client.post("/api/auth/register", json={"name": "Doc Tor", "email": "d@x.test", "password": "secretpw12", "role": "doctor"}).status_code == 422
+    m = client.post("/api/auth/register", json={"name": "Mana Ger", "email": "m@x.test", "password": "secretpw12", "role": "manager"}).json()
     hdr = {"Authorization": "Bearer " + m["token"]}
     assert client.get("/api/hub", headers=hdr).json()["hub"]["name"] == "Mana family"
 
@@ -111,7 +113,7 @@ def test_sse_run_and_isolation(client):
     assert steps[0] == "start" and {"privacy", "ingest", "extract", "verify", "triage", "plan", "simplify", "match", "escalate"} <= set(steps)
     other = login(client, "sunita")
     assert client.get(f"/api/documents/{doc_id}/plan", headers=other).status_code == 404  # another patient
-    assert client.get(f"/api/documents/{doc_id}/run?token=garbage").status_code == 401
+    assert client.get(f"/api/documents/{doc_id}/run?ticket=garbage").status_code == 401
     assert any(d["id"] == doc_id for d in client.get("/api/documents", headers=h).json())
     lines = client.get(f"/api/documents/{doc_id}/source", headers=h).json()
     assert lines[0]["line_no"] == 1 and len(lines) > 20
@@ -219,7 +221,7 @@ def test_edit_and_reject(client):
 def test_fallback_when_doctor_unavailable(client):
     doc_id, ph, _ = make_doc(client, "ramesh", "a")
     adm = login(client, "admin")
-    q = client.get("/api/admin/queue", headers=adm).json()
+    q = client.get("/api/admin/queue?limit=500", headers=adm).json()
     mine = [x for x in q if x["document_id"] == doc_id]
     assert mine and all("original_text" not in x["item"] for x in mine)  # management never sees clinical text
     primary = mine[0]["assigned_doctor"]["id"]
@@ -268,7 +270,7 @@ def test_flag_and_provider_select(client):
     assert "PATIENT_FLAG" in again["codes"] and again["reason_plain"]
     assert client.post(f"/api/items/{ok['id']}/flag", json={}, headers=ph).status_code == 409
     physio = next(i for i in plan["items"] if i["title"] == "Physiotherapy")
-    pid = physio["matches"][1]["provider"]["id"]
+    pid = physio["matches"][0]["provider"]["id"]
     assert client.post(f"/api/items/{physio['id']}/provider", json={"provider_id": pid}, headers=ph).status_code == 200
     assert client.post(f"/api/items/{physio['id']}/provider", json={"provider_id": 99999}, headers=ph).status_code == 404
     sel = next(i for i in client.get(f"/api/documents/{doc_id}/plan", headers=ph).json()["items"] if i["id"] == physio["id"])

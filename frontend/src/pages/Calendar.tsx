@@ -82,7 +82,7 @@ export default function Calendar() {
                 const open = list.filter((x) => x.status === "Pending").length;
                 return (
                   <button key={d} onClick={() => setPick(d)} aria-pressed={d === selected} aria-label={`${d}, ${list.length}`}
-                    className={`flex h-16 flex-col items-center rounded-sm border p-1 text-sm ${d === selected ? "border-primary bg-primary text-surface" : d === today ? "border-primary bg-surface" : "border-line bg-bg hover:border-primary"}`}>
+                    className={`flex h-16 flex-col items-center rounded-lg border p-1 text-sm ${d === selected ? "border-primary bg-primary text-surface" : d === today ? "border-primary bg-surface" : "border-line bg-bg hover:border-primary"}`}>
                     <span className="tnum font-semibold">{i + 1}</span>
                     {list.length > 0 && (
                       <span className="mt-auto flex gap-0.5" aria-hidden>
@@ -113,7 +113,7 @@ export default function Calendar() {
                 const done = x.status === "Completed";
                 return (
                   <motion.li layout key={x.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={mt(0.18)}
-                    className={`rounded-sm border p-2 ${x.overdue ? "border-attention bg-attention-tint" : done ? "border-line bg-bg text-muted" : "border-line bg-surface"}`}>
+                    className={`rounded-lg border p-2 ${x.overdue ? "border-attention bg-attention-tint" : done ? "border-line bg-bg text-muted" : "border-line bg-surface"}`}>
                     <p className="flex items-start gap-2">
                       {x.kind === "medicine" ? <Pill size={18} weight="duotone" className="mt-0.5 shrink-0 text-primary" aria-hidden /> : <Stethoscope size={18} weight="duotone" className="mt-0.5 shrink-0 text-primary" aria-hidden />}
                       <span className="lang-text min-w-0">{x.title}</span>

@@ -1,4 +1,4 @@
-"""Doctor review queue, availability and callbacks."""
+"""Doctor review queue, availability, callbacks and calendar."""
 import re
 from datetime import datetime, timedelta
 from typing import Optional
@@ -177,6 +177,32 @@ def resolve_review(rid: int, body: ReviewIn, u: User = Depends(require("doctor")
     return {"id": r.id, "state": r.state}
 
 
+# ---------- mark plan checked (B.1) ----------
+@router.post("/documents/{doc_id}/mark-checked")
+def mark_checked(doc_id: int, u: User = Depends(require("doctor")), s: Session = Depends(get_session)):
+    doc = s.get(Document, doc_id)
+    if not doc:
+        raise HTTPException(404, "Plan not found")
+    mine = s.exec(select(ReviewQueue).where(
+        ReviewQueue.document_id == doc_id,
+        or_(ReviewQueue.assigned_doctor_id == u.id, ReviewQueue.fallback_doctor_id == u.id)
+    )).all()
+    if not mine:
+        raise HTTPException(403, "You have no review items for this plan")
+    if any(r.state == "open" for r in mine):
+        raise HTTPException(409, "Resolve all your open review items first")
+    if doc.plan_state == "doctor_checked":
+        raise HTTPException(409, "Already checked")
+    doc.plan_state = "doctor_checked"
+    doc.checked_by = u.id
+    doc.checked_at = clock_now()
+    s.add(doc)
+    s.commit()
+    audit(s, doc.id, f"user:{u.id}", "plan_checked", {})
+    routing.notify(s, doc.owner_id, doc.id, f"Dr. {u.name} has checked your care plan")
+    return {"plan_state": doc.plan_state, "checked_by": u.id}
+
+
 # ---------- availability ----------
 class AvailIn(BaseModel):
     available: bool
@@ -305,3 +331,82 @@ def callback_act(cid: int, body: CallbackAct, u: User = Depends(require("doctor"
     if msg:
         routing.notify(s, doc.owner_id, doc.id, msg)
     return callback_rows(s, [c])[0]
+
+
+# ---------- doctor calendar ----------
+@router.get("/doctor/calendar")
+def doctor_calendar(month: str, u: User = Depends(require("doctor")), s: Session = Depends(get_session)):
+    """All tasks for patients assigned to this doctor, for one month."""
+    if month == "now":
+        month = clock_now().strftime("%Y-%m")
+    try:
+        y, m = (int(x) for x in month.split("-"))
+        first = datetime(y, m, 1)
+    except ValueError:
+        raise HTTPException(422, "month must look like 2026-10")
+    last = (first.replace(year=y + (m == 12), month=m % 12 + 1)) - timedelta(seconds=1)
+    mine = or_(ReviewQueue.assigned_doctor_id == u.id, ReviewQueue.fallback_doctor_id == u.id)
+    doc_ids = list(s.exec(select(ReviewQueue.document_id).where(mine).distinct()))
+    if not doc_ids:
+        return {"month": month, "today": clock_now().strftime("%Y-%m-%d"), "events": []}
+    docs = {d.id: d for d in s.exec(select(Document).where(Document.id.in_(doc_ids)))}
+    tasks = s.exec(select(Task).where(
+        Task.document_id.in_(doc_ids), Task.due_at >= first, Task.due_at <= last
+    ).order_by(Task.due_at)).all()
+    items = {i.id: i for i in s.exec(select(Item).where(Item.id.in_({t.item_id for t in tasks} or {0})))}
+    now = clock_now()
+    events = []
+    for t in tasks:
+        doc = docs.get(t.document_id)
+        if not doc:
+            continue
+        it = items.get(t.item_id)
+        events.append({
+            "id": t.id, "document_id": doc.id, "patient_alias": doc.patient_alias,
+            "title": t.title, "due_at": t.due_at.isoformat(), "status": t.status,
+            "overdue": t.status == "Pending" and t.due_at < now,
+            "category": it.category if it else None,
+            "plan_state": doc.plan_state,
+        })
+    return {"month": month, "today": clock_now().strftime("%Y-%m-%d"), "events": events}
+
+
+# ---------- doctor: redirect patient to another doctor ----------
+class RedirectIn(BaseModel):
+    to_doctor_id: int
+
+@router.post("/doctor/patients/{doc_id}/redirect")
+def redirect_patient(doc_id: int, body: RedirectIn, u: User = Depends(require("doctor")), s: Session = Depends(get_session)):
+    """A doctor redirects all their open review items for a patient to another available doctor."""
+    doc = s.get(Document, doc_id)
+    if not doc:
+        raise HTTPException(404, "Plan not found")
+    target = s.exec(select(Doctor).where(Doctor.user_id == body.to_doctor_id)).first()
+    if not target or not target.available:
+        raise HTTPException(422, "Target doctor is not available")
+    target_user = s.get(User, target.user_id)
+    mine = s.exec(select(ReviewQueue).where(
+        ReviewQueue.document_id == doc_id, ReviewQueue.state == "open",
+        or_(ReviewQueue.assigned_doctor_id == u.id, ReviewQueue.fallback_doctor_id == u.id)
+    )).all()
+    if not mine:
+        raise HTTPException(404, "No open review items for this patient")
+    moved = 0
+    for r in mine:
+        r.assigned_doctor_id = body.to_doctor_id
+        s.add(r)
+        moved += 1
+    s.commit()
+    for r in mine:
+        audit(s, doc_id, f"user:{u.id}", "redirect", {"review_id": r.id, "from": u.id, "to": body.to_doctor_id})
+    routing.notify(s, body.to_doctor_id, doc_id, f"Dr. {u.name} redirected {doc.patient_alias} to you", "warning")
+    return {"moved": moved, "to_doctor": {"id": target_user.id, "name": target_user.name}}
+
+
+@router.get("/doctor/available-doctors")
+def list_available_doctors(u: User = Depends(require("doctor")), s: Session = Depends(get_session)):
+    """Available doctors excluding self, for the redirect dropdown."""
+    docs = routing.available_doctors(s)
+    users = {x.id: x for x in s.exec(select(User).where(User.id.in_({d.user_id for d in docs} or {0})))}
+    return [{"id": d.user_id, "name": users[d.user_id].name, "specialty": d.specialty}
+            for d in docs if d.user_id != u.id and d.user_id in users]

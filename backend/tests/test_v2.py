@@ -212,7 +212,7 @@ def test_admin_stats_follow_range_and_department(demo):
     s7 = demo.get("/api/admin/stats?days=7", headers=h).json()
     assert len(s30["reviews_per_day"]) == 30 and len(s7["reviews_per_day"]) == 7
     n = s30["numbers"]
-    assert set(n) == {"plans_created", "needing_review", "median_clear_hours", "reviews_overdue", "task_completion_rate",
+    assert set(n) >= {"plans_created", "needing_review", "median_clear_hours", "reviews_overdue", "task_completion_rate",
                       "overdue_tasks", "callbacks_completed", "open_alerts"}
     assert n["needing_review"] >= s7["numbers"]["needing_review"] and n["plans_created"] >= s7["numbers"]["plans_created"]
     assert n["needing_review"] == sum(d["opened"] for d in s30["reviews_per_day"])

@@ -17,7 +17,7 @@ function Block({ title, children, table }: { title: string; children: React.Reac
     <Card as="section" className="space-y-3 p-4" aria-label={title}>
       <h3 className="text-xl">{title}</h3>
       <div className="h-64" role="img" aria-label={title}>{children}</div>
-      <div className="max-h-44 overflow-auto rounded-sm border border-line">{table}</div>
+      <div className="max-h-44 overflow-auto rounded-lg border border-line">{table}</div>
     </Card>
   );
 }

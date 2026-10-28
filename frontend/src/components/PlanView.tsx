@@ -34,10 +34,10 @@ function ViewSwitcher({ mode, set }: { mode: Mode; set: (m: Mode) => void }) {
     { m: "timeline", label: t("timeline"), Icon: Rows },
   ];
   return (
-    <div role="tablist" aria-label="Display" className="relative inline-flex max-w-full overflow-x-auto rounded-md border border-primary p-0.5">
+    <div role="tablist" aria-label="Display" className="relative inline-flex max-w-full overflow-x-auto rounded-xl border border-primary p-0.5">
       {opts.map(({ m, label, Icon }) => (
         <button key={m} role="tab" aria-selected={mode === m} onClick={() => set(m)} className="relative whitespace-nowrap px-2.5 py-1.5 text-sm font-semibold sm:px-3">
-          {mode === m && <motion.span layoutId="mode-pill" className="absolute inset-0 rounded-sm bg-primary" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
+          {mode === m && <motion.span layoutId="mode-pill" className="absolute inset-0 rounded-[10px] bg-primary" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
           <span className={`relative inline-flex items-center gap-1.5 ${mode === m ? "text-surface" : "text-primary"}`}>
             <Icon size={18} weight="duotone" aria-hidden /> {label}
           </span>
@@ -90,7 +90,7 @@ export function PlanView({ plan, preview, elderly, onTask, onAck, onSource, onRe
         </motion.section>
       )}
       {!preview && plan.open_reviews > 0 && scope === "full" && role === "patient" && (
-        <p className="lang-text flex items-center gap-2 rounded-sm border border-attention bg-attention-tint p-3 text-attention">
+        <p className="lang-text flex items-center gap-2 rounded-lg border border-attention bg-attention-tint p-3 text-attention">
           <WarningCircle size={22} weight="duotone" aria-hidden /> {t("reviewBanner")}
         </p>
       )}
@@ -179,7 +179,7 @@ export function PlanView({ plan, preview, elderly, onTask, onAck, onSource, onRe
 
       {role === "patient" && !preview && <Activity docId={plan.document.id} />}
       {/* Rule on every screen: footer disclaimer */}
-      <p className="lang-text rounded-sm border border-line p-3 text-sm text-muted">{t("disclaimer")}</p>
+      <p className="lang-text rounded-lg border border-line p-3 text-sm text-muted">{t("disclaimer")}</p>
     </div>
   );
 }
@@ -267,7 +267,7 @@ function AlertFeed({ alerts, onAck }: { alerts: Alert[]; onAck?: (id: number) =>
       <ul className="space-y-2">
         {open.map((a) => (
           <motion.li layout key={a.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-            className={`flex flex-wrap items-center justify-between gap-2 rounded-sm border p-3 ${a.level === "urgent" ? "border-attention bg-attention-tint" : "border-line"}`}>
+            className={`flex flex-wrap items-center justify-between gap-2 rounded-lg border p-3 ${a.level === "urgent" ? "border-attention bg-attention-tint" : "border-line"}`}>
             <span className="lang-text">
               {a.level === "urgent" && <strong className="mr-2 text-attention">Urgent</strong>}
               {a.message}

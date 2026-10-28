@@ -13,7 +13,7 @@ import { Logo } from "./Icons";
 import { Button, LinkButton, ListSkeleton } from "./ui";
 import { LangToggle } from "./LangToggle";
 
-const link = "relative whitespace-nowrap rounded-sm px-2.5 py-1.5 text-ink hover:underline aria-[current=page]:font-semibold aria-[current=page]:text-primary";
+const link = "relative whitespace-nowrap rounded-md px-2.5 py-1.5 text-ink hover:underline aria-[current=page]:font-semibold aria-[current=page]:text-primary";
 
 const NAV: Partial<Record<Role, { to: string; label: StringKey }[]>> = {
   patient: [
@@ -73,11 +73,11 @@ function BellMenu({ dark = false }: { dark?: boolean }) {
       </button>
       <AnimatePresence>
         {open && (
-          <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="absolute right-0 z-30 mt-1 max-h-96 w-[min(20rem,calc(100vw-2rem))] overflow-y-auto rounded-md border border-line bg-surface p-2 text-ink">
+          <motion.div initial={{ opacity: 0, y: -6, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }} className="absolute right-0 z-30 mt-1 max-h-96 w-[min(20rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-line bg-surface p-2 text-ink shadow-xl">
             {list.length === 0 && <p className="p-2 text-muted">Nothing yet.</p>}
             <ul className="space-y-1">
               {list.map((n) => (
-                <li key={n.id} className={`rounded-sm p-2 text-sm ${n.level !== "info" ? "bg-attention-tint" : "bg-bg"}`}>
+                <li key={n.id} className={`rounded-xl p-2 text-sm transition-colors ${n.level !== "info" ? "bg-attention-tint" : "bg-bg hover:bg-line"}`}>
                   {n.message}
                   <span className="block text-xs text-muted">{new Date(n.created_at).toLocaleString("en-IN")}</span>
                 </li>
@@ -100,7 +100,7 @@ export function Header() {
   const { t } = useLang();
   const items = user ? NAV[user.role] ?? [] : [];
   return (
-    <header className="no-print sticky top-0 z-20 border-b border-line bg-surface">
+    <header className="no-print sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1480px] items-center justify-between gap-3 px-5 py-3">
         <Link to={user ? (user.role === "patient" ? "/patient" : "/family") : "/"} className="flex min-w-0 items-center gap-2 text-ink no-underline hover:no-underline">
           <Logo size={32} />
@@ -163,14 +163,14 @@ export function Header() {
 export function Footer() {
   const { t } = useLang();
   return (
-    <footer className="no-print mt-20 border-t border-line bg-surface">
+    <footer className="no-print mt-20 border-t border-line bg-surface/80 backdrop-blur-sm">
       <div className="mx-auto grid max-w-[1480px] gap-8 px-5 py-10 md:grid-cols-[1.4fr_1fr]">
         <div className="max-w-xl space-y-2">
           <p className="font-heading text-xl">{PRODUCT} <span className="text-muted">by {HOSPITAL_FULL}</span></p>
           <p className="text-muted">
             {t("footerNote")}
           </p>
-          <p className="text-sm text-muted">{HOSPITAL} Hospital owns and runs this service. Its doctors and staff are added by the hospital's management team. All data in this demo is synthetic.</p>
+          <p className="text-sm text-muted">{HOSPITAL} Hospital owns and runs this service. Its doctors and staff are added by the hospital's management team.</p>
         </div>
         <nav className="flex flex-col gap-1 md:items-end" aria-label="Legal">
           <Link to="/terms">{t("terms")}</Link>
@@ -194,7 +194,7 @@ export function StaffShell({ variant, title, nav, extra }: { variant: "doctor" |
   const side = dark ? "bg-ink text-surface" : "bg-primary text-surface";
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <aside className={`no-print flex shrink-0 flex-col gap-3 p-4 md:sticky md:top-0 md:h-screen md:w-64 ${side}`}>
+      <aside className={`no-print flex shrink-0 flex-col gap-3 p-4 md:sticky md:top-0 md:h-screen md:w-64 md:rounded-r-2xl ${side}`}>
         <div className="flex items-center gap-2">
           <Logo size={34} />
           <div className="leading-tight">
@@ -204,10 +204,10 @@ export function StaffShell({ variant, title, nav, extra }: { variant: "doctor" |
         </div>
         <nav className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible" aria-label={title}>
           {nav.map(({ to, label, Icon, end }) => (
-            <NavLink key={to} to={to} end={end} className="side-link relative whitespace-nowrap rounded-sm px-3 py-2">
+            <NavLink key={to} to={to} end={end} className="side-link relative whitespace-nowrap rounded-xl px-3 py-2">
               {({ isActive }) => (
                 <>
-                  {isActive && <motion.span layoutId={`side-${variant}`} className="absolute inset-0 rounded-sm" style={{ background: "rgba(246,252,250,0.22)" }} transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
+                  {isActive && <motion.span layoutId={`side-${variant}`} className="absolute inset-0 rounded-xl" style={{ background: "rgba(246,252,250,0.22)" }} transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
                   <span className="relative flex items-center gap-2 font-semibold" style={{ color: "var(--surface)" }}><Icon size={20} weight="duotone" aria-hidden /> {label}</span>
                 </>
               )}
@@ -233,7 +233,7 @@ export function StaffShell({ variant, title, nav, extra }: { variant: "doctor" |
             <Outlet />
           </Suspense>
         </motion.div>
-        <p className="mx-auto mt-12 max-w-[1480px] text-xs text-muted">{HOSPITAL_FULL} staff workspace. Synthetic data only. This tool organizes instructions and gives no medical advice.</p>
+        <p className="mx-auto mt-12 max-w-[1480px] text-xs text-muted">{HOSPITAL_FULL} staff workspace. This tool organizes discharge instructions and gives no medical advice.</p>
       </main>
     </div>
   );

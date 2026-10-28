@@ -45,7 +45,7 @@ function MedicineCard({ item }: { item: PlanItem }) {
     { label: t("food"), value: m.food === "after" ? t("afterFood") : m.food === "before" ? t("beforeFood") : t("notStated") },
   ];
   return (
-    <div className="mt-2 rounded-md border border-line bg-bg p-3">
+    <div className="mt-2 rounded-xl border border-line bg-bg p-3">
       <dl className="grid grid-cols-2 gap-x-4 gap-y-2 md:grid-cols-4">
         {cells.map((c, i) => (
           <motion.div key={c.label} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={mt(0.3, 0.25 + i * 0.06)}>
@@ -148,7 +148,7 @@ export function ItemCard({ item, plan, task, onTask, onSource, onRefresh, previe
 
   return (
     <div
-      className={`rounded-md border p-4 ${
+      className={`rounded-2xl border p-4 transition-shadow duration-200 hover:shadow-md ${
         locked ? (mine || role === "doctor" ? "border-attention bg-attention-tint" : "border-line bg-bg text-muted") : "border-line bg-surface"
       }`}
     >
@@ -160,7 +160,7 @@ export function ItemCard({ item, plan, task, onTask, onSource, onRefresh, previe
             {!locked && <span className="text-sm text-muted">{cat(item.category)}</span>}
             <StatusBadge status={task?.status === "Completed" ? "Completed" : item.status} />
             {d && (
-              <span className="inline-flex items-center gap-1 rounded-sm border border-line px-2 text-sm text-muted">
+              <span className="inline-flex items-center gap-1 rounded-md border border-line px-2 text-sm text-muted">
                 <CalendarBlank size={14} weight="duotone" aria-hidden /> {fmtDate(item.date_resolved!, { day: "numeric", month: "short" })}
               </span>
             )}

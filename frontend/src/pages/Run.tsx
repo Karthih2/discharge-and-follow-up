@@ -29,29 +29,32 @@ export default function Run() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const es = new EventSource(api.runUrl(id));
-    es.onmessage = (m) => {
-      const ev: StepEvent = JSON.parse(m.data);
-      if (ev.step === "start" && ev.steps) {
-        setRows(ev.steps.map((s) => ({ ...s, state: "waiting" as State })));
-      } else if (ev.step === "complete") {
-        setFinished(true);
-        for (const k of ["today", "documents", "calendar", "plan", "family"]) invalidate(k); // the new plan shows up on every screen, family hub included
-        setCounts({ items: ev.items ?? 0, flagged: ev.flagged ?? 0 });
-        es.close();
-      } else if (ev.step === "error") {
-        setError(ev.message ?? "Something went wrong");
-        es.close();
-      } else {
-        setRows((r) => r.map((x) => (x.key === ev.step ? { ...x, state: ev.state as State, message: ev.message ?? x.message } : x)));
-        if (ev.items !== undefined) setCounts({ items: ev.items, flagged: ev.flagged ?? 0 });
-      }
-    };
-    es.onerror = () => {
-      es.close();
-      setError((e) => e ?? "The connection was lost. Make sure the backend is running, then try again.");
-    };
-    return () => es.close();
+    let es: EventSource | null = null;
+    api.getRunUrl(id).then(url => {
+      es = new EventSource(url);
+      es.onmessage = (m) => {
+        const ev: StepEvent = JSON.parse(m.data);
+        if (ev.step === "start" && ev.steps) {
+          setRows(ev.steps.map((s) => ({ ...s, state: "waiting" as State })));
+        } else if (ev.step === "complete") {
+          setFinished(true);
+          for (const k of ["today", "documents", "calendar", "plan", "family"]) invalidate(k);
+          setCounts({ items: ev.items ?? 0, flagged: ev.flagged ?? 0 });
+          es?.close();
+        } else if (ev.step === "error") {
+          setError(ev.message ?? "Something went wrong");
+          es?.close();
+        } else {
+          setRows((r) => r.map((x) => (x.key === ev.step ? { ...x, state: ev.state as State, message: ev.message ?? x.message } : x)));
+          if (ev.items !== undefined) setCounts({ items: ev.items, flagged: ev.flagged ?? 0 });
+        }
+      };
+      es.onerror = () => {
+        es?.close();
+        setError((e) => e ?? "The connection was lost. Make sure the backend is running, then try again.");
+      };
+    });
+    return () => es?.close();
   }, [id]);
 
   const doneCount = rows.filter((r) => r.state === "done" || r.state === "flagged").length;
@@ -104,7 +107,7 @@ export default function Run() {
       </p>
 
       {error && (
-        <div role="alert" className="space-y-3 rounded-sm border border-attention bg-attention-tint p-4">
+        <div role="alert" className="space-y-3 rounded-lg border border-attention bg-attention-tint p-4">
           <p className="text-attention">{error}</p>
           <p className="text-sm">{t("nothingLost")}</p>
           <div className="flex gap-2">

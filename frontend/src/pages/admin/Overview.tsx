@@ -27,16 +27,20 @@ export default function Overview() {
   };
 
   const n = s?.numbers;
-  const cards: [string, number | null | undefined, string, boolean, number?][] = [
-    [t("plansCreated"), n?.plans_created, "", false],
+  type Tint = "neutral" | "primary" | "warn";
+  const cards: [string, number | null | undefined, string, boolean, number?, Tint?][] = [
+    [t("plansCreated"), n?.plans_created, "", false, 0, "primary"],
     [t("needingReview"), n?.needing_review, "", false],
     [t("medianClear"), n?.median_clear_hours, " h", false, 1],
-    [t("reviewsOverdue"), n?.reviews_overdue, "", true],
+    [t("medianCheck"), n?.median_check_hours, " h", false, 1, "primary"],
+    [t("pctChecked24h"), n?.pct_checked_24h, "%", false, 1, "primary"],
+    [t("reviewsOverdue"), n?.reviews_overdue, "", true, 0, "warn"],
     [t("completionRate"), n?.task_completion_rate, "%", false, 1],
-    [t("overdueTasks"), n?.overdue_tasks, "", true],
+    [t("overdueTasks"), n?.overdue_tasks, "", true, 0, "warn"],
     [t("callbacksCompleted"), n?.callbacks_completed, "", false],
-    [t("openFamilyAlerts"), n?.open_alerts, "", true],
+    [t("openFamilyAlerts"), n?.open_alerts, "", true, 0, "warn"],
   ];
+  const tintClass = (t?: Tint) => t === "primary" ? "tint-primary" : t === "warn" ? "hl-warn" : "";
 
   return (
     <div className="space-y-6">
@@ -54,15 +58,15 @@ export default function Overview() {
       </div>
       {stats.error && <p role="alert" className="text-attention">{stats.error}</p>}
 
-      {stats.loading ? <StatsSkeleton n={8} /> : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {cards.map(([label, v, unit, warn, dec], i) => (
+      {stats.loading ? <StatsSkeleton n={10} /> : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {cards.map(([label, v, unit, warn, dec, tint], i) => (
             <motion.div key={label} {...rise(i)}>
-              <Card className="h-full p-4">
-                <p className={`font-heading text-4xl tnum ${warn && v ? "text-attention" : ""}`}>
+              <Card className={`h-full p-4 ${tintClass(tint)}`}>
+                <p className={`font-heading text-3xl tnum ${warn && v ? "text-attention" : ""}`}>
                   {v === null || v === undefined ? "-" : <><CountUp to={v} decimals={dec ?? 0} />{unit}</>}
                 </p>
-                <p className="text-muted">{label}</p>
+                <p className="text-sm text-muted">{label}</p>
               </Card>
             </motion.div>
           ))}

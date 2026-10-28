@@ -53,7 +53,7 @@ export default function DoctorHome() {
         )}
       </PageHead>
       {home.error && <p role="alert" className="text-attention">{home.error}</p>}
-      {h && !h.available && <p className="rounded-sm border border-attention bg-attention-tint p-3 text-attention">{t("youAreAway")}</p>}
+      {h && !h.available && <p className="rounded-lg border border-attention bg-attention-tint p-3 text-attention">{t("youAreAway")}</p>}
 
       {home.loading ? <StatsSkeleton /> : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

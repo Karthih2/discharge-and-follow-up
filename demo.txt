@@ -1,0 +1,19 @@
+Doctor: go to http://localhost:5173/doctor
+
+meera@code2care.test (Cardiology)
+arjun@code2care.test (General medicine)
+sana@code2care.test (Diabetology)
+vikram@code2care.test (Orthopaedics)
+
+Management: go to http://localhost:5173/management
+
+admin@code2care.test
+
+Patient and family: use the page you’re on now, http://localhost:5173/
+
+Patients: ramesh@code2care.test, sunita@code2care.test, karthik@code2care.test, lakshmi@code2care.test
+Family hub manager: priya@code2care.test
+Family viewer: arun@code2care.test
+subramanian@code2care.test
+
+The password for every account is demo1234.

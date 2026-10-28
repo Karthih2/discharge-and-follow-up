@@ -1,13 +1,11 @@
 import { ChartBar, ClockCounterClockwise, Gear, PhoneCall, Stack, Stethoscope, UsersThree } from "@phosphor-icons/react";
 import { lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { DemoClock } from "../components/DemoClock";
 import { StaffShell } from "../components/Layout";
 import { Guard } from "../lib/auth";
 import { useLang } from "../lib/lang";
-import { SharedSignIn } from "../components/SharedSignIn";
+import { StaffLogin } from "../components/StaffLogin";
 
-// One chunk per screen. Recharts loads only with the overview charts.
 const Overview = lazy(() => import("../pages/admin/Overview"));
 const Reviews = lazy(() => import("../pages/admin/Reviews"));
 const Doctors = lazy(() => import("../pages/admin/Doctors"));
@@ -20,14 +18,13 @@ export default function AdminApp() {
   const { t } = useLang();
   return (
     <Routes>
-      <Route path="/login" element={<SharedSignIn />} />
+      <Route path="/login" element={<StaffLogin portalLabel="Management" />} />
       <Route
         element={
           <Guard roles={["management"]}>
             <StaffShell
               variant="admin"
               title={t("managementConsole")}
-              extra={<div className="rounded-sm bg-surface p-2 text-ink"><DemoClock stack /></div>}
               nav={[
                 { to: "/", label: t("overview"), Icon: ChartBar, end: true },
                 { to: "/reviews", label: t("reviewAssignment"), Icon: Stack },

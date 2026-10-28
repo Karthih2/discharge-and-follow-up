@@ -47,6 +47,7 @@ Thumbs.db
 # Design reference images and AI prompt notes (not part of the app)
 desgin/
 CLAUDE_CODE_PROMPT.md
+CLAUDE_CODE_PROMPT_V2.md
 
 # Generated audio, coverage, backups, uploads
 *.mp3
@@ -58,3 +59,5 @@ coverage/
 backend/uploads/
 .vite/
 frontend/.vite/
+
+CareBridge_Architecture_Morph.pptx

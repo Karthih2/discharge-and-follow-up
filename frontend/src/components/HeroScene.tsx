@@ -1,13 +1,12 @@
-import { CalendarBlank, Lock, Pill } from "@phosphor-icons/react";
+import { CalendarBlank, Heart, Lock, Pill, ShieldCheck, Translate } from "@phosphor-icons/react";
 import { m as motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
 import type { PointerEvent, ReactNode } from "react";
 
-/** Flat cut-out photo with three flat cards at different depths. The scene tilts toward the pointer, so 2D layers feel 3D. */
 function Card({ children, className, z, delay, bob }: { children: ReactNode; className: string; z: number; delay: number; bob: number }) {
   const still = useReducedMotion();
   return (
     <motion.div
-      className={`absolute rounded-md border border-line bg-surface p-3 ${className}`}
+      className={`absolute rounded-2xl border border-line/50 bg-surface/95 p-3.5 shadow-lg backdrop-blur-sm ${className}`}
       style={{ z }}
       initial={still ? false : { opacity: 0, scale: 0.7, y: 24 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -20,14 +19,62 @@ function Card({ children, className, z, delay, bob }: { children: ReactNode; cla
   );
 }
 
+function PhoneFrame() {
+  return (
+    <div className="relative mx-auto w-[220px] sm:w-[260px]">
+      <div className="rounded-[28px] border-2 border-white/20 bg-ink/80 p-2 shadow-2xl backdrop-blur-md">
+        <div className="mx-auto mb-2 h-1.5 w-16 rounded-full bg-white/20" />
+        <div className="overflow-hidden rounded-[22px] bg-surface">
+          <div className="bg-primary px-4 py-3">
+            <p className="text-xs font-semibold text-surface/80">CareBridge</p>
+            <p className="text-sm font-bold text-surface">Today's Plan</p>
+          </div>
+          <div className="space-y-2 px-3 py-3">
+            <div className="flex items-center gap-2 rounded-xl bg-bg p-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><Pill size={16} weight="duotone" /></span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-ink">Aspirin 75mg</p>
+                <p className="text-[10px] text-muted">After breakfast</p>
+              </div>
+              <span className="h-5 w-5 rounded-full border-2 border-primary bg-primary/20" />
+            </div>
+            <div className="flex items-center gap-2 rounded-xl bg-bg p-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary/20 text-primary"><CalendarBlank size={16} weight="duotone" /></span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-ink">Heart check-up</p>
+                <p className="text-[10px] text-muted">Dr. Meera, 3 Nov</p>
+              </div>
+              <span className="rounded-md bg-secondary/30 px-1.5 text-[9px] font-bold text-primary">Upcoming</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-xl bg-attention-tint p-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-attention/10 text-attention"><Heart size={16} weight="duotone" /></span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-attention">Warning sign</p>
+                <p className="text-[10px] text-attention/70">Chest pain: go to ER</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 rounded-xl bg-bg p-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><Translate size={16} weight="duotone" /></span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-ink">தமிழ் மொழிபெயர்ப்பு</p>
+                <p className="text-[10px] text-muted">Tamil translation ready</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function HeroScene() {
   const still = useReducedMotion();
   const px = useMotionValue(0);
   const py = useMotionValue(0);
   const sx = useSpring(px, { stiffness: 120, damping: 18 });
   const sy = useSpring(py, { stiffness: 120, damping: 18 });
-  const rotY = useTransform(sx, [-0.5, 0.5], [-9, 9]);
-  const rotX = useTransform(sy, [-0.5, 0.5], [7, -7]);
+  const rotY = useTransform(sx, [-0.5, 0.5], [-8, 8]);
+  const rotX = useTransform(sy, [-0.5, 0.5], [6, -6]);
 
   const move = (e: PointerEvent<HTMLDivElement>) => {
     if (still) return;
@@ -38,31 +85,20 @@ export function HeroScene() {
   const leave = () => { px.set(0); py.set(0); };
 
   return (
-    <div className="relative mx-auto w-full max-w-[520px]" style={{ perspective: 1100 }} onPointerMove={move} onPointerLeave={leave}>
-      <motion.div className="relative" style={{ rotateX: still ? 0 : rotX, rotateY: still ? 0 : rotY, transformStyle: "preserve-3d" }}>
-        <motion.div className="absolute inset-x-6 bottom-0 top-10 rounded-md border border-line bg-surface" style={{ z: -40 }} aria-hidden />
-        <motion.img
-          src="/hero-cutout.png"
-          alt="A younger woman helps an older woman read her follow-up plan on a phone"
-          className="relative block w-full"
-          style={{ z: 30 }}
-          initial={still ? false : { opacity: 0, y: 30, scale: 0.94 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ type: "spring", stiffness: 140, damping: 18 }}
-          width={720}
-          height={695}
-        />
-        <Card className="-left-2 top-6 w-52 sm:-left-8" z={90} delay={0.35} bob={6}>
+    <div className="relative mx-auto w-full max-w-[440px]" style={{ perspective: 1100 }} onPointerMove={move} onPointerLeave={leave}>
+      <motion.div className="relative py-6" style={{ rotateX: still ? 0 : rotX, rotateY: still ? 0 : rotY, transformStyle: "preserve-3d" }}>
+        <PhoneFrame />
+        <Card className="-left-4 top-8 w-48 sm:-left-10" z={90} delay={0.35} bob={6}>
           <p className="flex items-center gap-2 text-sm font-semibold"><Pill size={18} weight="duotone" className="text-primary" aria-hidden /> Morning medicines</p>
-          <p className="text-sm text-muted">Aspirin 75 mg, after food</p>
+          <p className="text-xs text-muted">Aspirin 75 mg, after food</p>
         </Card>
-        <Card className="-right-2 top-[46%] w-48 sm:-right-6" z={120} delay={0.55} bob={8}>
-          <p className="flex items-center gap-2 text-sm font-semibold"><CalendarBlank size={18} weight="duotone" className="text-primary" aria-hidden /> Next visit</p>
-          <p className="text-sm text-muted">Heart doctor, 24 Oct</p>
+        <Card className="-right-4 top-[40%] w-44 sm:-right-8" z={120} delay={0.55} bob={8}>
+          <p className="flex items-center gap-2 text-sm font-semibold"><ShieldCheck size={18} weight="duotone" className="text-primary" aria-hidden /> Doctor verified</p>
+          <p className="text-xs text-muted">All items confirmed</p>
         </Card>
-        <Card className="bottom-4 left-2 w-52 border-attention bg-attention-tint sm:-left-4" z={70} delay={0.75} bob={5}>
-          <p className="flex items-center gap-2 text-sm font-semibold text-attention"><Lock size={18} weight="duotone" aria-hidden /> Waiting for a doctor</p>
-          <p className="text-sm text-attention">Your care team will confirm this</p>
+        <Card className="-left-2 bottom-4 w-44 sm:-left-6" z={70} delay={0.75} bob={5}>
+          <p className="flex items-center gap-2 text-sm font-semibold text-primary"><Lock size={18} weight="duotone" aria-hidden /> Waiting review</p>
+          <p className="text-xs text-muted">Doctor will confirm</p>
         </Card>
       </motion.div>
     </div>

@@ -1,13 +1,14 @@
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { ArrowBendUpRight, CheckCircle, MagnifyingGlass } from "@phosphor-icons/react";
 import { m as motion } from "motion/react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { StatusBadge } from "../../components/StatusBadge";
-import { Badge, Card, EmptyState, ListSkeleton, PageHead, Pager } from "../../components/ui";
+import { Badge, Button, Card, EmptyState, ListSkeleton, PageHead, Pager, Select } from "../../components/ui";
 import { api } from "../../lib/api";
 import { useLang } from "../../lib/lang";
 import { fmtDate, useStagger } from "../../lib/motion";
-import { useDebounced, useQuery } from "../../lib/query";
+import { invalidate, useDebounced, useQuery } from "../../lib/query";
+import { toast } from "../../lib/toast";
 
 const LIMIT = 20;
 
@@ -60,13 +61,81 @@ export function DoctorPatient() {
   const id = Number(useParams().id);
   const plan = useQuery(`plan/${id}/en`, () => api.plan(id, "en"));
   const hist = useQuery(`review/all/doc${id}`, () => api.review({ state: "all", document_id: id, limit: 200 }));
+  const doctors = useQuery("doctor/available", api.availableDoctors);
   const p = plan.data;
+  const [busy, setBusy] = useState("");
+  const [redirectTo, setRedirectTo] = useState("");
+  const [err, setErr] = useState<string | null>(null);
+
+  const hasOpenReviews = (hist.data?.rows ?? []).some((r) => r.state === "open");
+  const planState = p?.document?.plan_state;
+  const canCheck = !hasOpenReviews && planState === "checking";
+
+  const markChecked = async () => {
+    setBusy("check");
+    setErr(null);
+    try {
+      await api.markChecked(id);
+      toast(t("toastPlanChecked"));
+      invalidate("plan");
+      invalidate("doctor");
+    } catch (e) {
+      setErr((e as Error).message);
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const redirect = async () => {
+    if (!redirectTo) return;
+    setBusy("redirect");
+    setErr(null);
+    try {
+      const res = await api.redirectPatient(id, Number(redirectTo));
+      toast(`${t("redirected")}: ${res.to_doctor.name} (${res.moved} items)`);
+      invalidate("doctor");
+      invalidate("review");
+    } catch (e) {
+      setErr((e as Error).message);
+    } finally {
+      setBusy("");
+    }
+  };
 
   return (
     <div className="space-y-8">
       <Link to="/patients">{t("backToPatients")}</Link>
       <PageHead title={p?.document.patient_alias ?? t("patient")} text={p ? `${p.document.title}. ${t("leftHospital")} ${fmtDate(p.document.discharge_date)}. ${t("readOnly")}` : undefined} />
-      {(plan.error || hist.error) && <p role="alert" className="text-attention">{plan.error ?? hist.error}</p>}
+
+      {/* Plan state + actions */}
+      {p && (
+        <div className="flex flex-wrap items-center gap-3">
+          {planState === "doctor_checked" && <Badge tone="good"><CheckCircle size={16} className="mr-1 inline" />{t("planChecked")}</Badge>}
+          {planState === "checking" && <Badge tone="plain">{t("checking")}</Badge>}
+          {canCheck && (
+            <Button small onClick={markChecked} loading={busy === "check"}>
+              <CheckCircle size={18} aria-hidden /> {t("markPlanChecked")}
+            </Button>
+          )}
+          {hasOpenReviews && planState === "checking" && (
+            <span className="text-sm text-muted">{t("resolveFirst")}</span>
+          )}
+        </div>
+      )}
+
+      {/* Redirect patient to another doctor */}
+      {hasOpenReviews && (
+        <Card className="flex flex-wrap items-end gap-3 p-4">
+          <ArrowBendUpRight size={22} className="text-primary" aria-hidden />
+          <Select label={t("redirectPatient")} value={redirectTo} onChange={(e) => setRedirectTo(e.target.value)}>
+            <option value="">{t("selectDoctor")}</option>
+            {(doctors.data ?? []).map((d) => <option key={d.id} value={d.id}>{d.name} ({d.specialty})</option>)}
+          </Select>
+          <Button small onClick={redirect} loading={busy === "redirect"} disabled={!redirectTo}>{t("redirectPatient")}</Button>
+        </Card>
+      )}
+
+      {(plan.error || hist.error || err) && <p role="alert" className="text-attention">{err ?? plan.error ?? hist.error}</p>}
       <section aria-labelledby="h-plan" className="space-y-3">
         <h2 id="h-plan" className="text-2xl">{t("planItems")}</h2>
         {plan.loading && <ListSkeleton rows={4} />}

@@ -24,6 +24,9 @@ export interface Doc {
   created_at: string;
   items?: number;
   needs_review?: number;
+  plan_state?: string;
+  checked_by?: number | null;
+  checked_at?: string | null;
 }
 
 export interface Provider {
@@ -325,6 +328,8 @@ export interface Stats {
     plans_created: number;
     needing_review: number;
     median_clear_hours: number | null;
+    median_check_hours: number | null;
+    pct_checked_24h: number | null;
     reviews_overdue: number;
     task_completion_rate: number;
     overdue_tasks: number;
@@ -370,6 +375,18 @@ export interface StepEvent {
   flagged?: number;
   steps?: { key: string; label: string }[];
   document_id?: number;
+}
+
+export interface DoctorCalEvent {
+  id: number;
+  document_id: number;
+  patient_alias: string;
+  title: string;
+  due_at: string;
+  status: string;
+  overdue: boolean;
+  category: string | null;
+  plan_state: string;
 }
 
 export interface CalTask {

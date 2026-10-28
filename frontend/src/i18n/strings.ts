@@ -348,6 +348,20 @@ export const STRINGS = {
   toastNotesSaved: n("Notes saved.", "குறிப்புகள் சேமிக்கப்பட்டன.", "नोट सहेजे गए।"),
   toastRescheduled: n("Callback moved to the new time.", "அழைப்பு புதிய நேரத்திற்கு மாற்றப்பட்டது.", "कॉलबैक नए समय पर गया।"),
   toastCallbackDone: n("Callback updated.", "அழைப்பு புதுப்பிக்கப்பட்டது.", "कॉलबैक अपडेट हुआ।"),
+  // doctor calendar + plan actions
+  doctorCalendar: n("Calendar", "நாட்காட்டி", "कैलेंडर"), // needs native check
+  doctorCalendarIntro: n("Your patients' appointments and tasks. Click a day to see details.", "உங்கள் நோயாளிகளின் சந்திப்புகள் மற்றும் பணிகள்.", "आपके मरीज़ों की अपॉइंटमेंट और कार्य।"), // needs native check
+  markPlanChecked: n("Mark plan checked", "திட்டத்தை சரிபார்க்கப்பட்டதாகக் குறிக்கவும்", "प्लान जांचा हुआ चिह्नित करें"), // needs native check
+  planChecked: n("Plan checked", "திட்டம் சரிபார்க்கப்பட்டது", "प्लान जांचा गया"), // needs native check
+  checkedBy: n("Checked by", "சரிபார்த்தவர்", "जांचा गया"), // needs native check
+  resolveFirst: n("Resolve all open reviews first", "முதலில் அனைத்து திறந்த மதிப்பாய்வுகளையும் தீர்க்கவும்", "पहले सभी खुली समीक्षाएं हल करें"), // needs native check
+  redirectPatient: n("Redirect to another doctor", "மற்றொரு மருத்துவருக்கு திருப்பி அனுப்பு", "दूसरे डॉक्टर को भेजें"), // needs native check
+  redirected: n("Patient redirected", "நோயாளி திருப்பி அனுப்பப்பட்டார்", "मरीज़ भेजा गया"), // needs native check
+  selectDoctor: n("Select doctor", "மருத்துவரைத் தேர்ந்தெடுக்கவும்", "डॉक्टर चुनें"), // needs native check
+  noEvents: n("Nothing scheduled", "திட்டமிடப்பட்டது எதுவும் இல்லை", "कुछ भी शेड्यूल नहीं"), // needs native check
+  noEventsText: n("No appointments or tasks for this period.", "இந்த காலத்திற்கு சந்திப்புகள் அல்லது பணிகள் இல்லை.", "इस अवधि में कोई अपॉइंटमेंट या कार्य नहीं।"), // needs native check
+  checking: n("Not yet checked", "இன்னும் சரிபார்க்கப்படவில்லை", "अभी तक नहीं जांचा"), // needs native check
+  toastPlanChecked: n("Plan marked as checked.", "திட்டம் சரிபார்க்கப்பட்டதாகக் குறிக்கப்பட்டது.", "प्लान जांचा हुआ चिह्नित किया।"), // needs native check
   // management
   overview: n("Overview", "மேலோட்டம்", "अवलोकन"),
   overviewIntro: n("How reviews, callbacks and follow-up tasks are doing across Code2Care Hospital. Clinical text is never shown here.", "Code2Care மருத்துவமனை முழுவதும் மதிப்பாய்வுகள், அழைப்புகள், தொடர் பணிகள் எப்படி நடக்கின்றன. மருத்துவ உரை இங்கே காட்டப்படாது.", "Code2Care अस्पताल में समीक्षाएं, कॉलबैक और फ़ॉलो-अप काम कैसे चल रहे हैं। यहां चिकित्सा पाठ कभी नहीं दिखता।"),
@@ -356,6 +370,8 @@ export const STRINGS = {
   plansCreated: n("Plans created", "உருவாக்கப்பட்ட திட்டங்கள்", "बनी योजनाएं"),
   needingReview: n("Items needing review", "மதிப்பாய்வு தேவைப்படும் விஷயங்கள்", "समीक्षा चाहने वाले आइटम"),
   medianClear: n("Median time to clear a review", "மதிப்பாய்வை முடிக்கும் நடுநிலை நேரம்", "समीक्षा निपटाने का मध्यक समय"),
+  medianCheck: n("Median hours to doctor check", "மருத்துவர் சரிபார்ப்பு நடுநிலை மணிகள்", "डॉक्टर जांच तक मध्यक घंटे"), // needs native check
+  pctChecked24h: n("Plans checked within 24 h", "24 மணி நேரத்தில் சரிபார்க்கப்பட்ட திட்டங்கள்", "24 घंटे में जांचे गए प्लान"), // needs native check
   reviewsOverdue: n("Reviews overdue", "தாமதமான மதிப்பாய்வுகள்", "देर वाली समीक्षाएं"),
   completionRate: n("Task completion rate", "பணி முடிப்பு விகிதம்", "काम पूरे होने की दर"),
   overdueTasks: n("Overdue patient tasks", "தாமதமான நோயாளிப் பணிகள்", "मरीज़ों के देर वाले काम"),

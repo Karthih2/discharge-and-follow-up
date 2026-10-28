@@ -59,7 +59,7 @@ def build_plan(s: Session, doc: Document, lang: str = "en", escalate: bool = Tru
     matches: dict[int, list] = {}
     providers = {p.id: p for p in s.exec(select(Provider))}
     for m in s.exec(select(ProviderMatch).where(ProviderMatch.item_id.in_([i.id for i in items] or [0]))
-                    .order_by(ProviderMatch.score.desc())):
+                    .order_by(ProviderMatch.id)):
         p = providers.get(m.provider_id)
         if p:
             matches.setdefault(m.item_id, []).append({
@@ -120,7 +120,9 @@ def build_plan(s: Session, doc: Document, lang: str = "en", escalate: bool = Tru
 def doc_dict(d: Document) -> dict:
     return {"id": d.id, "title": d.title, "patient_alias": d.patient_alias, "discharge_date": d.discharge_date.isoformat(),
             "city": d.city, "pincode": d.pincode, "preferred_language": d.preferred_language,
-            "pii_check_passed": d.pii_check_passed, "created_at": d.created_at.isoformat()}
+            "pii_check_passed": d.pii_check_passed, "plan_state": d.plan_state,
+            "checked_by": d.checked_by, "checked_at": d.checked_at.isoformat() if d.checked_at else None,
+            "created_at": d.created_at.isoformat()}
 
 
 def alert_dict(a: CaregiverAlert) -> dict:

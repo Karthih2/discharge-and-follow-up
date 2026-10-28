@@ -17,7 +17,7 @@ export default function Register() {
 
   return (
     <form
-      className="max-w-md space-y-4"
+      className="mx-auto max-w-md space-y-4 rounded-2xl border border-line bg-surface p-6 shadow-sm"
       onSubmit={async (ev) => {
         ev.preventDefault();
         setBusy(true);
@@ -43,8 +43,8 @@ export default function Register() {
         <input className="field" type="email" value={f.email} onChange={set("email")} required />
       </label>
       <label className="block">
-        <span className="mb-1 block font-semibold">{t("password6")}</span>
-        <input className="field" type="password" value={f.password} onChange={set("password")} required minLength={6} autoComplete="new-password" />
+        <span className="mb-1 block font-semibold">{t("password")}</span>
+        <input className="field" type="password" value={f.password} onChange={set("password")} required minLength={8} autoComplete="new-password" placeholder="At least 8 characters" />
       </label>
       <label className="block">
         <span className="mb-1 block font-semibold">{t("iAmA")}</span>

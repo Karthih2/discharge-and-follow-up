@@ -47,7 +47,7 @@ export function SourceDrawer({ docId, cited, title, onClose }: Props) {
               <p className="text-sm text-muted">Original summary</p>
               <h2 className="text-xl">{title}</h2>
             </div>
-            <button onClick={onClose} aria-label="Close" className="rounded-sm p-1 text-primary hover:bg-line">
+            <button onClick={onClose} aria-label="Close" className="rounded-md p-1 text-primary hover:bg-line">
               <X size={24} />
             </button>
           </header>

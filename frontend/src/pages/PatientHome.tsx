@@ -143,7 +143,7 @@ export default function PatientHome() {
                   <div key={slot}>
                     <h3 className="mb-1 flex items-center gap-1.5 text-sm font-bold"><Icon size={18} weight="duotone" className="text-primary" aria-hidden /> {t(slot)}
                       {canSpeak() && rows.length > 0 && (
-                        <button className="ml-auto rounded-sm p-1 text-primary hover:bg-line" aria-label={`${t("readAloud")}: ${t(slot)}`} aria-pressed={talking === slot}
+                        <button className="ml-auto rounded-md p-1 text-primary hover:bg-line" aria-label={`${t("readAloud")}: ${t(slot)}`} aria-pressed={talking === slot}
                           onClick={() => say(slot, slot)}>
                           {talking === slot ? <SpeakerSimpleSlash size={18} aria-hidden /> : <SpeakerSimpleHigh size={18} aria-hidden />}
                         </button>
@@ -155,7 +155,7 @@ export default function PatientHome() {
                         {rows.map((m) => (
                           <motion.li layout key={m.task_id} transition={mt(0.2)}>
                             <button onClick={() => flip(m)} disabled={busy === m.task_id} role="checkbox" aria-checked={m.status === "Completed"}
-                              className={`flex w-full items-start gap-2 rounded-sm border px-2 py-1.5 text-left text-sm ${m.status === "Completed" ? "border-line bg-bg text-muted line-through" : "border-line bg-surface hover:border-primary"}`}>
+                              className={`flex w-full items-start gap-2 rounded-xl border px-3 py-2 text-left text-sm transition-all duration-150 ${m.status === "Completed" ? "border-line bg-bg text-muted line-through" : "border-line bg-surface hover:border-primary hover:shadow-sm"}`}>
                               {m.status === "Completed" ? <CheckCircle size={18} weight="fill" className="mt-0.5 shrink-0 text-primary" aria-hidden /> : <Circle size={18} className="mt-0.5 shrink-0 text-muted" aria-hidden />}
                               <span className="lang-text">{m.medicines.join(", ")}</span>
                             </button>
@@ -193,7 +193,7 @@ export default function PatientHome() {
           {d.needs_review.length === 0 ? <p className="text-muted">{t("noReview")}</p> : (
             <ul className="space-y-1.5">
               {d.needs_review.slice(0, 3).map((r) => (
-                <li key={r.item_id} className="rounded-sm border border-attention bg-attention-tint px-2 py-1">
+                <li key={r.item_id} className="rounded-lg border border-attention bg-attention-tint px-2 py-1">
                   <p className="lang-text text-sm font-semibold">{r.title}</p>
                   <p className="text-xs text-attention">{r.reason}</p>
                 </li>

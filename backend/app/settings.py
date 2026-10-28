@@ -19,6 +19,7 @@ DEFAULT_SETTINGS = {
     "simulated_today": "2026-10-12",
     "app_base_url": "http://localhost:5173",
     "patient_insurance": "Ayushman Bharat",
+    "provider_radius_km": "10",
 }
 
 

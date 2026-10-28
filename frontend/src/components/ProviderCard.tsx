@@ -20,7 +20,7 @@ export function ProviderCard({ p, reasons, rank }: { p: Provider; reasons?: stri
           {rank ? <span className="mr-2 text-muted">{rank}.</span> : null}
           {p.name}
         </h4>
-        <span className="rounded-sm border border-line px-2 text-sm text-muted">{TYPE_LABEL[p.type] ?? p.type}</span>
+        <span className="rounded-md border border-line px-2 text-sm text-muted">{TYPE_LABEL[p.type] ?? p.type}</span>
       </div>
       <p className="text-muted">
         {p.city} {p.pincode}. Open {p.open_days}. {p.languages.map((l) => LANG_LABEL[l] ?? l).join(", ")}.
@@ -35,7 +35,7 @@ export function ProviderCard({ p, reasons, rank }: { p: Provider; reasons?: stri
       )}
       <p className="mt-2 flex items-center gap-2 font-semibold">
         <Phone size={18} aria-hidden /> {p.phone}
-        <span className="ml-1 rounded-sm bg-bg px-1.5 text-xs font-normal text-muted">invented number</span>
+        <span className="ml-1 rounded-md bg-bg px-1.5 text-xs font-normal text-muted">invented number</span>
       </p>
     </Card>
   );

@@ -17,7 +17,7 @@ const SCOPE_KEY = { full: "scopeFull", appointments: "scopeAppointments", remind
 /** Grey card for something the patient chose not to share. It says why in plain words. */
 function Locked({ text }: { text: string }) {
   return (
-    <div className="flex items-start gap-2 rounded-sm border border-line bg-bg p-3 text-muted">
+    <div className="flex items-start gap-2 rounded-lg border border-line bg-bg p-3 text-muted">
       <Lock size={18} className="mt-0.5 shrink-0" aria-hidden />
       <p>{text}</p>
     </div>
@@ -104,7 +104,7 @@ export function FamilyHome() {
           <ul className="space-y-1.5">
             <AnimatePresence initial={false}>
               {alerts.data?.slice(0, 8).map((a) => (
-                <motion.li layout key={a.id} transition={mt(0.2)} className={`flex items-start justify-between gap-2 rounded-sm border px-2 py-1.5 text-sm ${a.acknowledged_at ? "border-line text-muted" : a.level === "urgent" ? "border-attention bg-attention-tint" : "border-line"}`}>
+                <motion.li layout key={a.id} transition={mt(0.2)} className={`flex items-start justify-between gap-2 rounded-lg border px-2 py-1.5 text-sm ${a.acknowledged_at ? "border-line text-muted" : a.level === "urgent" ? "border-attention bg-attention-tint" : "border-line"}`}>
                   <span className="min-w-0"><strong>{a.patient}</strong> {a.level === "urgent" && !a.acknowledged_at && <Badge tone="solid">{t("urgent")}</Badge>}<br />{a.message}<br /><span className="font-mono text-xs text-muted">{fmtDate(a.created_at, { day: "numeric", month: "short" })}</span></span>
                   {!a.acknowledged_at && a.can_ack && <Button small look="quiet" loading={busy === a.id} onClick={() => ack(a.id)}>{t("acknowledge")}</Button>}
                 </motion.li>

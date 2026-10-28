@@ -25,7 +25,7 @@ export function ToastHost() {
       <AnimatePresence>
         {list.map((t) => (
           <motion.p key={t.id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={mt(0.18)}
-            className="rounded-sm border border-ink bg-ink px-4 py-2 text-surface">
+            className="rounded-lg border border-ink bg-ink px-4 py-2 text-surface">
             {t.text}
           </motion.p>
         ))}

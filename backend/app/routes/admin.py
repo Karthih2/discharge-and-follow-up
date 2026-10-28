@@ -117,12 +117,19 @@ def stats(days: int = 30, department: Optional[str] = None, s: Session = Depends
         row[0] += t.status == "Completed"
         row[1] += 1
         row[2] += t.status == "Pending"
+    checked_docs = s.exec(select(D).where(D.plan_state == "doctor_checked", D.checked_at.isnot(None),
+                                           D.created_at >= first, D.created_at <= last, *dept(D.department))).all()
+    all_plan_docs = s.exec(select(D).where(D.created_at >= first, D.created_at <= last, *dept(D.department))).all()
+    check_hours = [(d.checked_at - d.created_at).total_seconds() / 3600 for d in checked_docs if d.checked_at and d.created_at]
+    checked_within_24 = sum(1 for h in check_hours if h <= 24)
     return {
         "days": days, "department": department, "today": today.isoformat(),
         "departments": sorted(set(dept_of.values())),
         "numbers": {
             "plans_created": plans, "needing_review": len(created),
             "median_clear_hours": round(statistics.median(hours), 1) if hours else None,
+            "median_check_hours": round(statistics.median(check_hours), 1) if check_hours else None,
+            "pct_checked_24h": round(100 * checked_within_24 / len(checked_docs), 1) if checked_docs else None,
             "reviews_overdue": sum(r.created_at < late for r in open_now),
             "task_completion_rate": _pct(sum(t.status == "Completed" for t in due_rows), len(due_rows)),
             "overdue_tasks": overdue_now, "callbacks_completed": callbacks_done, "open_alerts": alerts_open,
@@ -251,9 +258,11 @@ class DoctorIn(BaseModel):
 
 @router.post("/doctors")
 def add_doctor(body: DoctorIn, s: Session = Depends(get_session)):
+    from ..auth import validate_password
     email = body.email.strip().lower()
-    if len(body.password) < 8:
-        raise HTTPException(422, "Password needs 8 or more characters")
+    pw_err = validate_password(body.password)
+    if pw_err:
+        raise HTTPException(422, pw_err)
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
         raise HTTPException(422, "Enter a valid email address")
     if len(body.name.strip()) < 2:
@@ -309,11 +318,14 @@ class PasswordIn(BaseModel):
 
 @router.post("/doctors/{user_id}/reset-password")
 def reset_password(user_id: int, body: PasswordIn, s: Session = Depends(get_session)):
+    from ..auth import validate_password
     _doctor_or_404(s, user_id)
-    if len(body.password) < 8:
-        raise HTTPException(422, "Password needs 8 or more characters")
+    pw_err = validate_password(body.password)
+    if pw_err:
+        raise HTTPException(422, pw_err)
     u = s.get(User, user_id)
     u.password_hash = hash_password(body.password)
+    u.token_version += 1
     s.add(u)
     s.commit()
     audit(s, None, "management", "password_reset", {"doctor": user_id})

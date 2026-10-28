@@ -95,15 +95,25 @@ def score_provider(p: Provider, item: Item, doc: Document, origin, language: str
 
 
 def match_item(session: Session, item: Item, doc: Document, top: int = 3) -> int:
-    origin = PINCODES.get(doc.pincode) or CITY_CENTRE.get(doc.city.lower(), (13.0418, 80.2341))
     insurance = get_setting(session, "patient_insurance")
+    city_providers = session.exec(select(Provider).where(Provider.city == doc.city)).all()
+    # Origin: known pincode, else providers sharing the pincode, else the city's providers (works for every city).
+    near = [p for p in city_providers if p.pincode == doc.pincode] or city_providers
+    origin = PINCODES.get(doc.pincode) or (
+        (sum(p.lat for p in near) / len(near), sum(p.lng for p in near) / len(near)) if near
+        else CITY_CENTRE.get(doc.city.lower(), (13.0418, 80.2341)))
+    radius = float(get_setting(session, "provider_radius_km"))
     scored = []
-    for p in session.exec(select(Provider).where(Provider.city == doc.city)):
+    for p in city_providers:
+        d = km(origin, (p.lat, p.lng))
+        if d > radius:
+            continue
         s, r = score_provider(p, item, doc, origin, doc.preferred_language, insurance)
         if s > 0:
-            scored.append((s, p, r))
-    scored.sort(key=lambda x: -x[0])
-    for s, p, r in scored[:top]:
+            scored.append((s, p, r, d))
+    # Nearest only: providers that list the needed specialty first, then by distance.
+    scored.sort(key=lambda x: (not x[2][0].startswith("Offers"), x[3]))
+    for s, p, r, _ in scored[:top]:
         session.add(ProviderMatch(item_id=item.id, provider_id=p.id, score=s, reasons=r))
     session.commit()
     return min(top, len(scored))

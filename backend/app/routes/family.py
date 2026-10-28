@@ -193,8 +193,13 @@ def get_clock(_: User = Depends(current_user), s: Session = Depends(get_session)
     return {"today": sim_today(s).isoformat()}
 
 
-@router.post("/demo/clock")
-def move_clock(body: ClockIn, u: User = Depends(current_user), s: Session = Depends(get_session)):
+def _need_demo():
+    from .demo import need_demo
+    need_demo()
+
+
+@router.post("/demo/clock", dependencies=[Depends(_need_demo)])
+def move_clock(body: ClockIn, u: User = Depends(require("management")), s: Session = Depends(get_session)):
     new = body.date or (sim_today(s) + timedelta(days=body.days or 0))
     set_setting(s, "simulated_today", new.isoformat())
     counts = run_escalation(s)

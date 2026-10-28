@@ -16,15 +16,17 @@ from ..agents.dates import resolve_date
 from ..agents.ingest import pdf_to_text
 from ..agents.pipeline import run_pipeline
 from ..agents.privacy import mask_pii
-from ..auth import current_user, get_doc_for, require
+from ..auth import create_stream_ticket, current_user, get_doc_for, require, verify_stream_ticket
 from ..voices import speak_text
 from ..db import audit, clock_now, get_session, sim_today
-from ..models import (AuditLog, CallbackRequest, Document, Item, ItemText, ProviderMatch, ReviewQueue, SourceLine,
-                      Task, User)
+from ..models import (AuditLog, CallbackRequest, Document, HealthReading, Item, ItemText, ProviderMatch, ReviewQueue,
+                      ShareLink, SourceLine, Task, TaskSkip, User)
 from .plans import build_ics, build_plan, doc_dict
 
 router = APIRouter(prefix="/api")
 LANG_PAT = "^(en|ta|hi|te|kn|ml)$"
+MAX_PDF_BYTES = 5 * 1024 * 1024  # 5 MB
+MAX_TEXT_CHARS = 30_000
 
 
 class DocIn(BaseModel):
@@ -57,6 +59,8 @@ def _create(s: Session, user: User, body: DocIn) -> dict:
         text = samples.sample_text(body.sample_key)
     elif body.text and body.text.strip():
         text = body.text
+        if len(text) > MAX_TEXT_CHARS:
+            raise HTTPException(422, f"Text is too long. Maximum {MAX_TEXT_CHARS} characters.")
     else:
         raise HTTPException(422, "Provide text or a sample_key")
     guess = _guess(text, sim_today(s))
@@ -91,7 +95,13 @@ def create_document(body: DocIn, u: User = Depends(require("patient")), s: Sessi
 @router.post("/documents/pdf")
 async def create_from_pdf(file: UploadFile = File(...), preferred_language: str = "en",
                           u: User = Depends(require("patient")), s: Session = Depends(get_session)):
-    data = await file.read()
+    header = await file.read(5)
+    if not header.startswith(b"%PDF"):
+        raise HTTPException(422, "File does not look like a PDF")
+    rest = await file.read(MAX_PDF_BYTES - 5)
+    if await file.read(1):
+        raise HTTPException(422, f"PDF is too large. Maximum {MAX_PDF_BYTES // (1024 * 1024)} MB.")
+    data = header + rest
     try:
         text = pdf_to_text(data)
     except Exception:
@@ -117,9 +127,19 @@ def read_document(doc_id: int, u: User = Depends(current_user), s: Session = Dep
     return doc_dict(doc)
 
 
-@router.get("/documents/{doc_id}/run")
-def run(doc_id: int, u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+@router.post("/documents/{doc_id}/run-ticket")
+def run_ticket(doc_id: int, u: User = Depends(require("patient")), s: Session = Depends(get_session)):
     doc, _ = get_doc_for(s, u, doc_id)
+    ticket = create_stream_ticket(s, u, doc.id)
+    return {"ticket": ticket}
+
+
+@router.get("/documents/{doc_id}/run")
+def run(doc_id: int, ticket: str = Query(...), s: Session = Depends(get_session)):
+    user = verify_stream_ticket(s, ticket, doc_id)
+    doc = s.get(Document, doc_id)
+    if not doc or doc.owner_id != user.id:
+        raise HTTPException(404, "Plan not found")
 
     def gen():
         for ev in run_pipeline(doc.id):
@@ -161,7 +181,6 @@ def audit_log(doc_id: int, u: User = Depends(require("patient", "doctor", "manag
 
 
 def _who(s: Session, actor: str) -> str:
-    """user:7 becomes 'Priya Iyer (manager)'."""
     if actor.startswith("user:"):
         u = s.get(User, int(actor[5:]))
         if u:
@@ -180,6 +199,13 @@ def ics(doc_id: int, lang: str = Query("en", pattern=LANG_PAT), u: User = Depend
 # ---------- tasks ----------
 class TaskIn(BaseModel):
     status: str
+
+
+class TaskSkipIn(BaseModel):
+    reason: str
+
+
+SKIP_REASONS = {"felt sick", "ran out", "forgot", "other"}
 
 
 @router.patch("/tasks/{task_id}")
@@ -203,6 +229,23 @@ def patch_task(task_id: int, body: TaskIn, u: User = Depends(require("patient", 
     return {"id": task.id, "status": task.status}
 
 
+@router.post("/tasks/{task_id}/skip")
+def skip_task(task_id: int, body: TaskSkipIn, u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+    task = s.get(Task, task_id)
+    if not task:
+        raise HTTPException(404, "Task not found")
+    doc, _ = get_doc_for(s, u, task.document_id)
+    if body.reason not in SKIP_REASONS:
+        raise HTTPException(422, f"reason must be one of: {', '.join(sorted(SKIP_REASONS))}")
+    task.status = "Completed"
+    task.completed_at = clock_now()
+    s.add(task)
+    s.add(TaskSkip(task_id=task.id, reason=body.reason, skipped_by=u.id))
+    s.commit()
+    audit(s, doc.id, f"user:{u.id}", "task_skipped", {"task_id": task.id, "reason": body.reason})
+    return {"id": task.id, "status": "Completed", "skipped": True}
+
+
 # ---------- item level: voice and callback ----------
 def _item_for(s: Session, u: User, item_id: int):
     item = s.get(Item, item_id)
@@ -215,13 +258,12 @@ def _item_for(s: Session, u: User, item_id: int):
 @router.get("/items/{item_id}/audio")
 def audio(item_id: int, lang: str = Query("en", pattern=LANG_PAT), u: User = Depends(current_user),
           s: Session = Depends(get_session)):
-    """Reads already approved text aloud. Never creates new wording."""
     item, doc, scope = _item_for(s, u, item_id)
     if item.status == "Needs Review":
         raise HTTPException(409, "This item is waiting for doctor review, so it cannot be read aloud yet")
     texts = {t.language: t for t in s.exec(select(ItemText).where(ItemText.item_id == item.id))}
     t = texts.get(lang) if texts.get(lang) and texts[lang].numbers_verified else texts.get("en")
-    spoken = t.language if t else "en"  # the voice matches the language of the text that is actually read
+    spoken = t.language if t else "en"
     text = t.simple_text if t else item.original_text
     try:
         data = speak_text(text, spoken)
@@ -238,7 +280,6 @@ class CallbackIn(BaseModel):
 @router.post("/items/{item_id}/callback")
 def request_callback(item_id: int, body: CallbackIn, u: User = Depends(require("patient", "manager")),
                      s: Session = Depends(get_session)):
-    """Simulated masked call: only invented numbers are used and no real call is made."""
     item, doc, scope = _item_for(s, u, item_id)
     if scope != "full":
         raise HTTPException(403, "Callback needs full access to this plan")
@@ -261,7 +302,6 @@ class FlagIn(BaseModel):
 
 @router.post("/items/{item_id}/flag")
 def flag_item(item_id: int, body: FlagIn, u: User = Depends(require("patient", "manager")), s: Session = Depends(get_session)):
-    """The patient (or an allowed hub manager) asks a doctor to check an item. The item locks until they do."""
     item, doc, scope = _item_for(s, u, item_id)
     if scope != "full":
         raise HTTPException(403, "Flagging needs full access to this plan")
@@ -296,3 +336,191 @@ def pick_provider(item_id: int, body: ProviderPick, u: User = Depends(require("p
     s.commit()
     audit(s, doc.id, f"user:{u.id}", "provider_selected", {"item_id": item.id, "provider_id": body.provider_id})
     return {"selected": body.provider_id}
+
+
+# ---------- share links (B.3) ----------
+import secrets
+from datetime import timedelta as _td
+
+
+class ShareIn(BaseModel):
+    scope: str = "full"
+
+
+@router.post("/documents/{doc_id}/share")
+def create_share(doc_id: int, body: ShareIn, u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+    doc, _ = get_doc_for(s, u, doc_id)
+    if body.scope not in ("full", "appointments", "reminders"):
+        raise HTTPException(422, "scope must be full, appointments or reminders")
+    token = secrets.token_urlsafe(32)
+    link = ShareLink(patient_id=u.id, token=token, scope=body.scope,
+                     expires_at=clock_now() + _td(days=30))
+    s.add(link)
+    s.commit()
+    s.refresh(link)
+    audit(s, doc.id, f"user:{u.id}", "share_created", {"link_id": link.id, "scope": body.scope})
+    return {"id": link.id, "token": token, "scope": body.scope, "expires_at": link.expires_at.isoformat()}
+
+
+@router.get("/share/{token}/plan")
+def share_view(token: str, s: Session = Depends(get_session)):
+    link = s.exec(select(ShareLink).where(ShareLink.token == token)).first()
+    if not link or link.revoked:
+        raise HTTPException(404, "Link not found or revoked")
+    if link.expires_at < clock_now():
+        raise HTTPException(410, "Link expired")
+    docs = s.exec(select(Document).where(Document.owner_id == link.patient_id).order_by(Document.id.desc())).all()
+    if not docs:
+        raise HTTPException(404, "No plans found")
+    doc = docs[0]
+    from .plans import build_plan
+    plan = build_plan(s, doc, "en", scope=link.scope, role="family")
+    audit(s, doc.id, f"share:{link.id}", "share_viewed", {"scope": link.scope})
+    return plan
+
+
+@router.delete("/share/{link_id}")
+def revoke_share(link_id: int, u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+    link = s.get(ShareLink, link_id)
+    if not link or link.patient_id != u.id:
+        raise HTTPException(404, "Link not found")
+    link.revoked = True
+    s.add(link)
+    s.commit()
+    audit(s, None, f"user:{u.id}", "share_revoked", {"link_id": link.id})
+    return {"id": link.id, "revoked": True}
+
+
+@router.get("/share/links")
+def list_shares(u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+    links = s.exec(select(ShareLink).where(ShareLink.patient_id == u.id).order_by(ShareLink.id.desc())).all()
+    return [{"id": l.id, "token": l.token, "scope": l.scope, "revoked": l.revoked,
+             "expires_at": l.expires_at.isoformat(), "created_at": l.created_at.isoformat()} for l in links]
+
+
+# ---------- health readings (B.6) ----------
+READING_TYPES = {"bp", "sugar", "weight", "temperature", "pain"}
+
+
+class ReadingIn(BaseModel):
+    reading_type: str
+    value: str
+
+
+@router.post("/readings")
+def add_reading(body: ReadingIn, u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+    if body.reading_type not in READING_TYPES:
+        raise HTTPException(422, f"reading_type must be one of: {', '.join(sorted(READING_TYPES))}")
+    if not body.value.strip():
+        raise HTTPException(422, "value is required")
+    r = HealthReading(patient_id=u.id, reading_type=body.reading_type, value=body.value.strip(),
+                      recorded_at=clock_now())
+    s.add(r)
+    s.commit()
+    s.refresh(r)
+    return {"id": r.id, "reading_type": r.reading_type, "value": r.value, "recorded_at": r.recorded_at.isoformat()}
+
+
+@router.get("/readings")
+def list_readings(u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+    rows = s.exec(select(HealthReading).where(HealthReading.patient_id == u.id)
+                  .order_by(HealthReading.recorded_at.desc()).limit(200)).all()
+    return [{"id": r.id, "reading_type": r.reading_type, "value": r.value,
+             "recorded_at": r.recorded_at.isoformat()} for r in rows]
+
+
+@router.get("/patients/{patient_id}/readings")
+def doctor_readings(patient_id: int, u: User = Depends(require("doctor")), s: Session = Depends(get_session)):
+    from sqlalchemy import or_
+    assigned = s.exec(select(ReviewQueue).join(Document, Document.id == ReviewQueue.document_id).where(
+        Document.owner_id == patient_id,
+        or_(ReviewQueue.assigned_doctor_id == u.id, ReviewQueue.fallback_doctor_id == u.id)
+    )).first()
+    if not assigned:
+        raise HTTPException(404, "Patient not found")
+    rows = s.exec(select(HealthReading).where(HealthReading.patient_id == patient_id)
+                  .order_by(HealthReading.recorded_at.desc()).limit(200)).all()
+    return [{"id": r.id, "reading_type": r.reading_type, "value": r.value,
+             "recorded_at": r.recorded_at.isoformat()} for r in rows]
+
+
+# ---------- B.5: Reminder settings (simulated) ----------
+REMINDER_CHANNELS = {"in_app", "whatsapp_simulated", "voice_call_simulated"}
+
+
+class ReminderSettingsIn(BaseModel):
+    reminder_channel: str
+
+
+def _get_reminder_channel(s: Session, user_id: int) -> str:
+    from ..models import Setting
+    row = s.get(Setting, f"reminder_channel_{user_id}")
+    return row.value if row else "in_app"
+
+
+@router.get("/settings/reminders")
+def get_reminder_settings(u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+    return {"reminder_channel": _get_reminder_channel(s, u.id)}
+
+
+@router.put("/settings/reminders")
+def set_reminder_settings(body: ReminderSettingsIn, u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+    if body.reminder_channel not in REMINDER_CHANNELS:
+        raise HTTPException(422, f"reminder_channel must be one of: {', '.join(sorted(REMINDER_CHANNELS))}")
+    from ..models import Setting
+    row = s.get(Setting, f"reminder_channel_{u.id}")
+    if row:
+        row.value = body.reminder_channel
+    else:
+        row = Setting(key=f"reminder_channel_{u.id}", value=body.reminder_channel)
+    s.add(row)
+    s.commit()
+    audit(s, None, f"user:{u.id}", "reminder_settings", {"channel": body.reminder_channel})
+    return {"reminder_channel": body.reminder_channel}
+
+
+@router.get("/settings/messages")
+def sent_messages(u: User = Depends(require("patient")), s: Session = Depends(get_session)):
+    from ..models import Notification
+    rows = s.exec(select(Notification).where(Notification.user_id == u.id)
+                  .order_by(Notification.id.desc()).limit(50)).all()
+    channel = _get_reminder_channel(s, u.id)
+    return {"channel": channel, "messages": [
+        {"id": n.id, "message": n.message, "level": n.level, "channel": channel,
+         "created_at": n.created_at.isoformat()} for n in rows]}
+
+
+# ---------- B.7: SOS config ----------
+@router.get("/sos")
+def sos_info(u: User = Depends(current_user), s: Session = Depends(get_session)):
+    from ..models import HubMember, Item
+    hospital_phone = "044-5550-0100"
+    manager_phone = None
+    manager_name = None
+
+    hub_member = s.exec(select(HubMember).where(HubMember.user_id == u.id)).first()
+    if hub_member:
+        members = s.exec(select(HubMember).where(
+            HubMember.hub_id == hub_member.hub_id, HubMember.role == "manager"
+        )).all()
+        if members:
+            mgr = s.get(User, members[0].user_id)
+            if mgr:
+                manager_name = mgr.name
+                manager_phone = mgr.mobile or "+91 90000 00005"
+
+    warnings = []
+    if u.role == "patient":
+        docs = s.exec(select(Document).where(Document.owner_id == u.id).order_by(Document.id.desc()).limit(1)).all()
+        if docs:
+            items = s.exec(select(Item).where(
+                Item.document_id == docs[0].id, Item.category == "warning_sign"
+            )).all()
+            warnings = [i.original_text for i in items if i.status != "Rejected"]
+
+    return {
+        "emergency": "108",
+        "hospital_phone": hospital_phone,
+        "manager": {"name": manager_name, "phone": manager_phone} if manager_name else None,
+        "warning_signs": warnings,
+    }

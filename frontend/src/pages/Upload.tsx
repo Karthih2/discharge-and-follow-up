@@ -40,7 +40,7 @@ export default function Upload() {
         <ul className="space-y-2">
           {created.masked.map((m, i) => (
             <Card key={i} as="li" className="flex flex-wrap items-center gap-3 p-3">
-              <span className="rounded-sm border border-line px-2 text-sm">{m.kind}</span>
+              <span className="rounded-md border border-line px-2 text-sm">{m.kind}</span>
               <span className="text-muted line-through">{m.original}</span>
               <span className="font-semibold">{m.masked}</span>
             </Card>
@@ -56,11 +56,11 @@ export default function Upload() {
     <div className="space-y-10">
       <header className="max-w-2xl">
         <h1 className="text-4xl">{t("addSummaryTitle")}</h1>
-        <p className="mt-2 text-muted">{t("uploadIntro")}</p>
+        <p className="mt-2 text-lg text-muted">{t("uploadIntro")}</p>
       </header>
 
       <div className="grid gap-10 lg:grid-cols-2">
-        <section aria-labelledby="h-own" className="space-y-4">
+        <section aria-labelledby="h-own" className="space-y-4 rounded-2xl border border-line bg-surface p-6 shadow-sm">
           <h2 id="h-own" className="text-2xl">{t("pasteOrPdf")}</h2>
           <label className="block">
             <span className="mb-1 block font-semibold">{t("summaryText")}</span>

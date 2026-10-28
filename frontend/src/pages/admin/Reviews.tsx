@@ -96,7 +96,7 @@ export default function Reviews() {
     <div className="space-y-6">
       <PageHead title={t("reviewAssignment")} text={t("reviewAssignmentIntro")} />
       {away.length > 0 && (
-        <p className="rounded-sm border border-attention bg-attention-tint p-3 text-attention">
+        <p className="rounded-lg border border-attention bg-attention-tint p-3 text-attention">
           {away.map((d) => `${d.name} (${d.open_items})`).join(", ")}: {t("awayWithItems")}
         </p>
       )}

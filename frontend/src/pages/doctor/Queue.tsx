@@ -118,7 +118,7 @@ export default function DoctorQueue() {
                 {rows.map((r) => (
                   <motion.li layout key={r.id} id={`row-${r.id}`} exit={{ opacity: 0 }} transition={mt(0.18)}>
                     <button onClick={() => setPick(r.id)} aria-current={selected?.id === r.id}
-                      className={`w-full rounded-sm border p-3 text-left ${selected?.id === r.id ? "border-primary bg-surface" : "border-line bg-bg hover:border-primary"}`}>
+                      className={`w-full rounded-lg border p-3 text-left ${selected?.id === r.id ? "border-primary bg-surface" : "border-line bg-bg hover:border-primary"}`}>
                       <span className="flex flex-wrap items-center gap-1">
                         {r.codes.slice(0, 2).map((c) => <Badge key={c} tone="warn" className="font-mono text-xs">{c}</Badge>)}
                         {r.state !== "open" && <Badge tone="mark">{t(`state_${r.state}` as "state_approved")}</Badge>}

@@ -7,7 +7,6 @@ import { Welcome } from "../components/Welcome";
 import { Guard } from "../lib/auth";
 import { useMotionT } from "../lib/motion";
 
-// Every screen is its own chunk. Visitors download only the page they open.
 const Landing = lazy(() => import("../pages/Landing"));
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));

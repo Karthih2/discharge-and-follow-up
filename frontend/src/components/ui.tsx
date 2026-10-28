@@ -91,7 +91,7 @@ const tone: Record<Tone, string> = {
 };
 
 export function Badge({ tone: t = "plain", children, className }: { tone?: Tone; children: ReactNode; className?: string }) {
-  return <span className={cx("inline-flex items-center rounded-sm border px-2 text-sm font-semibold", tone[t], className)}>{children}</span>;
+  return <span className={cx("inline-flex items-center rounded-lg border px-2 text-sm font-semibold", tone[t], className)}>{children}</span>;
 }
 
 export function EmptyState({ title, text, action }: { title: string; text?: string; action?: ReactNode }) {

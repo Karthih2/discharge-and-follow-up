@@ -34,6 +34,9 @@ class Document(SQLModel, table=True):
     raw_text: str
     created_at: NaiveDatetime = Field(default_factory=_now)
     pii_check_passed: bool = False
+    plan_state: str = "checking"  # checking, doctor_checked
+    checked_by: Optional[int] = None
+    checked_at: Optional[NaiveDatetime] = None
 
 
 class SourceLine(SQLModel, table=True):
@@ -178,6 +181,8 @@ class User(SQLModel, table=True):
     elderly: bool = False
     welcomed: bool = False
     active: bool = True
+    token_version: int = 0
+    mobile: Optional[str] = None
     created_at: NaiveDatetime = Field(default_factory=_now)
 
 
@@ -238,4 +243,54 @@ class CallbackRequest(SQLModel, table=True):
     note: Optional[str] = None
     call_notes: Optional[str] = None
     scheduled_for: Optional[NaiveDatetime] = None
+    created_at: NaiveDatetime = Field(default_factory=_now)
+
+
+class StreamTicket(SQLModel, table=True):
+    __tablename__ = "stream_tickets"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    token: str = Field(index=True)
+    document_id: int
+    user_id: int
+    expires_at: NaiveDatetime
+    used: bool = False
+
+
+class ShareLink(SQLModel, table=True):
+    __tablename__ = "share_links"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    patient_id: int = Field(index=True)
+    token: str = Field(index=True, unique=True)
+    scope: str = "full"  # full, appointments, reminders
+    expires_at: NaiveDatetime
+    revoked: bool = False
+    created_at: NaiveDatetime = Field(default_factory=_now)
+
+
+class HealthReading(SQLModel, table=True):
+    __tablename__ = "health_readings"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    patient_id: int = Field(index=True)
+    reading_type: str  # bp, sugar, weight, temperature, pain
+    value: str
+    recorded_at: NaiveDatetime = Field(default_factory=_now)
+
+
+class MobileCode(SQLModel, table=True):
+    __tablename__ = "mobile_codes"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    mobile: str = Field(index=True)
+    code_hash: str
+    attempts: int = 0
+    expires_at: NaiveDatetime
+    used: bool = False
+    created_at: NaiveDatetime = Field(default_factory=_now)
+
+
+class TaskSkip(SQLModel, table=True):
+    __tablename__ = "task_skips"
+    id: Optional[int] = Field(default=None, primary_key=True)
+    task_id: int = Field(index=True)
+    reason: str
+    skipped_by: int
     created_at: NaiveDatetime = Field(default_factory=_now)

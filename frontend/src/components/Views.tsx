@@ -98,9 +98,9 @@ export function TwoPanel(p: ViewProps) {
     <div className="grid gap-5 lg:grid-cols-2">
       <Card aria-label="Original summary" as="section" className="max-h-[70vh] overflow-y-auto p-3">
         <div className="mb-2 flex flex-wrap gap-2 text-xs">
-          <span className="hl-appt rounded-sm px-2 py-0.5">Appointments and tests</span>
-          <span className="hl-med rounded-sm px-2 py-0.5">Medicines</span>
-          <span className="hl-warn rounded-sm px-2 py-0.5 text-attention">Warnings</span>
+          <span className="hl-appt rounded-md px-2 py-0.5">Appointments and tests</span>
+          <span className="hl-med rounded-md px-2 py-0.5">Medicines</span>
+          <span className="hl-warn rounded-md px-2 py-0.5 text-attention">Warnings</span>
         </div>
         {!full && <p className="text-muted">The patient did not share the original summary with you.</p>}
         {full && !lines && !p.preview && <div className="space-y-2">{[0, 1, 2, 3, 4, 5].map((k) => <Skeleton key={k} className="h-5 w-full" />)}</div>}

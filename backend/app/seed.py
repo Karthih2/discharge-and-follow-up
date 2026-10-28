@@ -12,31 +12,55 @@ from .models import Consent, Doctor, Document, FamilyHub, HubMember, User  # noq
 DEMO_PASSWORD = "demo1234"  # shown on the sign in page for the demo only
 
 # key, name, email, role, language
+# key, name, email, role, language, mobile
 USERS = [
-    ("ramesh", "Ramesh Iyer", "ramesh@code2care.test", "patient", "ta"),
-    ("sunita", "Sunita Verma", "sunita@code2care.test", "patient", "hi"),
-    ("karthik", "Karthik Subramanian", "karthik@code2care.test", "patient", "en"),
-    ("lakshmi", "Lakshmi Narayanan", "lakshmi@code2care.test", "patient", "ta"),
-    ("priya", "Priya Iyer (hub manager)", "priya@code2care.test", "manager", "en"),
-    ("arun", "Arun Iyer (family viewer)", "arun@code2care.test", "family", "en"),
-    ("meera", "Dr. Meera Nair", "meera@code2care.test", "doctor", "en"),
-    ("arjun", "Dr. Arjun Rao", "arjun@code2care.test", "doctor", "en"),
-    ("sana", "Dr. Sana Khan", "sana@code2care.test", "doctor", "en"),
-    ("vikram", "Dr. Vikram Shah", "vikram@code2care.test", "doctor", "en"),
-    ("admin", "Management Admin", "admin@code2care.test", "management", "en"),
+    ("ramesh", "Ramesh Iyer", "ramesh@code2care.test", "patient", "ta", "+91 90000 00001"),
+    ("sunita", "Sunita Verma", "sunita@code2care.test", "patient", "hi", "+91 90000 00002"),
+    ("karthik", "Karthik Subramanian", "karthik@code2care.test", "patient", "en", "+91 90000 00003"),
+    ("lakshmi", "Lakshmi Narayanan", "lakshmi@code2care.test", "patient", "ta", "+91 90000 00004"),
+    ("priya", "Priya Iyer (hub manager)", "priya@code2care.test", "manager", "en", "+91 90000 00005"),
+    ("arun", "Arun Iyer (family viewer)", "arun@code2care.test", "family", "en", "+91 90000 00006"),
+    ("meera", "Dr. Meera Nair", "meera@code2care.test", "doctor", "en", None),
+    ("arjun", "Dr. Arjun Rao", "arjun@code2care.test", "doctor", "en", None),
+    ("sana", "Dr. Sana Khan", "sana@code2care.test", "doctor", "en", None),
+    ("vikram", "Dr. Vikram Shah", "vikram@code2care.test", "doctor", "en", None),
+    ("admin", "Management Admin", "admin@code2care.test", "management", "en", None),
 ]
 DOCTORS = {"meera": ("cardiology", "044-5550-0201"), "arjun": ("general medicine", "044-5550-0202"),
            "sana": ("diabetology", "044-5550-0203"), "vikram": ("orthopaedics", "011-5550-0204")}
 SAMPLE_OWNER = {"a": "ramesh", "b": "sunita", "c": "karthik", "d": "lakshmi"}
 
 
+def _is_demo() -> bool:
+    return os.getenv("DEMO", "0") == "1"
+
+
 def seed_users(s: Session) -> None:
     if s.exec(select(User)).first():
         return
+    if _is_demo():
+        _seed_demo_users(s)
+    else:
+        _seed_admin_from_env(s)
+
+
+def _seed_admin_from_env(s: Session) -> None:
+    email = os.getenv("ADMIN_EMAIL", "").strip().lower()
+    password = os.getenv("ADMIN_PASSWORD", "")
+    if not email:
+        raise RuntimeError("ADMIN_EMAIL is required when DEMO is not set")
+    if len(password) < 12:
+        raise RuntimeError("ADMIN_PASSWORD must be at least 12 characters")
+    u = User(name="Admin", email=email, password_hash=hash_password(password), role="management")
+    s.add(u)
+    s.commit()
+
+
+def _seed_demo_users(s: Session) -> None:
     ids = {}
-    pw = hash_password(DEMO_PASSWORD)  # one salt for every demo account: instant, and the demo password is public anyway
-    for key, name, email, role, lang in USERS:
-        u = User(name=name, email=email, password_hash=pw, role=role, language=lang)
+    pw = hash_password(DEMO_PASSWORD)
+    for key, name, email, role, lang, mobile in USERS:
+        u = User(name=name, email=email, password_hash=pw, role=role, language=lang, mobile=mobile)
         s.add(u)
         s.commit()
         s.refresh(u)
@@ -49,7 +73,6 @@ def seed_users(s: Session) -> None:
     s.refresh(hub)
     for key, role in [("priya", "manager"), ("arun", "family"), ("ramesh", "patient"), ("lakshmi", "patient")]:
         s.add(HubMember(hub_id=hub.id, user_id=ids[key], role=role))
-    # Patients consent. Ramesh: Priya full, Arun appointments only. Lakshmi: Priya full, Arun none.
     for patient, member, scope in [("ramesh", "priya", "full"), ("ramesh", "arun", "appointments"),
                                    ("lakshmi", "priya", "full"), ("lakshmi", "arun", "none")]:
         s.add(Consent(patient_id=ids[patient], member_id=ids[member], scope=scope))
