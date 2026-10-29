@@ -1,18 +1,28 @@
+import { ChartLineUp, CheckCircle, ClipboardText, Clock, Heartbeat, Phone, ShieldCheck, UsersFour, WarningCircle } from "@phosphor-icons/react";
 import { m as motion } from "motion/react";
 import { lazy, Suspense } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CountUp } from "../../components/CountUp";
-import { Button, Card, PageHead, Select, Skeleton, StatsSkeleton } from "../../components/ui";
+import { Button, Card, Select, Skeleton, StatsSkeleton } from "../../components/ui";
 import { api } from "../../lib/api";
+import { useAuth } from "../../lib/auth";
 import { useLang } from "../../lib/lang";
 import { useStagger } from "../../lib/motion";
 import { useQuery } from "../../lib/query";
+
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
+}
 
 const Charts = lazy(() => import("./Charts"));
 const RANGES = [7, 30, 90] as const;
 
 export default function Overview() {
   const { t } = useLang();
+  const { user } = useAuth();
   const [params, setParams] = useSearchParams();
   const days = RANGES.find((d) => d === Number(params.get("days"))) ?? 30;
   const dept = params.get("dept") ?? "";
@@ -28,6 +38,7 @@ export default function Overview() {
 
   const n = s?.numbers;
   type Tint = "neutral" | "primary" | "warn";
+  const statIcons = [ClipboardText, ShieldCheck, Clock, Heartbeat, CheckCircle, WarningCircle, ChartLineUp, WarningCircle, Phone, UsersFour];
   const cards: [string, number | null | undefined, string, boolean, number?, Tint?][] = [
     [t("plansCreated"), n?.plans_created, "", false, 0, "primary"],
     [t("needingReview"), n?.needing_review, "", false],
@@ -44,7 +55,11 @@ export default function Overview() {
 
   return (
     <div className="space-y-6">
-      <PageHead title={t("overview")} text={t("overviewIntro")} />
+      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}>
+        <p className="text-muted text-sm">{greeting()}</p>
+        <h1 className="font-heading text-3xl">{user?.name ?? t("overview")}</h1>
+        <p className="text-muted">{t("overviewIntro")}</p>
+      </motion.div>
       <div className="flex flex-wrap items-end gap-4">
         <div role="group" aria-label={t("dateRange")} className="flex gap-2">
           {RANGES.map((d) => (
@@ -60,16 +75,26 @@ export default function Overview() {
 
       {stats.loading ? <StatsSkeleton n={10} /> : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {cards.map(([label, v, unit, warn, dec, tint], i) => (
-            <motion.div key={label} {...rise(i)}>
-              <Card className={`h-full p-4 ${tintClass(tint)}`}>
-                <p className={`font-heading text-3xl tnum ${warn && v ? "text-attention" : ""}`}>
-                  {v === null || v === undefined ? "-" : <><CountUp to={v} decimals={dec ?? 0} />{unit}</>}
-                </p>
-                <p className="text-sm text-muted">{label}</p>
-              </Card>
-            </motion.div>
-          ))}
+          {cards.map(([label, v, unit, warn, dec, tint], i) => {
+            const Icon = statIcons[i];
+            return (
+              <motion.div key={label} {...rise(i)}>
+                <Card className={`h-full p-4 ${tintClass(tint)}`}>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className={`font-heading text-3xl tnum ${warn && v ? "text-attention" : ""}`}>
+                        {v === null || v === undefined ? "-" : <><CountUp to={v} decimals={dec ?? 0} />{unit}</>}
+                      </p>
+                      <p className="mt-1 text-sm text-muted">{label}</p>
+                    </div>
+                    <span className={`rounded-[10px] p-1.5 ${tint === "warn" ? "bg-attention/8 text-attention" : tint === "primary" ? "bg-primary/8 text-primary" : "bg-line text-muted"}`}>
+                      <Icon size={18} weight="duotone" aria-hidden />
+                    </span>
+                  </div>
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
       )}
 

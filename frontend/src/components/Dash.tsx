@@ -96,7 +96,7 @@ export function ActivityDots({ tasks, today }: { tasks: CalTask[]; today: string
 /** Number with a label under it. */
 export function Stat({ n, label, warn }: { n: number | string; label: string; warn?: boolean }) {
   return (
-    <div className="card flex flex-col items-center justify-center rounded-2xl px-2 py-3 text-center">
+    <div className="card flex flex-col items-center justify-center rounded-[10px] px-2 py-3 text-center">
       <span className={`font-mono text-2xl font-semibold ${warn ? "text-attention" : "text-ink"}`}>{n}</span>
       <span className="text-xs text-muted">{label}</span>
     </div>
@@ -109,7 +109,7 @@ export function IconTile({ icon, label, onClick, to, disabled, loading }: { icon
   const mt = useMotionT();
   return (
     <motion.button whileTap={{ scale: 0.96 }} transition={mt(0.1)} disabled={disabled || loading} aria-busy={loading || undefined} onClick={() => (to ? nav(to) : onClick?.())}
-      className="card flex h-20 flex-col items-center justify-center gap-1 rounded-2xl px-2 text-center text-sm font-semibold text-ink hover:border-primary hover:text-primary hover:-translate-y-0.5">
+      className="card flex h-20 flex-col items-center justify-center gap-1 rounded-[10px] px-2 text-center text-sm font-semibold text-ink hover:border-primary hover:text-primary">
       <span className="text-primary" aria-hidden>{icon}</span>
       {label}
     </motion.button>

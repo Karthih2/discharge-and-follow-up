@@ -15,7 +15,7 @@ export default function Login() {
     <section aria-labelledby="h-login" className="mx-auto max-w-lg space-y-5">
       <h1 id="h-login" className="text-4xl">{t("signIn")}</h1>
       <p className="text-muted">Sign in to access your discharge plans and care schedule.</p>
-      <div className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
+      <div className="rounded-[10px] border border-line bg-surface p-6">
         <SignInForm
           notice={state?.expired ? t("sessionEnded") : null}
           submit={async (email, password) => {
@@ -26,7 +26,7 @@ export default function Login() {
           footer={<Link to="/register">{t("createAccount")}</Link>}
         />
       </div>
-      <div className="rounded-2xl border border-line bg-surface/60 p-4 text-sm text-muted">
+      <div className="rounded-[10px] border border-line bg-surface/60 p-4 text-sm text-muted">
         <p>Doctors sign in at <a href="/doctor/login" className="text-primary underline">/doctor</a></p>
         <p>Management signs in at <a href="/management/login" className="text-primary underline">/management</a></p>
       </div>

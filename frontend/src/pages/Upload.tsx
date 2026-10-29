@@ -60,7 +60,7 @@ export default function Upload() {
       </header>
 
       <div className="grid gap-10 lg:grid-cols-2">
-        <section aria-labelledby="h-own" className="space-y-4 rounded-2xl border border-line bg-surface p-6 shadow-sm">
+        <section aria-labelledby="h-own" className="space-y-4 rounded-[10px] border border-line bg-surface p-6">
           <h2 id="h-own" className="text-2xl">{t("pasteOrPdf")}</h2>
           <label className="block">
             <span className="mb-1 block font-semibold">{t("summaryText")}</span>

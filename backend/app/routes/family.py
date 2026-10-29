@@ -56,7 +56,7 @@ def search_people(q: str = "", u: User = Depends(require("manager")), s: Session
     q = q.strip().lower()
     if not hub or len(q) < 3:
         return []
-    like = q.replace("\\", "\\\\").replace("%", "\%").replace("_", "\_")  # a typed % or _ is a letter, not a wildcard
+    like = q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")  # a typed % or _ is a letter, not a wildcard
     inside = select(HubMember.user_id).where(HubMember.hub_id == hub.id)
     rows = s.exec(select(User).where(User.role.in_(["patient", "family", "manager"]), User.active == True, User.id.not_in(inside),  # noqa: E712
                                      or_(func.lower(User.name).like(f"%{like}%", escape="\\"), func.lower(User.email).like(f"%{like}%", escape="\\"))).order_by(User.name).limit(8)).all()

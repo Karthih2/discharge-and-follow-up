@@ -17,7 +17,7 @@ export default function Register() {
 
   return (
     <form
-      className="mx-auto max-w-md space-y-4 rounded-2xl border border-line bg-surface p-6 shadow-sm"
+      className="mx-auto max-w-md space-y-4 rounded-[10px] border border-line bg-surface p-6"
       onSubmit={async (ev) => {
         ev.preventDefault();
         setBusy(true);

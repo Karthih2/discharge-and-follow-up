@@ -73,11 +73,11 @@ function BellMenu({ dark = false }: { dark?: boolean }) {
       </button>
       <AnimatePresence>
         {open && (
-          <motion.div initial={{ opacity: 0, y: -6, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }} className="absolute right-0 z-30 mt-1 max-h-96 w-[min(20rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-line bg-surface p-2 text-ink shadow-xl">
+          <motion.div initial={{ opacity: 0, y: -6, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }} className="absolute right-0 z-30 mt-1 max-h-96 w-[min(20rem,calc(100vw-2rem))] overflow-y-auto rounded-[10px] border border-line bg-surface p-2 text-ink">
             {list.length === 0 && <p className="p-2 text-muted">Nothing yet.</p>}
             <ul className="space-y-1">
               {list.map((n) => (
-                <li key={n.id} className={`rounded-xl p-2 text-sm transition-colors ${n.level !== "info" ? "bg-attention-tint" : "bg-bg hover:bg-line"}`}>
+                <li key={n.id} className={`rounded-lg p-2 text-sm transition-colors ${n.level !== "info" ? "bg-attention-tint" : "bg-bg hover:bg-line"}`}>
                   {n.message}
                   <span className="block text-xs text-muted">{new Date(n.created_at).toLocaleString("en-IN")}</span>
                 </li>

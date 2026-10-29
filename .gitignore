@@ -3,6 +3,7 @@
 .env.*
 !.env.example
 
+demo.txt
 # Python
 .venv/
 venv/
@@ -45,7 +46,7 @@ Thumbs.db
 *.db-shm
 
 # Design reference images and AI prompt notes (not part of the app)
-desgin/
+design/
 CLAUDE_CODE_PROMPT.md
 CLAUDE_CODE_PROMPT_V2.md
 
@@ -61,3 +62,6 @@ backend/uploads/
 frontend/.vite/
 
 CareBridge_Architecture_Morph.pptx
+
+# Internal project documentation (local only)
+CareBridge_Doc.md

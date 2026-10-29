@@ -148,7 +148,7 @@ export function ItemCard({ item, plan, task, onTask, onSource, onRefresh, previe
 
   return (
     <div
-      className={`rounded-2xl border p-4 transition-shadow duration-200 hover:shadow-md ${
+      className={`rounded-[10px] border p-4 transition-colors duration-200 ${
         locked ? (mine || role === "doctor" ? "border-attention bg-attention-tint" : "border-line bg-bg text-muted") : "border-line bg-surface"
       }`}
     >

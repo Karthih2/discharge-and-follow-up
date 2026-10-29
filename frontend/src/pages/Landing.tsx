@@ -1,7 +1,7 @@
 import { ArrowRight, CalendarCheck, ChatCircleDots, Eye, FirstAidKit, Globe, Heart, Pill, Prohibit, ShieldCheck, Translate, UsersFour } from "@phosphor-icons/react";
-import { m as motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { m as motion, useInView, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HeroScene } from "../components/HeroScene";
 import { LinkButton } from "../components/ui";
 import { HOME, useAuth } from "../lib/auth";
@@ -9,53 +9,26 @@ import { useLang } from "../lib/lang";
 import { useMotionT } from "../lib/motion";
 import { Logo } from "../components/Icons";
 
+function ScrollReveal({ children, className = "", direction = "up", delay = 0 }: { children: React.ReactNode; className?: string; direction?: "up" | "left" | "right"; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const still = useReducedMotion();
+  const xy = direction === "left" ? { x: -40, y: 0 } : direction === "right" ? { x: 40, y: 0 } : { x: 0, y: 32 };
+  return (
+    <motion.div
+      ref={ref}
+      initial={still ? false : { opacity: 0, ...xy }}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : {}}
+      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 const NEVER = ["never1", "never2", "never3", "never4"] as const;
 
-/* ─── Floating particles (subtle, CSS-only) ─── */
-function FloatingParticles() {
-  const still = useReducedMotion();
-  if (still) return null;
-  return (
-    <div className="particles-field" aria-hidden>
-      {Array.from({ length: 6 }, (_, i) => (
-        <div key={i} className="particle" style={{ "--i": i } as React.CSSProperties} />
-      ))}
-    </div>
-  );
-}
-
-/* ─── Orbiting Circles (inspired by ReactBits Circles) ─── */
-function OrbitRing({ radius, duration, items, reverse }: { radius: number; duration: number; items: ReactNode[]; reverse?: boolean }) {
-  const still = useReducedMotion();
-  const dir = reverse ? "reverse" : "normal";
-  const counterDir = reverse ? "normal" : "reverse";
-  return (
-    <div className="orbit-ring" style={{ width: radius * 2, height: radius * 2, animationDuration: still ? "0s" : `${duration}s`, animationDirection: dir }} aria-hidden>
-      <svg className="orbit-path" viewBox={`0 0 ${radius * 2} ${radius * 2}`}>
-        <circle cx={radius} cy={radius} r={radius - 1} fill="none" stroke="var(--secondary)" strokeWidth="0.5" opacity="0.2" strokeDasharray="4 8" />
-      </svg>
-      {items.map((item, i) => {
-        const angle = (360 / items.length) * i;
-        return (
-          <div key={i} className="orbit-item" style={{ "--item-angle": `${angle}deg`, "--orbit-r": `${radius}px`, animationDuration: still ? "0s" : `${duration}s`, animationDirection: counterDir } as React.CSSProperties}>
-            {item}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function OrbitIcon({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
-  return (
-    <div className="orbit-icon-chip">
-      <Icon size={18} weight="duotone" />
-      <span>{label}</span>
-    </div>
-  );
-}
-
-/* ─── Animated counter ─── */
 function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
@@ -81,96 +54,63 @@ function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
   return <span ref={ref}>{display}{suffix}</span>;
 }
 
-/* ─── Bento Feature Card ─── */
-function BentoCard({ icon: Icon, title, desc, index, span }: { icon: React.ElementType; title: string; desc: string; index: number; span?: string }) {
+function FeatureCard({ icon: Icon, title, desc, index }: { icon: React.ElementType; title: string; desc: string; index: number }) {
   const mt = useMotionT();
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40, scale: 0.95 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={mt(0.45, index * 0.08)}
-      className={`bento-card group ${span ?? ""}`}
+      transition={mt(0.4, index * 0.08)}
+      className="kv-feature-card"
     >
-      <div className="bento-icon">
-        <Icon size={26} weight="duotone" />
+      <div className="kv-feature-icon">
+        <Icon size={20} weight="duotone" />
       </div>
-      <h3>{title}</h3>
-      <p>{desc}</p>
-      <div className="bento-glow" aria-hidden />
+      <h3 className="mt-3 text-[1.05rem] font-semibold">{title}</h3>
+      <p className="mt-1.5 text-sm text-muted leading-relaxed">{desc}</p>
     </motion.div>
   );
 }
 
-/* ─── Step card with stagger ─── */
 function StepCard({ icon: Icon, num, title, desc, extra, index }: { icon: React.ElementType; num: number; title: string; desc: string; extra: string; index: number }) {
   const mt = useMotionT();
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={mt(0.5, index * 0.12)}
-      className="step-card-v2"
+      transition={mt(0.45, index * 0.1)}
+      className="kv-step-card"
     >
-      <div className="step-num-v2">{num}</div>
-      <div className="step-body-v2">
-        <div className="flex items-center gap-3">
-          <div className="step-icon-v2"><Icon size={20} weight="duotone" /></div>
-          <h3 className="text-xl">{title}</h3>
+      <div className="kv-step-num">{num}</div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2.5">
+          <div className="kv-step-icon"><Icon size={18} weight="duotone" /></div>
+          <h3 className="text-lg font-semibold">{title}</h3>
         </div>
-        <p className="mt-2 text-muted">{desc}</p>
-        <p className="mt-2 text-sm opacity-60">{extra}</p>
+        <p className="mt-2 text-muted text-[0.92rem] leading-relaxed">{desc}</p>
+        <p className="mt-2 text-sm text-muted/60 leading-relaxed">{extra}</p>
       </div>
     </motion.div>
   );
 }
 
-/* ─── Parallax section wrapper ─── */
-function Parallax({ children, className = "", speed = 0.15 }: { children: ReactNode; className?: string; speed?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [30 * speed, -30 * speed]);
-  return (
-    <motion.div ref={ref} style={{ y }} className={className}>
-      {children}
-    </motion.div>
-  );
-}
-
-/* ─── Who card with hover tilt ─── */
-function WhoCard({ role, desc, color, index }: { role: string; desc: string; color: string; index: number }) {
+function RoleCard({ role, desc, icon: Icon, index }: { role: string; desc: string; icon: React.ElementType; index: number }) {
   const mt = useMotionT();
-  const still = useReducedMotion();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 200, damping: 20 });
-  const sy = useSpring(y, { stiffness: 200, damping: 20 });
-  const rotX = useTransform(sy, [-0.5, 0.5], [6, -6]);
-  const rotY = useTransform(sx, [-0.5, 0.5], [-6, 6]);
-
-  const move = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (still) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    x.set((e.clientX - r.left) / r.width - 0.5);
-    y.set((e.clientY - r.top) / r.height - 0.5);
-  };
-  const leave = () => { x.set(0); y.set(0); };
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={mt(0.4, index * 0.1)}
-      className="who-card-v2"
-      style={{ perspective: 600, rotateX: still ? 0 : rotX, rotateY: still ? 0 : rotY }}
-      onPointerMove={move}
-      onPointerLeave={leave}
+      transition={mt(0.4, index * 0.08)}
+      className="kv-role-card"
     >
-      <div className="who-stripe" style={{ background: color }} />
-      <h3 className="text-xl">{role}</h3>
-      <p className="mt-2 text-muted">{desc}</p>
+      <div className="kv-role-icon">
+        <Icon size={22} weight="duotone" />
+      </div>
+      <h3 className="mt-3 text-lg font-semibold">{role}</h3>
+      <p className="mt-1.5 text-sm text-muted leading-relaxed">{desc}</p>
     </motion.div>
   );
 }
@@ -180,36 +120,25 @@ export default function Landing() {
   const { t } = useLang();
   const mt = useMotionT();
   const home = user ? HOME[user.role] : null;
+  const still = useReducedMotion();
+
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
     <div className="-mx-5 -mt-8 md:-mx-10">
 
       {/* ═══════════════ HERO ═══════════════ */}
-      <section className="hero-dark relative min-h-[92vh] overflow-hidden px-5 pb-24 pt-20 md:px-10 md:pb-32 md:pt-28">
-        <FloatingParticles />
-        <div className="orbit-container" aria-hidden>
-          <OrbitRing radius={220} duration={45} items={[
-            <OrbitIcon icon={Translate} label="Tamil" />,
-            <OrbitIcon icon={Globe} label="Hindi" />,
-            <OrbitIcon icon={Translate} label="Kannada" />,
-            <OrbitIcon icon={Globe} label="Telugu" />,
-          ]} />
-          <OrbitRing radius={320} duration={70} reverse items={[
-            <OrbitIcon icon={Pill} label="Medicines" />,
-            <OrbitIcon icon={CalendarCheck} label="Visits" />,
-            <OrbitIcon icon={ShieldCheck} label="Verified" />,
-            <OrbitIcon icon={FirstAidKit} label="Tests" />,
-            <OrbitIcon icon={Heart} label="Warnings" />,
-          ]} />
-        </div>
-
-        <div className="relative z-10 mx-auto grid max-w-[1480px] items-center gap-10 md:grid-cols-[1.15fr_0.85fr]">
-          <div className="space-y-8">
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={mt(0.2)} className="hero-tag">
+      <section ref={heroRef} className="hero-dark relative overflow-hidden px-5 pb-20 pt-10 md:px-10 md:pb-28 md:pt-12">
+        <motion.div style={still ? {} : { y: heroY, opacity: heroOpacity }} className="relative z-10 mx-auto grid max-w-[1480px] items-center gap-8 md:grid-cols-[1fr_1fr]">
+          <div className="space-y-5">
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={mt(0.2)} className="hero-tag">
               <Logo size={18} /> CareBridge
             </motion.div>
 
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={mt(0.5, 0.06)} className="hero-title">
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={mt(0.5, 0.06)} className="hero-title">
               {t("landingTitle")}
             </motion.h1>
 
@@ -217,7 +146,7 @@ export default function Landing() {
               {t("landingText")}
             </motion.p>
 
-            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={mt(0.3, 0.32)} className="flex flex-wrap gap-3 pt-2">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={mt(0.3, 0.32)} className="flex flex-wrap gap-3 pt-2">
               {home
                 ? <LinkButton to={home} className="btn-hero-primary">{t("goMyPlans")} <ArrowRight size={18} /></LinkButton>
                 : <>
@@ -227,224 +156,198 @@ export default function Landing() {
             </motion.div>
           </div>
 
-          <motion.div initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}>
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}>
             <HeroScene />
           </motion.div>
-        </div>
+        </motion.div>
 
-        <svg className="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden>
-          <path d="M0 40 C360 80 1080 0 1440 40 L1440 80 L0 80Z" fill="var(--bg)" />
+        <svg className="hero-wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden>
+          <path d="M0 60 C360 120 1080 0 1440 60 L1440 120 L0 120Z" fill="var(--bg)" />
         </svg>
       </section>
 
-      {/* ═══════════════ TRUST STRIP — animated counters ═══════════════ */}
+      {/* ═══════════════ TRUST STRIP ═══════════════ */}
       <section className="trust-strip-v2" aria-label="Trust indicators">
         <div className="mx-auto flex max-w-[1480px] flex-wrap items-center justify-center gap-x-12 gap-y-6 px-5">
-          <TrustItem value={6} label="Languages supported" />
+          <TrustItem value={6} label="Languages supported" index={0} />
           <span className="trust-divider" aria-hidden />
-          <TrustItem value={100} suffix="%" label="Doctor-verified plans" />
+          <TrustItem value={100} suffix="%" label="Doctor-verified plans" index={1} />
           <span className="trust-divider" aria-hidden />
-          <TrustItem value={0} label="Medical advice given" />
+          <TrustItem value={0} label="Medical advice given" index={2} />
           <span className="trust-divider" aria-hidden />
-          <TrustItem value={24} suffix="/7" label="Family access" />
+          <TrustItem value={24} suffix="/7" label="Family access" index={3} />
         </div>
       </section>
 
-      {/* ═══════════════ WHAT IS CAREBRIDGE ═══════════════ */}
+      {/* ═══════════════ FEATURE CARDS ROW ═══════════════ */}
       <section className="section-pad">
         <div className="mx-auto max-w-[1480px]">
-          <Parallax className="mx-auto max-w-3xl text-center">
-            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={mt(0.3)} className="section-tag">What is CareBridge</motion.p>
-            <motion.h2
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={mt(0.5, 0.05)}
-              className="text-3xl md:text-[2.6rem] md:leading-[1.1]"
-            >
-              Hospital discharge papers are hard to follow. We turn them into a daily plan your family can actually use.
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={mt(0.3, 0.15)}
-              className="mt-5 text-lg text-muted"
-            >
-              Paste or upload the discharge summary. CareBridge extracts every medicine, appointment, test and warning sign, translates it into your language, and puts it on a calendar with reminders. Nothing is invented. Everything links back to the original line the doctor wrote.
-            </motion.p>
-          </Parallax>
-        </div>
-      </section>
+          <ScrollReveal className="mb-10 text-center">
+            <p className="kv-section-label">One platform</p>
+            <h2 className="text-3xl md:text-[2.5rem] md:leading-[1.1] font-semibold">Everything from one discharge summary</h2>
+          </ScrollReveal>
 
-      {/* ═══════════════ FEATURES — Bento grid ═══════════════ */}
-      <section className="features-section-v2 section-pad" id="features">
-        <div className="mx-auto max-w-[1480px]">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={mt(0.4)}
-            className="mb-14 max-w-2xl"
-          >
-            <p className="section-tag">Features</p>
-            <h2 className="text-3xl md:text-4xl">Everything from one discharge summary</h2>
-          </motion.div>
-
-          <div className="bento-grid">
-            <BentoCard icon={Translate} index={0} span="bento-wide"
+          <div className="kv-feature-row">
+            <FeatureCard icon={Translate} index={0}
               title="Six languages"
-              desc="Tamil, Hindi, Kannada, Telugu, Malayalam and English. Each family member reads the plan in their own language." />
-            <BentoCard icon={Pill} index={1}
+              desc="Tamil, Hindi, Kannada, Telugu, Malayalam and English." />
+            <FeatureCard icon={Pill} index={1}
               title="Medicine schedule"
-              desc="Exact drug names, doses, timing and food rules. Morning, afternoon and night slots." />
-            <BentoCard icon={CalendarCheck} index={2}
+              desc="Drug names, doses, timing and food rules in clear slots." />
+            <FeatureCard icon={CalendarCheck} index={2}
               title="Appointment calendar"
-              desc="Every follow-up visit, blood test and check-up on a dated calendar." />
-            <BentoCard icon={ShieldCheck} index={3}
+              desc="Every follow-up visit and test on a dated calendar." />
+            <FeatureCard icon={ShieldCheck} index={3}
               title="Doctor verification"
-              desc="Unclear instructions stay locked until a hospital doctor reviews and confirms them." />
-            <BentoCard icon={UsersFour} index={4}
-              title="Family sharing"
-              desc="Share with family. They see only what you allow — full plan, medicines, or appointments." />
-            <BentoCard icon={ChatCircleDots} index={5} span="bento-wide"
-              title="Source tracing"
-              desc="Every extracted item links back to the exact line in the discharge summary. Tap any medicine or appointment to see the original text." />
+              desc="Unclear items stay locked until a doctor confirms." />
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ HOW IT WORKS — stacked steps ═══════════════ */}
-      <section className="section-pad" id="how">
+      {/* ═══════════════ MORE FEATURES ═══════════════ */}
+      <section className="kv-features-extra section-pad" style={{ paddingTop: 0 }}>
         <div className="mx-auto max-w-[1480px]">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={mt(0.4)}
-            className="mb-14 max-w-2xl"
-          >
-            <p className="section-tag">How it works</p>
-            <h2 className="text-3xl md:text-4xl">Four steps. Discharge to daily plan.</h2>
-          </motion.div>
+          <div className="kv-feature-row">
+            <FeatureCard icon={UsersFour} index={0}
+              title="Family sharing"
+              desc="Share with family. They see only what you allow." />
+            <FeatureCard icon={ChatCircleDots} index={1}
+              title="Source tracing"
+              desc="Every item links back to the exact line in the summary." />
+          </div>
+        </div>
+      </section>
 
-          <div className="steps-v2">
-            {[
-              { icon: Eye, num: 1, title: t("step1T"), desc: t("step1D"), extra: "Supports PDF upload, copy-paste, and photo scan. Personal data is automatically masked before processing." },
-              { icon: Translate, num: 2, title: t("step2T"), desc: t("step2D"), extra: "AI identifies medicines, appointments, tests, warning signs and lifestyle instructions. Each one links to its source line." },
-              { icon: ShieldCheck, num: 3, title: t("step3T"), desc: t("step3D"), extra: "Ambiguous items are flagged and locked. A hospital doctor reviews them before the patient sees them." },
-              { icon: Globe, num: 4, title: t("step4T"), desc: t("step4D"), extra: "Calendar view, medicine timeline, fridge sheet for printing, and push reminders. Family gets a read-only link." },
-            ].map((s, i) => (
-              <StepCard key={s.num} {...s} index={i} />
+      {/* ═══════════════ HOW IT WORKS ═══════════════ */}
+      <section className="kv-how-section section-pad" id="how">
+        <div className="mx-auto max-w-[1480px]">
+          <div className="kv-how-layout">
+            <div className="kv-how-left">
+              <ScrollReveal direction="left">
+                <p className="kv-section-label">How it works</p>
+                <h2 className="text-3xl md:text-[2.5rem] md:leading-[1.1] font-semibold">
+                  How CareBridge fits into your workflow.
+                </h2>
+                <p className="mt-4 text-muted text-lg">
+                  From discharge to daily plan in four steps.
+                </p>
+              </ScrollReveal>
+              <ScrollReveal delay={0.15}>
+                <div className="mt-6">
+                  <LinkButton to="/register" className="btn-hero-primary" style={{ background: "var(--primary)", borderColor: "var(--primary)", color: "#fff" }}>
+                    Get started <ArrowRight size={18} />
+                  </LinkButton>
+                </div>
+              </ScrollReveal>
+            </div>
+
+            <div className="kv-how-right">
+              {[
+                { icon: Eye, num: 1, title: t("step1T"), desc: t("step1D"), extra: "PDF upload, copy-paste, photo scan. Personal data masked automatically." },
+                { icon: Translate, num: 2, title: t("step2T"), desc: t("step2D"), extra: "AI finds medicines, appointments, tests and warnings. Each links to source." },
+                { icon: ShieldCheck, num: 3, title: t("step3T"), desc: t("step3D"), extra: "Ambiguous items flagged and locked. Doctor reviews before patient sees." },
+                { icon: Globe, num: 4, title: t("step4T"), desc: t("step4D"), extra: "Calendar, medicine timeline, fridge sheet, push reminders. Family gets read-only link." },
+              ].map((s, i) => (
+                <StepCard key={s.num} {...s} index={i} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ WHO IT'S FOR ═══════════════ */}
+      <section className="section-pad">
+        <div className="mx-auto max-w-[1480px]">
+          <ScrollReveal className="mb-10 text-center">
+            <p className="kv-section-label">Who it's for</p>
+            <h2 className="text-3xl md:text-[2.5rem] md:leading-[1.1] font-semibold">One platform, four roles</h2>
+          </ScrollReveal>
+
+          <div className="kv-role-grid">
+            <RoleCard role="Patient" desc="Upload your discharge summary. Get a personal plan with medicines, appointments and reminders in your language." icon={Heart} index={0} />
+            <RoleCard role="Family" desc="View your loved one's plan. See only what they share. No app needed." icon={UsersFour} index={1} />
+            <RoleCard role="Doctor" desc="Review flagged items in a queue. Confirm, correct or clarify before the patient sees them." icon={FirstAidKit} index={2} />
+            <RoleCard role="Management" desc="Hospital-wide stats. Track plans created, reviewed and shared." icon={Globe} index={3} />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ TRUST / SAFETY ═══════════════ */}
+      <section className="kv-trust-section section-pad" id="safety">
+        <div className="mx-auto max-w-[1480px]">
+          <ScrollReveal className="mb-10 text-center">
+            <p className="kv-section-label kv-section-label-light">Safety promise</p>
+            <h2 className="text-3xl md:text-[2.5rem] md:leading-[1.1] font-semibold text-white">
+              {t("itNeverWill")}
+            </h2>
+            <p className="mt-4 mx-auto max-w-2xl text-lg" style={{ color: "rgba(246,252,250,0.6)" }}>
+              CareBridge organizes what your doctor already wrote. It never adds, changes, or invents medical information.
+            </p>
+          </ScrollReveal>
+
+          <div className="kv-trust-grid">
+            {NEVER.map((key, i) => (
+              <motion.div
+                key={key}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+                className="kv-trust-card"
+              >
+                <div className="kv-trust-icon">
+                  <Prohibit size={20} weight="duotone" />
+                </div>
+                <p className="mt-2 text-sm font-medium">{t(key)}</p>
+              </motion.div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ═══════════════ WHO IT'S FOR — tilt cards ═══════════════ */}
-      <section className="who-section-v2 section-pad">
-        <div className="mx-auto max-w-[1480px]">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={mt(0.3)}
-            className="mb-14 text-center"
-          >
-            <p className="section-tag">Who it's for</p>
-            <h2 className="text-3xl md:text-4xl">One platform, four roles</h2>
-          </motion.div>
-
-          <div className="who-grid-v2">
-            <WhoCard role="Patient" desc="Upload your discharge summary. Get a personal plan with medicines, appointments and reminders in your language." color="var(--primary)" index={0} />
-            <WhoCard role="Family" desc="View your loved one's plan. See only what they share. No app needed." color="var(--secondary)" index={1} />
-            <WhoCard role="Doctor" desc="Review flagged items in a queue. Confirm, correct or clarify before the patient sees them." color="#4B9B6E" index={2} />
-            <WhoCard role="Management" desc="Hospital-wide stats. Track plans created, reviewed and shared. Monitor doctor workload." color="#2E7D5C" index={3} />
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ SAFETY ═══════════════ */}
-      <section className="section-pad" id="safety">
-        <div className="mx-auto max-w-[1480px]">
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.97 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={mt(0.5)}
-            className="safety-card-v2"
-          >
-            <div className="safety-card-inner">
-              <div>
-                <p className="section-tag">Safety promise</p>
-                <h2 className="safety-heading text-3xl md:text-4xl">{t("itNeverWill")}</h2>
-                <p className="mt-4 text-muted measure">
-                  CareBridge organizes and explains what your doctor already wrote. It never adds, changes, or invents medical information.
-                </p>
-              </div>
-              <ul className="safety-list-v2">
-                {NEVER.map((key, i) => (
-                  <motion.li
-                    key={key}
-                    initial={{ opacity: 0, x: -16 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={mt(0.25, 0.15 + i * 0.08)}
-                    className="safety-item-v2"
-                  >
-                    <Prohibit size={22} weight="duotone" className="mt-0.5 shrink-0 text-attention" aria-hidden />
-                    <span>{t(key)}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-            <p className="mt-6 text-sm text-muted">
-              <Link to="/safety" className="underline">{t("safetyLimits")}</Link>
-            </p>
-          </motion.div>
+          <ScrollReveal delay={0.2} className="mt-6 text-center">
+            <Link to="/safety" className="text-sm underline" style={{ color: "var(--secondary)" }}>{t("safetyLimits")}</Link>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ═══════════════ CTA ═══════════════ */}
-      <section className="cta-section-v2" aria-label="Get started">
-        <div className="mx-auto max-w-3xl px-5 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={mt(0.45)}
-            className="space-y-7"
-          >
-            <h2 className="cta-title-v2">Ready to turn your discharge summary into a plan?</h2>
-            <p className="mx-auto max-w-xl text-lg hero-sub">
-              Create an account. Paste your discharge summary, get a dated calendar, medicine times and reminders — all in six languages.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-              {home
-                ? <LinkButton to={home} className="btn-hero-primary">{t("goMyPlans")} <ArrowRight size={18} /></LinkButton>
-                : <>
-                    <LinkButton to="/register" className="btn-hero-primary">{t("createAccount")} <ArrowRight size={18} /></LinkButton>
-                    <LinkButton to="/login" className="btn btn-ghost-dark">{t("signIn")}</LinkButton>
-                  </>}
-            </div>
-            {!home && (
-              <p className="text-sm hero-sub opacity-75">
-                Doctor? <a href="/doctor/login" className="underline">Sign in here</a> · Management? <a href="/management/login" className="underline">Sign in here</a>
+      <section className="kv-cta-section" aria-label="Get started">
+        <div className="kv-cta-inner">
+          <div className="mx-auto max-w-3xl px-5 text-center relative z-10">
+            <motion.div
+              initial={still ? false : { opacity: 0, y: 30, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+              className="space-y-6"
+            >
+              <h2 className="kv-cta-title">Ready to turn your discharge summary into a plan?</h2>
+              <p className="mx-auto max-w-xl text-lg" style={{ color: "var(--ink)", opacity: 0.7 }}>
+                Create an account. Paste your discharge summary, get a dated calendar, medicine times and reminders — all in six languages.
               </p>
-            )}
-          </motion.div>
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+                {home
+                  ? <LinkButton to={home} className="kv-cta-btn">{t("goMyPlans")} <ArrowRight size={18} /></LinkButton>
+                  : <>
+                      <LinkButton to="/register" className="kv-cta-btn">{t("createAccount")} <ArrowRight size={18} /></LinkButton>
+                      <LinkButton to="/login" className="kv-cta-btn-ghost">{t("signIn")}</LinkButton>
+                    </>}
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
     </div>
   );
 }
 
-function TrustItem({ value, suffix = "", label }: { value: number; suffix?: string; label: string }) {
+function TrustItem({ value, suffix = "", label, index = 0 }: { value: number; suffix?: string; label: string; index?: number }) {
+  const still = useReducedMotion();
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={still ? false : { opacity: 0, y: 12, scale: 0.9 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: index * 0.08 }}
       className="text-center"
     >
       <span className="trust-value"><Counter value={value} suffix={suffix} /></span>

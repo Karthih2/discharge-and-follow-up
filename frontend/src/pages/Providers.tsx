@@ -79,38 +79,40 @@ export default function Providers() {
         </section>
       )}
 
-      <section aria-labelledby="h-dir" className="space-y-4">
-        <h2 id="h-dir" className="text-2xl">Providers near you ({list.length})</h2>
-        <div className="flex flex-wrap items-end gap-3">
+      <section aria-labelledby="h-dir" className="space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 id="h-dir" className="text-2xl">Providers near you <span className="text-base font-normal text-muted">({list.length})</span></h2>
+          <div className="flex gap-1 rounded-lg border border-line p-0.5" role="group" aria-label="View">
+            {(["list", "map"] as const).map((v) => (
+              <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)}
+                className={`rounded-md px-4 py-1.5 text-sm font-semibold transition-colors ${view === v ? "bg-primary text-white shadow-sm" : "text-muted hover:text-ink"}`}>
+                {v === "list" ? "List" : "Map"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-wrap items-end gap-3 rounded-xl border border-line bg-surface p-3">
           <label className="text-sm">
-            <span className="block font-semibold">Near</span>
+            <span className="block font-semibold text-muted">Near</span>
             <select className="field w-auto" value={area?.code ?? ""} onChange={(e) => setPin(e.target.value)}>
               {areas.map((a) => <option key={a.code} value={a.code}>{a.city} {a.code}</option>)}
             </select>
           </label>
           <label className="text-sm">
-            <span className="block font-semibold">Within</span>
+            <span className="block font-semibold text-muted">Within</span>
             <select className="field w-auto" value={radius} onChange={(e) => setRadius(e.target.value)}>
               {["5", "10", "15", "25"].map((r) => <option key={r} value={r}>{r} km</option>)}
               <option value="any">Any distance</option>
             </select>
           </label>
           <label className="text-sm">
-            <span className="block font-semibold">Type</span>
+            <span className="block font-semibold text-muted">Type</span>
             <select className="field w-auto" value={type} onChange={(e) => setType(e.target.value)}>
               <option value="">All types</option>
               {Object.entries(TYPE_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </label>
-          <input className="field max-w-xs" placeholder="Search name or specialty" aria-label="Search" value={q} onChange={(e) => setQ(e.target.value)} />
-          <div className="ml-auto flex gap-1" role="group" aria-label="View">
-            {(["list", "map"] as const).map((v) => (
-              <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)}
-                className={`rounded-md border px-3 py-1.5 font-semibold ${view === v ? "border-primary bg-primary text-white" : "border-line"}`}>
-                {v === "list" ? "List" : "Map"}
-              </button>
-            ))}
-          </div>
+          <input className="field max-w-xs flex-1" placeholder="Search name or specialty" aria-label="Search" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
         {error && <p className="text-attention">Could not load providers.</p>}
         {!all && <ListSkeleton />}
@@ -120,11 +122,11 @@ export default function Providers() {
         {view === "map" && area && list.length > 0 && (
           <NearbyMap origin={area.at} radiusKm={maxKm} spots={list} activeId={active} onActive={setActive} />
         )}
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className={view === "map" ? "grid gap-3 sm:grid-cols-2 lg:grid-cols-3" : "grid gap-3 md:grid-cols-2"}>
           {list.map(({ provider: p, km: d }, i) => (
             <div key={p.id} onMouseEnter={() => setActive(p.id)} onMouseLeave={() => setActive(null)}
-              className={active === p.id ? "rounded-md outline outline-2 outline-primary" : ""}>
-              <ProviderCard p={p} rank={i + 1} reasons={[`${d.toFixed(1)} km from ${area.city} ${area.code}`]} />
+              className={`transition-all ${active === p.id ? "rounded-xl outline outline-2 outline-primary scale-[1.01]" : ""}`}>
+              <ProviderCard p={p} rank={i + 1} reasons={[`${d.toFixed(1)} km from ${area.city} ${area.code}`]} compact={view === "map"} />
             </div>
           ))}
         </div>
