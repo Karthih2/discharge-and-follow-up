@@ -1,28 +1,33 @@
 <div align="center">
 
-# CareBridge
+<img src="https://img.shields.io/badge/CareBridge-From%20Discharge%20to%20Recovery-0e7c7b?style=for-the-badge&labelColor=0b2e2d" width="100%">
 
-**From Discharge to Recovery**
+<h1 align="center">🏥 CareBridge — From Discharge to Recovery</h1>
 
-Turn hospital discharge summaries into simple, trackable follow-up plans — in 6 Indian languages.
+<p align="center">
+  <b>AI-Powered Follow-Up Plans • 6 Indian Languages • Safety-First Medical Instructions</b><br>
+  <i>React • TypeScript • FastAPI • Python • SQLite • Tailwind CSS • Groq AI</i>
+</p>
 
-![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white)
-![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
-![Groq](https://img.shields.io/badge/Groq_AI-F55036?style=flat-square)
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18-0e7c7b?style=flat-square&logo=react&logoColor=eafbf6&labelColor=0b2e2d">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=eafbf6&labelColor=0b2e2d">
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=eafbf6&labelColor=0b2e2d">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=eafbf6&labelColor=0b2e2d">
+  <img src="https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=eafbf6&labelColor=0b2e2d">
+  <img src="https://img.shields.io/badge/Tailwind-06B6D4?style=flat-square&logo=tailwindcss&logoColor=eafbf6&labelColor=0b2e2d">
+  <img src="https://img.shields.io/badge/Groq_AI-F55036?style=flat-square&labelColor=0b2e2d">
+</p>
 
 </div>
 
 ---
 
-## The Problem
+## 🧭 The Problem
 
 When patients leave a hospital, they receive a discharge summary — a dense medical document with medications, follow-up appointments, lifestyle changes, and warning signs. Most patients and families struggle to understand it, miss critical follow-ups, or misinterpret dosage instructions. This is especially challenging in India where patients speak different languages and may have limited medical literacy.
 
-## The Solution
+## 💡 The Solution
 
 CareBridge uses AI to read discharge summaries and convert them into clear, actionable follow-up plans. Every extracted instruction is traced back to its exact source line, and anything unclear or risky is held for a doctor to review before the patient sees it.
 
@@ -30,30 +35,37 @@ CareBridge uses AI to read discharge summaries and convert them into clear, acti
 
 ---
 
-## Features
+## ✨ Features
 
-### AI-Powered Extraction
+### 🤖 AI-Powered Extraction
+
 Upload a discharge summary (text or PDF). The AI extracts every instruction — medications, appointments, tests, lifestyle changes — and links each one to its exact source line for full traceability.
 
-### Safety First
+### 🛡️ Safety First
+
 Vague, risky, or conflicting instructions are automatically flagged and locked until a doctor reviews and approves them. Patients never see unverified medical guidance.
 
-### 6 Indian Languages
+### 🌐 6 Indian Languages
+
 English, Tamil, Hindi, Telugu, Kannada, and Malayalam. Instructions are rewritten in plain language and translated, with text-to-speech read-aloud support.
 
-### Medicine Schedule
+### 💊 Medicine Schedule
+
 Medications are organized into morning, afternoon, and night slots with tap-to-mark-taken tracking and automated reminders.
 
-### Smart Reminders & Escalation
+### 🔔 Smart Reminders & Escalation
+
 Missed tasks trigger a reminder chain: patient first, then family members, then the assigned doctor.
 
-### Provider Directory
+### 🏥 Provider Directory
+
 Nearby labs, clinics, hospitals, and pharmacies suggested by specialty, distance, language, and insurance — with a schematic map view.
 
-### Printable Fridge Sheet
+### 📄 Printable Fridge Sheet
+
 A one-page summary with QR code that families can print and stick on the fridge.
 
-### Three Apps, One Server
+### 🖥️ Three Apps, One Server
 
 | App | For | Path |
 |---|---|---|
@@ -63,9 +75,9 @@ A one-page summary with QR code that families can print and stick on the fridge.
 
 ---
 
-## How It Works
+## ⚙️ How It Works
 
-```
+```text
 Upload Summary → AI Pipeline → Doctor Review → Patient Plan
 ```
 
@@ -83,9 +95,10 @@ The AI pipeline runs 9 steps in sequence:
 
 ---
 
-## Getting Started
+## ▶️ Getting Started
 
 ### Prerequisites
+
 - Python 3.10+
 - Node.js 18+
 
@@ -107,6 +120,7 @@ JWT_SECRET=your_long_random_secret
 ### Run
 
 **Quick start (Windows):**
+
 ```powershell
 .\run_demo.bat
 ```
@@ -142,7 +156,7 @@ All passwords: `demo1234` · All emails: `<name>@code2care.test`
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 | Layer | Tools |
 |---|---|
@@ -153,7 +167,7 @@ All passwords: `demo1234` · All emails: `<name>@code2care.test`
 
 ---
 
-## Team
+## 🙌 Team
 
 <div align="center">
 
@@ -163,12 +177,20 @@ All passwords: `demo1234` · All emails: `<name>@code2care.test`
 
 <br/>
 
-**Made with ❤️ for better patient care**
+**Made with 💚 for better patient care**
 
 </div>
 
 ---
 
-## License
+## 🏷️ License
 
 MIT
+
+---
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:eafbf6,50:5ed6c3,100:0e7c7b&height=140&section=footer" width="100%"/>
+
+</div>
