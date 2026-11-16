@@ -24,15 +24,18 @@ const Terms = lazy(() => import("../pages/Legal").then((m) => ({ default: m.Term
 const Privacy = lazy(() => import("../pages/Legal").then((m) => ({ default: m.Privacy })));
 const Safety = lazy(() => import("../pages/Legal").then((m) => ({ default: m.Safety })));
 
+const CHROMELESS = new Set(["/", "/login", "/register"]);
+
 export default function PatientApp() {
   const loc = useLocation();
   const mt = useMotionT();
+  const bare = CHROMELESS.has(loc.pathname);
   return (
     <>
       <a href="#main" className="no-print sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:bg-surface focus:p-2">
         Skip to content
       </a>
-      <Header />
+      {!bare && <Header />}
       <Welcome />
       <AnimatePresence mode="wait" initial={false}>
         <motion.main
@@ -42,7 +45,7 @@ export default function PatientApp() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={mt(0.15)}
-          className="mx-auto max-w-[1480px] px-5 py-10"
+          className={bare ? "" : "mx-auto max-w-[1480px] px-5 py-10"}
         >
           <Suspense fallback={<ListSkeleton rows={3} />}>
             <Routes location={loc}>
@@ -71,7 +74,7 @@ export default function PatientApp() {
           </Suspense>
         </motion.main>
       </AnimatePresence>
-      <Footer />
+      {!bare && <Footer />}
     </>
   );
 }

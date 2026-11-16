@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LangToggle } from "../components/LangToggle";
+import { Logo } from "../components/Icons";
 import { api } from "../lib/api";
 import { HOME, useAuth } from "../lib/auth";
 import { useLang } from "../lib/lang";
@@ -16,49 +17,57 @@ export default function Register() {
   const set = (k: string) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });
 
   return (
-    <form
-      className="mx-auto max-w-md space-y-4 rounded-[10px] border border-line bg-surface p-6"
-      onSubmit={async (ev) => {
-        ev.preventDefault();
-        setBusy(true);
-        setErr(null);
-        try {
-          const out = await api.register({ ...f, language: lang });
-          signIn(out);
-          nav(HOME[out.user.role], { replace: true });
-        } catch (x) {
-          setErr((x as Error).message);
-          setBusy(false);
-        }
-      }}
-    >
-      <h1 className="text-4xl">{t("createAnAccount")}</h1>
-      <p className="text-muted">{t("registerIntro")}</p>
-      <label className="block">
-        <span className="mb-1 block font-semibold">{t("name")}</span>
-        <input className="field" value={f.name} onChange={set("name")} required minLength={2} />
-      </label>
-      <label className="block">
-        <span className="mb-1 block font-semibold">{t("email")}</span>
-        <input className="field" type="email" value={f.email} onChange={set("email")} required />
-      </label>
-      <label className="block">
-        <span className="mb-1 block font-semibold">{t("password")}</span>
-        <input className="field" type="password" value={f.password} onChange={set("password")} required minLength={8} autoComplete="new-password" placeholder="At least 8 characters" />
-      </label>
-      <label className="block">
-        <span className="mb-1 block font-semibold">{t("iAmA")}</span>
-        <select className="field" value={f.role} onChange={set("role")}>
-          <option value="patient">{t("rolePatient")}</option>
-          <option value="manager">{t("managerCaregiver")}</option>
-        </select>
-      </label>
-      <LangToggle />
-      {err && <p role="alert" className="text-attention">{err}</p>}
-      <div className="flex items-center gap-3">
-        <Button type="submit" disabled={busy}>{t("createAnAccount")}</Button>
-        <Link to="/login">{t("haveAccount")}</Link>
-      </div>
-    </form>
+    <div className="auth-page">
+      <form
+        className="auth-card"
+        onSubmit={async (ev) => {
+          ev.preventDefault();
+          setBusy(true);
+          setErr(null);
+          try {
+            const out = await api.register({ ...f, language: lang });
+            signIn(out);
+            nav(HOME[out.user.role], { replace: true });
+          } catch (x) {
+            setErr((x as Error).message);
+            setBusy(false);
+          }
+        }}
+      >
+        <div className="auth-logo">
+          <Logo size={28} />
+          <span>CareBridge</span>
+        </div>
+        <h1 className="text-2xl font-bold">{t("createAnAccount")}</h1>
+        <p className="mt-1 text-sm text-muted">{t("registerIntro")}</p>
+        <div className="mt-6 space-y-4">
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">{t("name")}</span>
+            <input className="field" value={f.name} onChange={set("name")} required minLength={2} />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">{t("email")}</span>
+            <input className="field" type="email" value={f.email} onChange={set("email")} required />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">{t("password")}</span>
+            <input className="field" type="password" value={f.password} onChange={set("password")} required minLength={8} autoComplete="new-password" placeholder="At least 8 characters" />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">{t("iAmA")}</span>
+            <select className="field" value={f.role} onChange={set("role")}>
+              <option value="patient">{t("rolePatient")}</option>
+              <option value="manager">{t("managerCaregiver")}</option>
+            </select>
+          </label>
+          <LangToggle />
+          {err && <p role="alert" className="text-sm text-attention">{err}</p>}
+          <div className="flex items-center gap-3">
+            <Button type="submit" disabled={busy}>{t("createAnAccount")}</Button>
+            <Link to="/login" className="text-sm">{t("haveAccount")}</Link>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 }

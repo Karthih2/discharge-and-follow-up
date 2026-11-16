@@ -30,13 +30,13 @@ export function StaffLogin({ portalLabel }: { portalLabel: string }) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-bg px-4">
-      <form className="w-full max-w-sm space-y-6 rounded-lg border border-line bg-surface p-6 sm:p-8" onSubmit={onSubmit} noValidate>
-        <div className="flex items-center gap-2">
+    <div className="auth-page">
+      <form className="auth-card space-y-6" onSubmit={onSubmit} noValidate>
+        <div className="auth-logo">
           <Logo size={28} />
-          <span className="font-heading text-xl">CareBridge</span>
+          <span>CareBridge</span>
         </div>
-        <h1 className="text-2xl">{portalLabel} Sign In</h1>
+        <h1 className="text-2xl font-bold">{portalLabel} Sign In</h1>
         <Input label={t("email")} type="email" autoComplete="username" value={email}
           onChange={(e) => { setEmail(e.target.value); setError(null); }} />
         <Input label={t("password")} type="password" autoComplete="current-password" value={password}

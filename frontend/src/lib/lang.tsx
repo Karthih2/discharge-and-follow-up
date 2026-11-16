@@ -28,10 +28,13 @@ function initial(): Lang {
   try {
     const v = localStorage.getItem("cb_lang") as Lang | null;
     if (v && LANG_NAMES.some((l) => l.code === v)) return v;
-  } catch {
-    /* storage unavailable */
-  }
+  } catch { /* storage unavailable */ }
   return "en";
+}
+
+/** Reset stored language to English (for testing). */
+export function resetLang() {
+  try { localStorage.removeItem("cb_lang"); } catch { /* */ }
 }
 
 export function LangProvider({ children }: { children: ReactNode }) {
