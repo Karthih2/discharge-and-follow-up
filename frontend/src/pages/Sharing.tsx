@@ -29,12 +29,14 @@ export default function Sharing() {
 
   return (
     <div className="max-w-3xl space-y-6">
-      <header>
-        <h1 className="text-4xl">Sharing with family</h1>
-        <p className="mt-2 text-muted">
-          You decide who sees your plan and how much. Nobody sees anything until you allow it. Family can mark tasks done only if they are a hub manager.
-          Items waiting for a doctor show as "waiting for doctor review". Every view is logged.
-        </p>
+      <header className="page-hero">
+        <div>
+          <h1>Sharing with family</h1>
+          <p className="mt-1 text-muted">
+            You decide who sees your plan and how much. Nobody sees anything until you allow it. Family can mark tasks done only if they are a hub manager.
+            Items waiting for a doctor show as "waiting for doctor review". Every view is logged.
+          </p>
+        </div>
       </header>
       {error && <p className="text-attention">{error}</p>}
       {!data && <ListSkeleton rows={3} />}

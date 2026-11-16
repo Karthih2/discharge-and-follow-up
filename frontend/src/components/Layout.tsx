@@ -162,8 +162,8 @@ export function Header() {
 export function Footer() {
   const { t } = useLang();
   return (
-    <footer className="no-print mt-20 border-t border-line bg-surface/80 backdrop-blur-sm">
-      <div className="mx-auto grid max-w-content gap-8 px-5 py-10 md:grid-cols-[1.4fr_1fr]">
+    <footer className="no-print mt-16 border-t border-line bg-surface/90 backdrop-blur-sm">
+      <div className="mx-auto grid max-w-content gap-8 px-5 py-8 md:grid-cols-[1.4fr_1fr]">
         <div className="max-w-xl space-y-2">
           <p className="text-lg font-semibold text-ink">{PRODUCT} <span className="text-muted">by {HOSPITAL_FULL}</span></p>
           <p className="text-muted">{t("footerNote")}</p>
@@ -191,7 +191,7 @@ export function StaffShell({ variant, title, nav, extra }: { variant: "doctor" |
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       <aside className={`no-print flex shrink-0 flex-col gap-3 p-4 md:sticky md:top-0 md:h-screen md:w-64 md:rounded-r-2xl ${side}`}>
-        <div className="flex items-center gap-2">
+        <div className="staff-sidebar-brand">
           <Logo size={34} />
           <div className="leading-tight">
             <p className="text-lg font-semibold">{HOSPITAL}</p>

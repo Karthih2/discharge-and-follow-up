@@ -54,9 +54,11 @@ export default function Upload() {
 
   return (
     <div className="space-y-10">
-      <header className="max-w-2xl">
-        <h1 className="text-4xl">{t("addSummaryTitle")}</h1>
-        <p className="mt-2 text-lg text-muted">{t("uploadIntro")}</p>
+      <header className="page-hero">
+        <div>
+          <h1>{t("addSummaryTitle")}</h1>
+          <p className="mt-1 text-muted">{t("uploadIntro")}</p>
+        </div>
       </header>
 
       <div className="grid gap-10 lg:grid-cols-2">

@@ -168,6 +168,91 @@
   .src-line-flash { animation: flash 1800ms ease-out; }
   .line-flash { animation: lineflash 1400ms ease-out; }
   .pulse-ring { animation: ringpulse 1.6s ease-out infinite; }
+
+  /* Page header */
+  .page-hero {
+    display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+    gap: 1rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); margin-bottom: 1.5rem;
+  }
+  .page-hero h1 { font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -0.025em; }
+
+  /* Upload drop zone */
+  .upload-zone {
+    border: 2px dashed var(--line); border-radius: 16px; padding: 2rem;
+    text-align: center; transition: border-color 200ms, background 200ms;
+    background: var(--bg);
+  }
+  .upload-zone:hover, .upload-zone.dragover { border-color: var(--brand-500); background: var(--brand-100); }
+
+  /* Provider filter bar */
+  .filter-bar {
+    display: flex; flex-wrap: wrap; align-items: end; gap: 0.75rem;
+    padding: 0.75rem 1rem; border-radius: 14px;
+    border: 1px solid var(--line); background: var(--surface);
+  }
+
+  /* Stat card with icon */
+  .stat-card {
+    position: relative; overflow: hidden;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.25rem; transition: border-color 200ms, box-shadow 200ms;
+  }
+  .stat-card:hover { border-color: var(--brand-500); box-shadow: 0 4px 16px -4px rgba(0,0,0,0.08); }
+  .stat-card-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--brand-100); color: var(--brand-700);
+  }
+
+  /* Staff sidebar polish */
+  .staff-sidebar {
+    display: flex; flex-direction: column; gap: 0.75rem;
+    padding: 1.25rem; border-right: 1px solid var(--line);
+  }
+  .staff-sidebar-brand {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+
+  /* Queue master-detail */
+  .queue-list { max-height: 72vh; overflow-y: auto; }
+  .queue-list::-webkit-scrollbar { width: 4px; }
+  .queue-row {
+    width: 100%; border-radius: 12px; border: 1px solid var(--line);
+    padding: 0.75rem; text-align: left; background: var(--bg);
+    transition: border-color 150ms, background 150ms;
+  }
+  .queue-row:hover { border-color: var(--brand-500); }
+  .queue-row[aria-current="true"] { border-color: var(--brand-700); background: var(--surface); box-shadow: 0 2px 8px -2px rgba(14,124,123,0.12); }
+
+  /* Availability indicator */
+  .avail-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--brand-500); animation: availpulse 2s ease-in-out infinite;
+  }
+  .avail-dot.off { background: var(--muted); animation: none; }
+
+  /* Staff stat cards */
+  .staff-stat {
+    position: relative; overflow: hidden;
+    border-radius: 14px; border: 1px solid var(--line);
+    background: var(--surface); padding: 1.25rem;
+    transition: border-color 200ms, box-shadow 200ms, transform 200ms;
+  }
+  .staff-stat:hover { border-color: var(--brand-500); box-shadow: 0 4px 16px -4px rgba(0,0,0,0.08); transform: translateY(-1px); }
+
+  /* Better popover shadows */
+  .shadow-popover { box-shadow: 0 10px 30px -5px rgba(0,0,0,0.12), 0 4px 10px -4px rgba(0,0,0,0.04); }
+
+  /* Rounded card variants for different contexts */
+  .card-compact { border-radius: 10px; }
+  .card-flush { border-radius: 0; border-left: none; border-right: none; }
+
+  /* Focus ring for accessibility */
+  .ring-focus:focus-visible { outline: 2px solid var(--brand-500); outline-offset: 2px; }
+
+  /* Smooth page transitions */
+  .fade-in { animation: fadein 300ms ease-out; }
 }
 
 /* ═══════════ Landing page ═══════════ */
@@ -457,6 +542,8 @@
 @keyframes dot { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
 @keyframes flash { from { background: rgba(20, 163, 139, 0.6); } to { background: rgba(20, 163, 139, 0.2); } }
 @keyframes lineflash { from { outline: 3px solid var(--brand-700); outline-offset: 1px; } to { outline: 3px solid transparent; outline-offset: 1px; } }
+@keyframes availpulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

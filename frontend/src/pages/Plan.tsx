@@ -56,10 +56,10 @@ export default function Plan() {
 
   return (
     <div className={`space-y-8 ${elderly ? "elderly" : ""}`}>
-      <header className="flex flex-wrap items-end justify-between gap-4">
+      <header className="page-hero">
         <div>
-          {!mine && <p className="text-muted">{t("viewingAs")} {role === "manager" ? t("roleManager") : role === "family" ? t("roleFamily") : role}. {plan.viewer.scope === "appointments" ? t("scopeApptsNote") : plan.viewer.scope === "reminders" ? t("scopeRemNote") : ""}</p>}
-          <h1 className="text-4xl">{mine ? t("planTitle") : plan.document.patient_alias}</h1>
+          {!mine && <p className="text-sm text-muted">{t("viewingAs")} {role === "manager" ? t("roleManager") : role === "family" ? t("roleFamily") : role}. {plan.viewer.scope === "appointments" ? t("scopeApptsNote") : plan.viewer.scope === "reminders" ? t("scopeRemNote") : ""}</p>}
+          <h1>{mine ? t("planTitle") : plan.document.patient_alias}</h1>
           <p className="lang-text text-muted">
             {mine && `${plan.document.patient_alias}. `}
             {t("discharged")} {fmtDate(plan.document.discharge_date)}.

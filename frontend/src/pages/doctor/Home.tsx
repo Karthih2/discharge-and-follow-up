@@ -61,7 +61,7 @@ export default function DoctorHome() {
           <Card className="flex items-center gap-3 p-3">
             <span className="relative inline-flex">
               <Activity size={26} className={h.available ? "text-primary" : "text-muted"} aria-hidden />
-              {h.available && <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-primary" style={{ animation: "pulse 2s infinite" }} />}
+              <span className={`absolute -right-0.5 -top-0.5 avail-dot ${h.available ? "" : "off"}`} />
             </span>
             <div className="leading-tight">
               <p className="font-semibold">{h.available ? t("available") : t("unavailable")}</p>

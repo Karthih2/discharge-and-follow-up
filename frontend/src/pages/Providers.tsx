@@ -50,12 +50,14 @@ export default function Providers() {
 
   return (
     <div className="space-y-10">
-      <header className="max-w-2xl">
-        <h1 className="text-4xl">Providers</h1>
-        <p className="mt-2 text-muted">
-          Every provider here is invented for this demo. Matches are suggestions only. Please call to confirm availability.
-        </p>
-        {id && <Link to={`/plan/${id}`} className="mt-2 inline-block">Back to the plan</Link>}
+      <header className="page-hero">
+        <div>
+          <h1>Providers</h1>
+          <p className="mt-1 text-muted">
+            Every provider here is invented for this demo. Matches are suggestions only. Please call to confirm availability.
+          </p>
+          {id && <Link to={`/plan/${id}`} className="mt-2 inline-block text-sm">Back to the plan</Link>}
+        </div>
       </header>
 
       {id && (
@@ -91,7 +93,7 @@ export default function Providers() {
             ))}
           </div>
         </div>
-        <div className="flex flex-wrap items-end gap-3 rounded-xl border border-line bg-surface p-3">
+        <div className="filter-bar">
           <label className="text-sm">
             <span className="block font-semibold text-muted">Near</span>
             <select className="field w-auto" value={area?.code ?? ""} onChange={(e) => setPin(e.target.value)}>

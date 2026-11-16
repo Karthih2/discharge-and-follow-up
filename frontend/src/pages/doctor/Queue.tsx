@@ -113,12 +113,12 @@ export default function DoctorQueue() {
       {queue.data && rows.length > 0 && (
         <div className="grid items-start gap-4 lg:grid-cols-[22rem_1fr]">
           <div>
-            <ul className="max-h-[70vh] space-y-2 overflow-y-auto pr-1" aria-label={t("reviewQueue")}>
+            <ul className="queue-list space-y-2 pr-1" aria-label={t("reviewQueue")}>
               <AnimatePresence initial={false}>
                 {rows.map((r) => (
                   <motion.li layout key={r.id} id={`row-${r.id}`} exit={{ opacity: 0 }} transition={mt(0.18)}>
                     <button onClick={() => setPick(r.id)} aria-current={selected?.id === r.id}
-                      className={`w-full rounded-lg border p-3 text-left ${selected?.id === r.id ? "border-primary bg-surface" : "border-line bg-bg hover:border-primary"}`}>
+                      className={`queue-row`}>
                       <span className="flex flex-wrap items-center gap-1">
                         {r.codes.slice(0, 2).map((c) => <Badge key={c} tone="warn" className="font-mono text-xs">{c}</Badge>)}
                         {r.state !== "open" && <Badge tone="mark">{t(`state_${r.state}` as "state_approved")}</Badge>}

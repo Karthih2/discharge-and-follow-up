@@ -96,7 +96,7 @@ export function ActivityDots({ tasks, today }: { tasks: CalTask[]; today: string
 /** Number with a label under it. */
 export function Stat({ n, label, warn }: { n: number | string; label: string; warn?: boolean }) {
   return (
-    <div className="card flex flex-col items-center justify-center rounded-[10px] px-2 py-3 text-center">
+    <div className="card flex flex-col items-center justify-center rounded-[10px] px-2 py-3 text-center transition-transform hover:scale-[1.02]">
       <span className={`font-mono text-2xl font-semibold ${warn ? "text-attention" : "text-ink"}`}>{n}</span>
       <span className="text-xs text-muted">{label}</span>
     </div>

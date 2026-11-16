@@ -1,7 +1,7 @@
 import {
-  ArrowRight, Bell, CalendarCheck, ChevronRight, ClipboardList, Eye, FileUp, Globe,
-  Heart, HeartPulse, Languages, MapPin, MessageCircle, Pill, Play, Printer,
-  Shield, ShieldCheck, ShieldOff, Stethoscope, Upload, Users
+  ArrowRight, Bell, CalendarCheck, ChevronRight, ClipboardList, Eye, FileUp,
+  Heart, Languages, MapPin, Pill, Play, Printer,
+  ShieldCheck, ShieldOff, Stethoscope,
 } from "lucide-react";
 import { m as motion, useInView, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { Link } from "react-router-dom";
@@ -23,27 +23,6 @@ function ScrollReveal({ children, className = "", delay = 0 }: { children: React
       {children}
     </motion.div>
   );
-}
-
-function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const [display, setDisplay] = useState(0);
-  const still = useReducedMotion();
-  useEffect(() => {
-    if (!inView) return;
-    if (still) { setDisplay(value); return; }
-    let frame: number;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const p = Math.min((now - start) / 1200, 1);
-      setDisplay(Math.round((1 - Math.pow(1 - p, 3)) * value));
-      if (p < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, value, still]);
-  return <span ref={ref}>{display}{suffix}</span>;
 }
 
 const NEVER = ["never1", "never2", "never3", "never4"] as const;
