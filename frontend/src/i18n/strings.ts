@@ -4,6 +4,8 @@ type Entry = Record<Lang, string>;
 const e = (en: string, ta: string, hi: string, te: string, kn: string, ml: string): Entry => ({ en, ta, hi, te, kn, ml });
 /** English, Tamil and Hindi are written. Telugu, Kannada and Malayalam show the English text until a native speaker reviews them. */
 const n = (en: string, ta: string, hi: string): Entry => ({ en, ta, hi, te: en, kn: en, ml: en });
+/** Staff consoles (doctor workspace, management console) are English only. */
+const en = (text: string): Entry => ({ en: text, ta: text, hi: text, te: text, kn: text, ml: text });
 
 // Patient facing UI dictionary. Instructions themselves come translated from the API.
 // Tamil and Hindi are the polished demo languages. Telugu, Kannada and Malayalam need a native speaker check.
@@ -542,6 +544,96 @@ export const STRINGS = {
   voiceNote: n("Voice reads the same text you see on screen.", "நீங்கள் திரையில் பார்க்கும் அதே உரையைக் குரல் வாசிக்கும்.", "आवाज़ वही पाठ पढ़ती है जो स्क्रीन पर दिखता है।"),
   voiceLang: n("Language and voice", "மொழியும் குரலும்", "भाषा और आवाज़"),
   signInAnyone: n("One sign in for everyone. Patients, family, doctors and management all start here, and your account decides which screen opens.", "எல்லோருக்கும் ஒரே உள்நுழைவு. நோயாளிகள், குடும்பம், மருத்துவர்கள், நிர்வாகம் அனைவரும் இங்கே தொடங்குவார்கள்; உங்கள் கணக்கு எந்தத் திரை திறக்கும் என்று முடிவு செய்யும்.", "सबके लिए एक ही साइन इन। मरीज़, परिवार, डॉक्टर और प्रबंधन सब यहीं से शुरू करते हैं, और आपका खाता तय करता है कि कौन सी स्क्रीन खुले।"),
+
+  // ── Patient home and navigation ──
+  navHome: e("Today", "இன்று", "आज", "ఈరోజు", "ಇಂದು", "ഇന്ന്"),
+  navPlan: e("My plan", "என் திட்டம்", "मेरी योजना", "నా ప్రణాళిక", "ನನ್ನ ಯೋಜನೆ", "എന്റെ പദ്ധതി"),
+  more: e("More", "மேலும்", "और", "మరిన్ని", "ಇನ್ನಷ್ಟು", "കൂടുതൽ"),
+  legalLinks: e("Terms, privacy and safety", "விதிமுறைகள், தனியுரிமை, பாதுகாப்பு", "शर्तें, गोपनीयता और सुरक्षा", "నిబంధనలు, గోప్యత, భద్రత", "ನಿಯಮಗಳು, ಗೌಪ್ಯತೆ, ಸುರಕ್ಷತೆ", "നിബന്ധനകൾ, സ്വകാര്യത, സുരക്ഷ"),
+  call108: e("Call 108", "108 அழைக்கவும்", "108 पर कॉल करें", "108కి కాల్ చేయండి", "108ಗೆ ಕರೆ ಮಾಡಿ", "108 വിളിക്കുക"),
+  warningsEmpty: e(
+    "Your doctor's warning signs will appear here once your plan is approved. In an emergency, call 108.",
+    "உங்கள் திட்டம் ஒப்புதல் பெற்றதும் மருத்துவரின் எச்சரிக்கை அறிகுறிகள் இங்கே தோன்றும். அவசரத்தில் 108 அழைக்கவும்.",
+    "योजना मंज़ूर होते ही डॉक्टर के बताए चेतावनी संकेत यहाँ दिखेंगे। आपातकाल में 108 पर कॉल करें।",
+    "మీ ప్రణాళిక ఆమోదం పొందిన తర్వాత డాక్టర్ హెచ్చరిక సంకేతాలు ఇక్కడ కనిపిస్తాయి. అత్యవసరంలో 108కి కాల్ చేయండి.",
+    "ನಿಮ್ಮ ಯೋಜನೆ ಅನುಮೋದನೆಯಾದ ನಂತರ ವೈದ್ಯರ ಎಚ್ಚರಿಕೆಯ ಚಿಹ್ನೆಗಳು ಇಲ್ಲಿ ಕಾಣುತ್ತವೆ. ತುರ್ತು ಸಂದರ್ಭದಲ್ಲಿ 108ಗೆ ಕರೆ ಮಾಡಿ.",
+    "പദ്ധതി അംഗീകരിച്ചാൽ ഡോക്ടറുടെ മുന്നറിയിപ്പ് ലക്ഷണങ്ങൾ ഇവിടെ കാണാം. അടിയന്തരഘട്ടത്തിൽ 108 വിളിക്കുക.",
+  ),
+  statusWaiting: e("Waiting for your doctor to approve your plan", "உங்கள் திட்டத்தை மருத்துவர் ஒப்புதல் அளிக்கக் காத்திருக்கிறது", "आपकी योजना पर डॉक्टर की मंज़ूरी का इंतज़ार है", "మీ ప్రణాళికకు డాక్టర్ ఆమోదం కోసం వేచి ఉంది", "ನಿಮ್ಮ ಯೋಜನೆಗೆ ವೈದ್ಯರ ಅನುಮೋದನೆಗಾಗಿ ಕಾಯಲಾಗುತ್ತಿದೆ", "പദ്ധതിക്ക് ഡോക്ടറുടെ അംഗീകാരത്തിനായി കാത്തിരിക്കുന്നു"),
+  statusActive: e("Your plan is active and approved by your doctor", "உங்கள் திட்டம் செயலில் உள்ளது, மருத்துவர் ஒப்புதல் அளித்தார்", "आपकी योजना चालू है और डॉक्टर ने मंज़ूर की है", "మీ ప్రణాళిక అమలులో ఉంది, డాక్టర్ ఆమోదించారు", "ನಿಮ್ಮ ಯೋಜನೆ ಚಾಲ್ತಿಯಲ್ಲಿದೆ, ವೈದ್ಯರು ಅನುಮೋದಿಸಿದ್ದಾರೆ", "പദ്ധതി സജീവമാണ്, ഡോക്ടർ അംഗീകരിച്ചു"),
+  statusMissed: e("{n} missed today. Take what is still safe to take, or ask your doctor.", "இன்று {n} தவறியது. இன்னும் எடுக்கக்கூடியதை எடுக்கவும், அல்லது மருத்துவரிடம் கேளுங்கள்.", "आज {n} छूट गए। जो अभी लेना सुरक्षित है वह लें, या डॉक्टर से पूछें।", "ఈరోజు {n} తప్పిపోయాయి. ఇంకా తీసుకోగలిగినవి తీసుకోండి, లేదా డాక్టర్‌ను అడగండి.", "ಇಂದು {n} ತಪ್ಪಿಹೋಗಿವೆ. ಇನ್ನೂ ತೆಗೆದುಕೊಳ್ಳಬಹುದಾದದ್ದನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ, ಅಥವಾ ವೈದ್ಯರನ್ನು ಕೇಳಿ.", "ഇന്ന് {n} മുടങ്ങി. ഇനിയും കഴിക്കാവുന്നത് കഴിക്കുക, അല്ലെങ്കിൽ ഡോക്ടറോട് ചോദിക്കുക."),
+  statusNoPlan: e("Add your discharge summary to start your plan", "உங்கள் திட்டத்தைத் தொடங்க டிஸ்சார்ஜ் சுருக்கத்தைச் சேர்க்கவும்", "योजना शुरू करने के लिए डिस्चार्ज सारांश जोड़ें", "ప్రణాళిక ప్రారంభించడానికి డిశ్చార్జ్ సారాంశం జోడించండి", "ಯೋಜನೆ ಆರಂಭಿಸಲು ಡಿಸ್ಚಾರ್ಜ್ ಸಾರಾಂಶ ಸೇರಿಸಿ", "പദ്ധതി തുടങ്ങാൻ ഡിസ്ചാർജ് സംഗ്രഹം ചേർക്കുക"),
+  markedBy: e("Marked by {name}", "{name} குறித்தார்", "{name} ने दर्ज किया", "{name} గుర్తించారు", "{name} ಗುರುತಿಸಿದರು", "{name} രേഖപ്പെടുത്തി"),
+  markedByYou: e("Marked by you", "நீங்கள் குறித்தீர்கள்", "आपने दर्ज किया", "మీరు గుర్తించారు", "ನೀವು ಗುರುತಿಸಿದ್ದೀರಿ", "നിങ്ങൾ രേഖപ്പെടുത്തി"),
+  tapWhenTaken: e("Tap when taken", "எடுத்ததும் தட்டவும்", "लेने के बाद टैप करें", "తీసుకున్నాక నొక్కండి", "ತೆಗೆದುಕೊಂಡ ನಂತರ ಒತ್ತಿ", "കഴിച്ചാൽ തൊടുക"),
+  dosesToday: e("Today's doses", "இன்றைய மருந்தளவுகள்", "आज की खुराक", "ఈరోజు మోతాదులు", "ಇಂದಿನ ಡೋಸ್‌ಗಳು", "ഇന്നത്തെ ഡോസുകൾ"),
+  selectDay: e("Pick a day to see what is due", "என்ன செய்ய வேண்டும் என்று பார்க்க ஒரு நாளைத் தேர்ந்தெடுக்கவும்", "क्या करना है देखने के लिए दिन चुनें", "ఏమి చేయాలో చూడటానికి రోజును ఎంచుకోండి", "ಏನು ಮಾಡಬೇಕು ಎಂದು ನೋಡಲು ದಿನ ಆರಿಸಿ", "എന്ത് ചെയ്യണമെന്ന് കാണാൻ ഒരു ദിവസം തിരഞ്ഞെടുക്കുക"),
+
+  // ── Doctor workspace ──
+  pl_queued: en("Queued"),
+  pl_processing: en("Processing"),
+  pl_failed: en("Rejected by reader"),
+  pl_ready: en("Read"),
+  reviewSummary: en("Summary"),
+  reviewPlan: en("Plan"),
+  removeLine: en("Remove"),
+  restoreLine: en("Restore"),
+  removed: en("Removed"),
+  approveLine: en("Approve"),
+  approvePlan: en("Approve plan"),
+  blockedOpen: en("{n} line(s) still need your review"),
+  blockedChecked: en("This plan is already approved"),
+  readyToApprove: en("Every line is reviewed. Approving releases the plan to the patient."),
+  makeAppointment: en("Make appointment"),
+  visitTitle: en("Visit"),
+  visitTitleHint: en("For example: Cardiology follow-up"),
+  bookVisit: en("Book visit"),
+  toastVisit: en("Visit booked and added to the patient's calendar."),
+  toastRemoved: en("Line removed from the plan."),
+  toastRestored: en("Line restored to the plan."),
+  removeNote: en("Reason for removing (kept in the audit log)"),
+  heldLine: en("Needs review"),
+
+  // ── Management console ──
+  needsYouNow: en("Needs you now"),
+  allPatientsTab: en("All patients"),
+  needsYouNowText: en("Patients with an overdue task, an open review, a waiting callback or an unread family alert."),
+  noOneNeeds: en("Nobody needs attention right now."),
+  patientDetail: en("Patient detail"),
+  planMakeup: en("Plan make-up"),
+  approvalTimeline: en("Approval timeline"),
+  editHistory: en("Edit history"),
+  followUpChecklist: en("Follow-up checklist"),
+  noClinicalText: en("Management sees categories, states, people and times. Clinical wording stays with doctors and the patient."),
+  hospitalMap: en("Hospital map"),
+  hospitalMapIntro: en("Providers next to where active patients live. Areas with patients and no nearby provider are gaps in cover."),
+  coverageGap: en("No provider in this pincode"),
+  workload: en("Workload"),
+  autoMoved: en("{n} open item(s) moved to available doctors."),
+  held: en("held"),
+  medsTaken: en("Medicine doses taken"),
+
+  // ── Sign in and sign up ──
+  welcomeBackTitle: e("Welcome Back", "மீண்டும் வருக", "फिर से स्वागत है", "తిరిగి స్వాగతం", "ಮರಳಿ ಸ್ವಾಗತ", "വീണ്ടും സ്വാഗതം"),
+  continueJourney: e("Continue your care journey.", "உங்கள் கவனிப்புப் பயணத்தைத் தொடருங்கள்.", "अपनी देखभाल की यात्रा जारी रखें।", "మీ సంరక్షణ ప్రయాణం కొనసాగించండి.", "ನಿಮ್ಮ ಆರೈಕೆಯ ಪಯಣ ಮುಂದುವರಿಸಿ.", "നിങ്ങളുടെ പരിചരണ യാത്ര തുടരുക."),
+  joinTitle: e("Join CareBridge", "CareBridge-இல் சேருங்கள்", "CareBridge से जुड़ें", "CareBridge లో చేరండి", "CareBridge ಸೇರಿ", "CareBridge-ൽ ചേരുക"),
+  startJourney: e("Start your care journey.", "உங்கள் கவனிப்புப் பயணத்தைத் தொடங்குங்கள்.", "अपनी देखभाल की यात्रा शुरू करें।", "మీ సంరక్షణ ప్రయాణం ప్రారంభించండి.", "ನಿಮ್ಮ ಆರೈಕೆಯ ಪಯಣ ಆರಂಭಿಸಿ.", "നിങ്ങളുടെ പരിചരണ യാത്ര തുടങ്ങുക."),
+  tabLogin: e("Login", "உள்நுழைவு", "लॉग इन", "లాగిన్", "ಲಾಗಿನ್", "ലോഗിൻ"),
+  tabSignUp: e("Sign Up", "பதிவு", "साइन अप", "సైన్ అప్", "ಸೈನ್ ಅಪ್", "സൈൻ അപ്പ്"),
+  emailAddress: e("Email address", "மின்னஞ்சல் முகவரி", "ईमेल पता", "ఇమెయిల్ చిరునామా", "ಇಮೇಲ್ ವಿಳಾಸ", "ഇമെയിൽ വിലാസം"),
+  forgotPassword: e("Forgot password?", "கடவுச்சொல் மறந்ததா?", "पासवर्ड भूल गए?", "పాస్‌వర్డ్ మరిచారా?", "ಪಾಸ್‌ವರ್ಡ್ ಮರೆತಿರಾ?", "പാസ്‌വേഡ് മറന്നോ?"),
+  forgotHelp: e(
+    "Ask your hospital's help desk to reset it. They will give you a new password to sign in with.",
+    "அதை மாற்ற உங்கள் மருத்துவமனை உதவி மையத்தைக் கேளுங்கள். உள்நுழைய புதிய கடவுச்சொல் தருவார்கள்.",
+    "इसे बदलने के लिए अपने अस्पताल के हेल्प डेस्क से कहें। वे साइन इन के लिए नया पासवर्ड देंगे।",
+    "దాన్ని మార్చడానికి మీ ఆసుపత్రి సహాయ కేంద్రాన్ని అడగండి. సైన్ ఇన్ కోసం కొత్త పాస్‌వర్డ్ ఇస్తారు.",
+    "ಅದನ್ನು ಬದಲಿಸಲು ನಿಮ್ಮ ಆಸ್ಪತ್ರೆಯ ಸಹಾಯ ಕೇಂದ್ರವನ್ನು ಕೇಳಿ. ಸೈನ್ ಇನ್‌ಗೆ ಹೊಸ ಪಾಸ್‌ವರ್ಡ್ ಕೊಡುತ್ತಾರೆ.",
+    "അത് മാറ്റാൻ ആശുപത്രി ഹെൽപ്പ് ഡെസ്കിനോട് ചോദിക്കുക. സൈൻ ഇൻ ചെയ്യാൻ പുതിയ പാസ്‌വേഡ് തരും.",
+  ),
+  noAccount: e("Don't have an account?", "கணக்கு இல்லையா?", "खाता नहीं है?", "ఖాతా లేదా?", "ಖಾತೆ ಇಲ್ಲವೇ?", "അക്കൗണ്ട് ഇല്ലേ?"),
+  haveAccountQ: e("Already have an account?", "ஏற்கனவே கணக்கு உள்ளதா?", "पहले से खाता है?", "ఇప్పటికే ఖాతా ఉందా?", "ಈಗಾಗಲೇ ಖಾತೆ ಇದೆಯೇ?", "ഇതിനകം അക്കൗണ്ട് ഉണ്ടോ?"),
+  back: e("Back", "பின்செல்", "वापस", "వెనుకకు", "ಹಿಂದೆ", "തിരികെ"),
+  fullName: e("Full name", "முழுப் பெயர்", "पूरा नाम", "పూర్తి పేరు", "ಪೂರ್ಣ ಹೆಸರು", "മുഴുവൻ പേര്"),
 } satisfies Record<string, Entry>;
 
 export type StringKey = keyof typeof STRINGS;

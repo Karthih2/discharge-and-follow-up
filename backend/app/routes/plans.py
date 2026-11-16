@@ -73,7 +73,7 @@ def build_plan(s: Session, doc: Document, lang: str = "en", escalate: bool = Tru
         first_task.setdefault(t.item_id, t)
     out_items = []
     for i in items:
-        if i.status == "Rejected":
+        if i.status == "Rejected" and role != "doctor":  # doctors still see removed lines so they can restore them
             continue
         by = texts.get(i.id, {})
         chosen = by.get(lang)

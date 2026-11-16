@@ -1,14 +1,13 @@
-import { CornerUpRight, CheckCircle2, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { m as motion } from "motion/react";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { StatusBadge } from "../../components/StatusBadge";
-import { Badge, Button, Card, EmptyState, ListSkeleton, PageHead, Pager, Select } from "../../components/ui";
+import { Link } from "react-router-dom";
+import { PipelineBadge } from "./PatientReview";
+import { Badge, EmptyState, ListSkeleton, PageHead, Pager } from "../../components/ui";
 import { api } from "../../lib/api";
 import { useLang } from "../../lib/lang";
 import { fmtDate, useStagger } from "../../lib/motion";
-import { invalidate, useDebounced, useQuery } from "../../lib/query";
-import { toast } from "../../lib/toast";
+import { useDebounced, useQuery } from "../../lib/query";
 
 const LIMIT = 20;
 
@@ -36,12 +35,14 @@ export function DoctorPatients() {
       <ul className="space-y-2">
         {list.data?.rows.map((p, i) => (
           <motion.li key={p.document_id} {...rise(i)}>
-            <Link to={`/patients/${p.document_id}`} className="card flex flex-wrap items-center justify-between gap-3 p-4 no-underline hover:border-primary hover:no-underline">
+            <Link to={`/patients/${p.document_id}`} className="card flex flex-wrap items-center justify-between gap-3 p-4 text-text no-underline hover:no-underline">
               <span className="min-w-0">
-                <strong className="block">{p.patient_alias}</strong>
+                <strong className="block text-ink">{p.patient_alias}</strong>
                 <span className="text-muted">{p.title}. {p.department}. {t("leftHospital")} {fmtDate(p.discharge_date)}.</span>
               </span>
               <span className="flex flex-wrap gap-2">
+                <PipelineBadge stage={p.pipeline} />
+                {p.plan_state === "doctor_checked" && <Badge tone="good">{t("planChecked")}</Badge>}
                 {p.open_reviews > 0 && <Badge tone="warn">{p.open_reviews} {t("open")}</Badge>}
                 {p.overdue_tasks > 0 && <Badge tone="warn">{p.overdue_tasks} {t("overdue")}</Badge>}
                 <Badge>{p.reviewed} {t("reviewedWord")}</Badge>
@@ -55,121 +56,4 @@ export function DoctorPatients() {
   );
 }
 
-/** One patient's plan, read only, with the review history for that plan. */
-export function DoctorPatient() {
-  const { t } = useLang();
-  const id = Number(useParams().id);
-  const plan = useQuery(`plan/${id}/en`, () => api.plan(id, "en"));
-  const hist = useQuery(`review/all/doc${id}`, () => api.review({ state: "all", document_id: id, limit: 200 }));
-  const doctors = useQuery("doctor/available", api.availableDoctors);
-  const p = plan.data;
-  const [busy, setBusy] = useState("");
-  const [redirectTo, setRedirectTo] = useState("");
-  const [err, setErr] = useState<string | null>(null);
-
-  const hasOpenReviews = (hist.data?.rows ?? []).some((r) => r.state === "open");
-  const planState = p?.document?.plan_state;
-  const canCheck = !hasOpenReviews && planState === "checking";
-
-  const markChecked = async () => {
-    setBusy("check");
-    setErr(null);
-    try {
-      await api.markChecked(id);
-      toast(t("toastPlanChecked"));
-      invalidate("plan");
-      invalidate("doctor");
-    } catch (e) {
-      setErr((e as Error).message);
-    } finally {
-      setBusy("");
-    }
-  };
-
-  const redirect = async () => {
-    if (!redirectTo) return;
-    setBusy("redirect");
-    setErr(null);
-    try {
-      const res = await api.redirectPatient(id, Number(redirectTo));
-      toast(`${t("redirected")}: ${res.to_doctor.name} (${res.moved} items)`);
-      invalidate("doctor");
-      invalidate("review");
-    } catch (e) {
-      setErr((e as Error).message);
-    } finally {
-      setBusy("");
-    }
-  };
-
-  return (
-    <div className="space-y-8">
-      <Link to="/patients">{t("backToPatients")}</Link>
-      <PageHead title={p?.document.patient_alias ?? t("patient")} text={p ? `${p.document.title}. ${t("leftHospital")} ${fmtDate(p.document.discharge_date)}. ${t("readOnly")}` : undefined} />
-
-      {/* Plan state + actions */}
-      {p && (
-        <div className="flex flex-wrap items-center gap-3">
-          {planState === "doctor_checked" && <Badge tone="good"><CheckCircle2 size={16} className="mr-1 inline" />{t("planChecked")}</Badge>}
-          {planState === "checking" && <Badge tone="plain">{t("checking")}</Badge>}
-          {canCheck && (
-            <Button small onClick={markChecked} loading={busy === "check"}>
-              <CheckCircle2 size={18} aria-hidden /> {t("markPlanChecked")}
-            </Button>
-          )}
-          {hasOpenReviews && planState === "checking" && (
-            <span className="text-sm text-muted">{t("resolveFirst")}</span>
-          )}
-        </div>
-      )}
-
-      {/* Redirect patient to another doctor */}
-      {hasOpenReviews && (
-        <Card className="flex flex-wrap items-end gap-3 p-4">
-          <CornerUpRight size={22} className="text-primary" aria-hidden />
-          <Select label={t("redirectPatient")} value={redirectTo} onChange={(e) => setRedirectTo(e.target.value)}>
-            <option value="">{t("selectDoctor")}</option>
-            {(doctors.data ?? []).map((d) => <option key={d.id} value={d.id}>{d.name} ({d.specialty})</option>)}
-          </Select>
-          <Button small onClick={redirect} loading={busy === "redirect"} disabled={!redirectTo}>{t("redirectPatient")}</Button>
-        </Card>
-      )}
-
-      {(plan.error || hist.error || err) && <p role="alert" className="text-attention">{err ?? plan.error ?? hist.error}</p>}
-      <section aria-labelledby="h-plan" className="space-y-3">
-        <h2 id="h-plan" className="text-2xl">{t("planItems")}</h2>
-        {plan.loading && <ListSkeleton rows={4} />}
-        <ul className="space-y-2">
-          {p?.items.map((i) => (
-            <li key={i.id}>
-              <Card className="space-y-1 p-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <strong>{i.title}</strong>
-                  <StatusBadge status={i.status} />
-                </div>
-                <p className="font-mono text-[0.92rem] text-muted">{i.original_text}</p>
-                {i.date_resolved && <p className="text-sm text-muted tnum">{fmtDate(i.date_resolved)}</p>}
-              </Card>
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section aria-labelledby="h-hist" className="space-y-3">
-        <h2 id="h-hist" className="text-2xl">{t("reviewHistory")}</h2>
-        {hist.loading && <ListSkeleton rows={3} />}
-        {hist.data && hist.data.rows.length === 0 && <p className="text-muted">{t("noHistory")}</p>}
-        <ul className="rule-list card px-4">
-          {hist.data?.rows.map((r) => (
-            <li key={r.id} className="flex flex-wrap items-baseline justify-between gap-2 py-2.5">
-              <span className="min-w-0"><strong>{r.item?.title}</strong> {r.reviewer_note && <span className="text-muted">{r.reviewer_note}</span>}</span>
-              <span className="flex items-center gap-2">
-                <Badge tone={r.state === "open" ? "warn" : "mark"}>{t(`state_${r.state}` as "state_approved")}</Badge>
-                <span className="tnum text-sm text-muted">{fmtDate(r.resolved_at ?? r.created_at, { day: "numeric", month: "short" })}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </div>
-  );
-}
+export { DoctorPatient } from "./PatientReview";

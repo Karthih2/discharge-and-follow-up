@@ -1,0 +1,81 @@
+/*
+  Sign in and sign up. A painted (pointillist) split panel over the same painting, blurred.
+  Palette: ivory, cream, forest green, muted teal, golden yellow, earth tones.
+  Headings in EB Garamond; form text in IBM Plex Sans.
+*/
+.au-page {
+  --au-ivory: #f7f3ea;
+  --au-cream: #efe8d4;
+  --au-forest: #2a6150;
+  --au-forest-deep: #214e40;
+  --au-teal: #3f7f78;
+  --au-gold: #c9a227;
+  --au-earth: #5b4a36;
+  --au-serif: "EB Garamond", "Iowan Old Style", Georgia, serif;
+  min-height: 100vh; min-height: 100dvh;
+  display: grid; place-items: center; grid-template-columns: minmax(0, 1fr);
+  padding: clamp(0.75rem, 3vw, 2.5rem);
+  background:
+    linear-gradient(180deg, rgba(255,251,238,0.12), rgba(255,251,238,0.06)),
+    url("/art/countryside-blur.webp") center / cover no-repeat,
+    #dfe7c4;
+}
+.au-panel {
+  width: min(1180px, 100%);
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  background: var(--au-ivory);
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 22px; padding: 8px;
+  box-shadow: 0 40px 80px -40px rgba(40,55,20,0.55), 0 8px 24px -12px rgba(40,55,20,0.25);
+}
+@media (min-width: 900px) {
+  .au-panel { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); min-height: min(720px, calc(100vh - 5rem)); }
+}
+.au-panel > * { min-width: 0; }
+.au-art { margin: 0; position: relative; overflow: hidden; border-radius: 16px; background: var(--au-cream); aspect-ratio: 16 / 10; }
+@media (min-width: 900px) { .au-art { aspect-ratio: auto; } }
+.au-art img { image-rendering: auto; min-width: 0; max-width: 100%; width: 100%; height: 100%; object-fit: cover; object-position: 40% 55%; display: block; }
+.au-art::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(91,74,54,0.12); pointer-events: none; }
+
+.au-form { position: relative; min-width: 0; display: flex; flex-direction: column; padding: 1.25rem 1.25rem 2rem; color: var(--au-earth); }
+@media (min-width: 900px) { .au-form { padding: 1.75rem 2.5rem 2.5rem; } }
+.au-back { display: inline-flex; align-items: center; gap: 0.4rem; align-self: flex-start; padding: 0.3rem 0.4rem; border-radius: 8px; font-family: var(--au-serif); font-size: 1.1rem; color: #24332b; }
+.au-back:hover { background: var(--au-cream); text-decoration: none; }
+.au-inner { width: min(100%, 25rem); margin: auto; padding-top: 1rem; text-align: center; }
+.au-brand { display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.35rem; font-weight: 600; color: var(--au-forest); letter-spacing: -0.01em; }
+.au-title { margin-top: 1.1rem; font-family: var(--au-serif); font-weight: 500; font-size: clamp(2.4rem, 4.4vw, 3.4rem); line-height: 1.02; letter-spacing: -0.01em; color: #183a2c; }
+.au-sub { margin-top: 0.6rem; font-family: var(--au-serif); font-size: 1.3rem; color: #6a5b45; }
+
+.au-tabs { margin-top: 1.75rem; display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 12px; background: var(--au-cream); }
+.au-tabs a { padding: 0.6rem 0.5rem; border-radius: 9px; font-family: var(--au-serif); font-size: 1.15rem; font-weight: 500; color: #2f4a3b; transition: background 180ms, color 180ms; }
+.au-tabs a:hover { text-decoration: none; background: rgba(31,95,70,0.07); }
+.au-tabs a[aria-current="page"] { background: var(--au-forest); color: #fbf7ea; box-shadow: 0 6px 14px -8px rgba(23,74,55,0.8); }
+
+.au-stack { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.85rem; text-align: left; }
+.au-field { position: relative; display: flex; align-items: center; min-height: 3.1rem; border-radius: 12px; border: 1px solid #d9cfb5; background: #fffdf7; transition: border-color 160ms, box-shadow 160ms; }
+.au-field:focus-within { border-color: var(--au-teal); box-shadow: 0 0 0 3px rgba(63,127,120,0.18); }
+.au-field.is-error { border-color: var(--attention); }
+.au-field-ic { position: absolute; left: 0.95rem; color: #3e4b42; pointer-events: none; }
+.au-field input { flex: 1; min-width: 0; width: 100%; height: 100%; padding: 0.8rem 0.9rem 0.8rem 2.85rem; border: 0; background: transparent; color: #1f2b24; font-family: var(--font); font-size: 0.98rem; outline: none; }
+.au-field input::placeholder { color: #8b7f68; }
+.au-field select { flex: 1; min-width: 0; padding: 0.8rem 0.9rem 0.8rem 2.85rem; border: 0; background: transparent; color: #1f2b24; font-family: var(--font); font-size: 0.98rem; outline: none; appearance: none; }
+.au-eye { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; margin-right: 0.15rem; border: 0; border-radius: 10px; background: transparent; color: #3e4b42; }
+.au-eye:hover { background: var(--au-cream); }
+
+.au-link { font-size: 0.9rem; color: var(--au-forest); text-decoration: underline; text-underline-offset: 3px; background: none; border: 0; padding: 0; }
+.au-link:hover { color: var(--au-forest-deep); }
+.au-help { border-radius: 10px; border: 1px solid #e4d9b9; background: #fbf5e1; padding: 0.65rem 0.8rem; font-size: 0.9rem; color: #5b4a36; }
+
+.au-submit {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; width: 100%; min-height: 3.2rem;
+  border: 0; border-radius: 12px; color: #fbf7ea; font-family: var(--au-serif); font-size: 1.35rem; font-weight: 500;
+  background: linear-gradient(135deg, #2f6a57 0%, #2a6150 55%, #255647 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset, 0 12px 22px -14px rgba(23,74,55,0.9);
+  transition: filter 160ms, transform 90ms;
+}
+.au-submit:hover { filter: brightness(1.07); }
+.au-submit:active:not(:disabled) { transform: translateY(1px); }
+.au-submit:focus-visible { outline: 2px solid var(--au-gold); outline-offset: 3px; }
+.au-foot { margin-top: 1.25rem; text-align: center; font-family: var(--au-serif); font-size: 1.1rem; color: #2a3830; }
+.au-foot a { color: var(--au-forest); text-decoration: underline; text-underline-offset: 3px; margin-left: 0.35rem; }
+.au-notice { border-radius: 10px; border: 1px solid #f1c4c4; background: #fdf1ef; padding: 0.65rem 0.8rem; font-size: 0.9rem; color: #9b1c1c; }

@@ -1,6 +1,6 @@
 export type Lang = "en" | "ta" | "hi" | "te" | "kn" | "ml";
 export type Role = "patient" | "manager" | "family" | "doctor" | "management";
-export type ItemStatus = "Pending" | "Completed" | "Needs Review";
+export type ItemStatus = "Pending" | "Completed" | "Needs Review" | "Rejected";
 
 export interface User {
   id: number;
@@ -116,15 +116,6 @@ export interface Plan {
   tasks: PlanTask[];
   alerts: Alert[];
   open_reviews: number;
-}
-
-export interface SampleMeta {
-  key: string;
-  title: string;
-  blurb: string;
-  patient_alias: string;
-  city: string;
-  discharge_date: string;
 }
 
 export interface Masked {
@@ -252,6 +243,8 @@ export interface TodayMed {
   status: "Pending" | "Completed";
   due_at: string;
   medicines: string[];
+  /** "you", a family member's name, or null when nobody has marked it. */
+  marked_by?: string | null;
 }
 
 export interface TodayEvent {
@@ -277,6 +270,9 @@ export interface Today {
   progress: { done: number; due: number; overdue: number; total: number };
   upcoming: TodayEvent[];
   open_callbacks: number;
+  plan_state: string | null;
+  missed_today: number;
+  warnings: { item_id: number; text: string }[];
 }
 
 export interface FamilyHomeRow {
@@ -317,7 +313,11 @@ export interface DoctorPatient {
   open_reviews: number;
   reviewed: number;
   overdue_tasks: number;
+  plan_state: string;
+  pipeline: PipelineStage;
 }
+
+export type PipelineStage = "queued" | "processing" | "failed" | "ready";
 
 export interface Stats {
   days: number;
@@ -351,6 +351,24 @@ export interface PatientRow {
   completion_rate: number;
   overdue_tasks: number;
   last_activity: string | null;
+  open_reviews: number;
+  open_callbacks: number;
+  plan_state: string | null;
+}
+
+export interface AdminPatientDetail {
+  patient: { id: number; alias: string; language: Lang; city: string | null };
+  plans: { id: number; department: string; discharge_date: string; plan_state: string; checked_by: string | null; checked_at: string | null; pipeline: PipelineStage }[];
+  makeup: { category: string; total: number; held: number; removed: number }[];
+  medicines: { due: number; done: number };
+  timeline: { id: number; document_id: number; category: string; severity: string; state: string; codes: string[]; doctor: string | null; created_at: string; resolved_at: string | null }[];
+  history: { id: number; action: string; actor: string; detail: Record<string, unknown>; created_at: string }[];
+  checklist: { task_id: number; category: string; due_at: string; status: string; overdue: boolean }[];
+}
+
+export interface Coverage {
+  providers: { id: number; name: string; type: string; city: string; pincode: string; lat: number; lng: number; specialties: string[] }[];
+  areas: { pincode: string; city: string; patients: number; plans: number; providers: number; at: [number, number] | null }[];
 }
 
 export type SettingsMap = Record<

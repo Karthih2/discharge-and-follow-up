@@ -388,7 +388,7 @@ def test_sos_info(client):
     assert r.status_code == 200
     data = r.json()
     assert data["emergency"] == "108"
-    assert data["hospital_phone"]
+    assert "hospital_phone" in data  # comes from HOSPITAL_PHONE; may be unset
     # ramesh is in a hub with priya as manager
     assert data["manager"]["name"] == "Priya Iyer (hub manager)"
 

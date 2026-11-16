@@ -1,31 +1,13 @@
 import { MapPin, Navigation } from "lucide-react";
-import { m as motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { api } from "../lib/api";
+import { centre, km } from "../lib/geo";
 import { useLang } from "../lib/lang";
-import { useMotionT } from "../lib/motion";
+import { useQuery } from "../lib/query";
 import type { Match } from "../lib/types";
-import { ProviderCard } from "./ProviderCard";
-import { Button } from ".//ui";
-
-// Known areas for the synthetic pincodes: state, district, area, centre.
-const AREAS = [
-  { state: "Tamil Nadu", district: "Chennai", area: "T. Nagar", pin: "600017", at: [13.0418, 80.2341] },
-  { state: "Tamil Nadu", district: "Chennai", area: "Adyar", pin: "600020", at: [13.0012, 80.2565] },
-  { state: "Tamil Nadu", district: "Chennai", area: "Anna Nagar", pin: "600040", at: [13.085, 80.2101] },
-  { state: "Tamil Nadu", district: "Chennai", area: "Velachery", pin: "600042", at: [12.9815, 80.218] },
-  { state: "Tamil Nadu", district: "Chennai", area: "Mylapore", pin: "600004", at: [13.0368, 80.2676] },
-  { state: "Delhi", district: "New Delhi", area: "Connaught Place", pin: "110001", at: [28.6315, 77.2167] },
-  { state: "Delhi", district: "New Delhi", area: "Lajpat Nagar", pin: "110024", at: [28.5677, 77.2433] },
-  { state: "Delhi", district: "New Delhi", area: "Dwarka", pin: "110075", at: [28.5921, 77.046] },
-  { state: "Delhi", district: "New Delhi", area: "Saket", pin: "110017", at: [28.5245, 77.2066] },
-] as const;
-
-export const km = (a: readonly number[], b: readonly number[]) => {
-  const r = Math.PI / 180;
-  const h = Math.sin(((b[0] - a[0]) * r) / 2) ** 2 + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(((b[1] - a[1]) * r) / 2) ** 2;
-  return 12742 * Math.asin(Math.sqrt(h));
-};
+import { LeafletMap } from "./LeafletMap";
+import { ProviderCard, TYPE_LABEL } from "./ProviderCard";
+import { Button } from "./ui";
 
 interface Props {
   itemId: number;
@@ -35,42 +17,37 @@ interface Props {
   onChanged: () => void;
 }
 
-/** Schematic map: pins for 3 to 5 suggested providers. Not to scale, no live tracking. */
+/**
+ * Suggested providers for one plan line on a real map. The starting point is the patient's own location when they
+ * share it, otherwise the centre of the providers listed under their pincode, otherwise the centre of the suggestions.
+ */
 export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: Props) {
   const { t } = useLang();
-  const mt = useMotionT();
-  // Pincodes outside the known list (other cities) start from the middle of the suggested providers.
-  const known = AREAS.find((a) => a.pin === pincode);
-  const start = known ?? AREAS[0];
-  const centre = matches.length
-    ? [matches.reduce((t, m) => t + m.provider.lat, 0) / matches.length, matches.reduce((t, m) => t + m.provider.lng, 0) / matches.length]
-    : start.at;
-  const [origin, setOrigin] = useState<readonly number[]>(known ? start.at : centre);
-  const [state, setState] = useState<string>(start.state);
-  const [area, setArea] = useState<string>(start.pin);
-  const [hover, setHover] = useState<number | null>(null);
+  const all = useQuery("providers", api.providers);
+  const home = useMemo(() => centre((all.data ?? []).filter((p) => p.pincode === pincode).map((p) => [p.lat, p.lng])), [all.data, pincode]);
+  const fallback = useMemo(() => centre(matches.map((m) => [m.provider.lat, m.provider.lng])), [matches]);
+  const [gps, setGps] = useState<[number, number] | null>(null);
   const [note, setNote] = useState<string | null>(null);
+  const [hover, setHover] = useState<number | null>(null);
+  const origin = gps ?? home ?? fallback;
 
   const ranked = useMemo(
-    () => [...matches].sort((a, b) => km(origin, [a.provider.lat, a.provider.lng]) - km(origin, [b.provider.lat, b.provider.lng])).slice(0, 5),
+    () => (origin ? [...matches].sort((a, b) => km(origin, [a.provider.lat, a.provider.lng]) - km(origin, [b.provider.lat, b.provider.lng])) : matches).slice(0, 5),
     [matches, origin],
   );
-  const pts = [origin, ...ranked.map((m) => [m.provider.lat, m.provider.lng])];
-  const lat = pts.map((p) => p[0]), lng = pts.map((p) => p[1]);
-  const [minLat, maxLat, minLng, maxLng] = [Math.min(...lat), Math.max(...lat), Math.min(...lng), Math.max(...lng)];
-  const W = 560, H = 300, pad = 46;
-  const x = (v: number) => pad + ((v - minLng) / (maxLng - minLng || 1)) * (W - pad * 2);
-  const y = (v: number) => H - pad - ((v - minLat) / (maxLat - minLat || 1)) * (H - pad * 2);
+  const pins = useMemo(() => ranked.map((m, i) => ({
+    id: m.provider.id, lat: m.provider.lat, lng: m.provider.lng, label: String(i + 1), type: m.provider.type,
+    color: m.selected ? "#0a2540" : undefined, title: m.provider.name,
+    detail: `${TYPE_LABEL[m.provider.type] ?? m.provider.type}${origin ? `, ${km(origin, [m.provider.lat, m.provider.lng]).toFixed(1)} km` : ""}`,
+  })), [ranked, origin]);
 
-  const useGps = () =>
-    navigator.geolocation?.getCurrentPosition(
-      (p) => {
-        setOrigin([p.coords.latitude, p.coords.longitude]);
-        setNote("Using your location for this search only. It is not saved.");
-      },
-      () => setNote("Location is off. Choose your area instead."),
+  const useGps = () => {
+    if (!navigator.geolocation) { setNote("This browser cannot share a location."); return; }
+    navigator.geolocation.getCurrentPosition(
+      (p) => { setGps([p.coords.latitude, p.coords.longitude]); setNote("Using your location for this search only. It is not saved."); },
+      () => setNote("Location is off. Distances are from your pincode instead."),
     );
-
+  };
   const pick = async (id: number) => {
     await api.pickProvider(itemId, id);
     onChanged();
@@ -78,76 +55,19 @@ export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: 
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap items-end gap-2">
-        {known && <label className="text-sm">
-          <span className="block font-semibold">State</span>
-          <select className="field w-auto py-1" value={state} onChange={(e) => {
-            setState(e.target.value);
-            const a = AREAS.find((r) => r.state === e.target.value)!;
-            setArea(a.pin);
-            setOrigin(a.at);
-          }}>
-            {[...new Set(AREAS.map((a) => a.state))].map((s) => <option key={s}>{s}</option>)}
-          </select>
-        </label>}
-        {known && <label className="text-sm">
-          <span className="block font-semibold">Area</span>
-          <select className="field w-auto py-1" value={area} onChange={(e) => {
-            setArea(e.target.value);
-            setOrigin(AREAS.find((a) => a.pin === e.target.value)!.at);
-            setNote(null);
-          }}>
-            {AREAS.filter((a) => a.state === state).map((a) => <option key={a.pin} value={a.pin}>{a.area} {a.pin}</option>)}
-          </select>
-        </label>}
-        <Button look="quiet" small onClick={useGps}>
-          <Navigation size={16} aria-hidden /> Use my location
-        </Button>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-muted">{gps ? "Distances from your location." : `Distances from pincode ${pincode}.`}</p>
+        <Button look="quiet" small onClick={useGps}><Navigation size={16} aria-hidden /> Use my location</Button>
       </div>
       {note && <p role="status" className="text-sm text-muted">{note}</p>}
-
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full rounded-md border border-line bg-bg" role="img" aria-label="Schematic map of suggested providers">
-        {[0.2, 0.4, 0.6, 0.8].map((f) => (
-          <g key={f} stroke="var(--line)" strokeWidth="1.5" fill="none">
-            <path d={`M0 ${H * f} C ${W * 0.3} ${H * f + 30}, ${W * 0.6} ${H * f - 30}, ${W} ${H * f}`} />
-            <path d={`M${W * f} 0 C ${W * f + 30} ${H * 0.3}, ${W * f - 30} ${H * 0.6}, ${W * f} ${H}`} />
-          </g>
-        ))}
-        <circle cx={x(origin[1])} cy={y(origin[0])} r="9" fill="var(--primary)" />
-        <circle cx={x(origin[1])} cy={y(origin[0])} r="16" fill="none" stroke="var(--primary)" strokeWidth="2" />
-        <text x={x(origin[1])} y={y(origin[0]) + 32} textAnchor="middle" fontSize="12" fill="var(--muted)">You</text>
-        {ranked.map((m, i) => {
-          const px = x(m.provider.lng), py = y(m.provider.lat);
-          const on = hover === m.provider.id || m.selected;
-          return (
-            <motion.g
-              key={m.provider.id}
-              initial={{ y: -30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ ...mt(0.45, i * 0.09), type: "spring", stiffness: 260, damping: 18 }}
-              onMouseEnter={() => setHover(m.provider.id)}
-              onMouseLeave={() => setHover(null)}
-              onFocus={() => setHover(m.provider.id)}
-              tabIndex={0}
-              role="button"
-              aria-label={`${m.provider.name}, ${km(origin, [m.provider.lat, m.provider.lng]).toFixed(1)} kilometres`}
-              style={{ cursor: "pointer" }}
-              onClick={() => canSelect && pick(m.provider.id)}
-            >
-              <path d={`M${px} ${py} c -14 -18 -14 -34 0 -34 s 14 16 0 34z`} fill={on ? "var(--attention)" : "var(--primary)"} />
-              <circle cx={px} cy={py - 24} r="5" fill="var(--surface)" />
-              <text x={px} y={py + 14} textAnchor="middle" fontSize="12" fontWeight="600" fill="var(--ink)">{i + 1}</text>
-            </motion.g>
-          );
-        })}
-      </svg>
-      <p className="text-sm text-muted">{t("suggestionOnly")} Schematic map, not to scale.</p>
-
+      <LeafletMap pins={pins} origin={origin} originLabel={gps ? "You" : `Pincode ${pincode}`} activeId={hover} onActive={setHover}
+        onPick={canSelect ? pick : undefined} className="h-[300px] sm:h-[340px]" label="Map of suggested providers" />
+      <p className="text-sm text-muted">{t("suggestionOnly")}</p>
       <div className="grid gap-3 md:grid-cols-2">
         {ranked.map((m, i) => (
           <div key={m.provider.id} onMouseEnter={() => setHover(m.provider.id)} onMouseLeave={() => setHover(null)}
-            className={m.selected ? "rounded-md outline outline-2 outline-primary" : ""}>
-            <ProviderCard p={m.provider} reasons={[...m.reasons, `${km(origin, [m.provider.lat, m.provider.lng]).toFixed(1)} km from the chosen spot`]} rank={i + 1} />
+            className={m.selected ? "rounded-card outline outline-2 outline-primary" : ""}>
+            <ProviderCard p={m.provider} reasons={[...m.reasons, ...(origin ? [`${km(origin, [m.provider.lat, m.provider.lng]).toFixed(1)} km away`] : [])]} rank={i + 1} />
             {canSelect && (
               <Button look="quiet" small className="mt-1" disabled={m.selected} onClick={() => pick(m.provider.id)}>
                 <MapPin size={16} aria-hidden /> {m.selected ? t("selected") : t("selectProvider")}

@@ -1,6 +1,6 @@
 import type {
   AuditRow, Callback, DoctorCalEvent, DoctorHome, DoctorPatient, DoctorRow, Doc, FamilyAlert, FamilyHomeRow, HubMember, Lang, Masked, MedFields, Notice,
-  CalTask, Page, PatientRow, Plan, Provider, ReviewEntry, SampleMeta, Scope, SettingsMap, Stats, Today, User,
+  AdminPatientDetail, CalTask, Coverage, Page, PatientRow, Plan, Provider, ReviewEntry, Scope, SettingsMap, Stats, Today, User,
 } from "./types";
 
 // Which app is this page? Each app keeps its own sign in, so they never share a login.
@@ -91,8 +91,7 @@ export const api = {
   setLanguage: (language: Lang) => req<User>("/auth/me", patch({ language })),
   setElderly: (elderly: boolean) => req<User>("/auth/me", patch({ elderly })),
   // patient
-  samples: () => req<SampleMeta[]>("/samples"),
-  createDocument: (body: { sample_key?: string; text?: string; preferred_language?: Lang }) => req<Created>("/documents", post(body)),
+  createDocument: (body: { text: string; preferred_language?: Lang }) => req<Created>("/documents", post(body)),
   createFromPdf: (file: File, preferred_language: Lang) => {
     const fd = new FormData();
     fd.append("file", file);
@@ -143,13 +142,17 @@ export const api = {
   markChecked: (docId: number) => req<{ plan_state: string; checked_by: number }>(`/documents/${docId}/mark-checked`, post({})),
   doctorCalendar: (month: string) => req<{ month: string; today: string; events: DoctorCalEvent[] }>(`/doctor/calendar?month=${month}`),
   availableDoctors: () => req<{ id: number; name: string; specialty: string }[]>("/doctor/available-doctors"),
+  removeItem: (itemId: number, note?: string) => req<{ id: number; status: string }>(`/doctor/items/${itemId}/remove`, post({ note })),
+  restoreItem: (itemId: number) => req<{ id: number; status: string }>(`/doctor/items/${itemId}/restore`, post({})),
+  makeAppointment: (docId: number, b: { title: string; date: string; time: string; note?: string }) =>
+    req<{ item_id: number; task_id: number; due_at: string }>(`/doctor/patients/${docId}/appointment`, post(b)),
   redirectPatient: (docId: number, toDoctorId: number) => req<{ moved: number; to_doctor: { id: number; name: string } }>(`/doctor/patients/${docId}/redirect`, post({ to_doctor_id: toDoctorId })),
   // admin
   stats: (days: number, department?: string) => req<Stats>(`/admin/stats${qs({ days, department })}`),
   adminQueue: (o: { state?: string; doctor_id?: number; unassigned?: boolean; overdue?: boolean; q?: string; limit?: number; offset?: number } = {}) =>
     reqPage<ReviewEntry>(`/admin/queue${qs({ ...o, state: o.state ?? "open", limit: o.limit ?? 50 })}`),
   adminDoctors: () => req<DoctorRow[]>("/admin/doctors"),
-  adminAvailability: (id: number, available: boolean) => req(`/admin/doctors/${id}/availability`, put({ available })),
+  adminAvailability: (id: number, available: boolean) => req<{ available: boolean; moved: number }>(`/admin/doctors/${id}/availability`, put({ available })),
   assign: (rid: number, doctor_id: number) => req(`/admin/queue/${rid}/assign`, post({ doctor_id })),
   bulkReassign: (from_doctor_id: number, to_doctor_id?: number) => req<{ moved: number }>("/admin/queue/bulk-reassign", post({ from_doctor_id, to_doctor_id })),
   addDoctor: (b: { name: string; email: string; password: string; specialty: string }) => req<User>("/admin/doctors", post(b)),
@@ -161,7 +164,9 @@ export const api = {
   callbackComplete: (id: number) => req(`/admin/callbacks/${id}/complete`, post()),
   callbackNoAnswer: (id: number) => req(`/admin/callbacks/${id}/no-answer`, post()),
   callbackAssign: (id: number, doctor_id: number) => req(`/admin/callbacks/${id}/assign`, post({ doctor_id })),
-  adminPatients: (o: { q?: string; limit?: number; offset?: number } = {}) => reqPage<PatientRow>(`/admin/patients${qs(o)}`),
+  adminPatient: (id: number) => req<AdminPatientDetail>(`/admin/patients/${id}`),
+  coverage: () => req<Coverage>("/admin/coverage"),
+  adminPatients: (o: { q?: string; attention?: boolean; limit?: number; offset?: number } = {}) => reqPage<PatientRow>(`/admin/patients${qs(o)}`),
   settings: () => req<SettingsMap>("/admin/settings"),
   saveSettings: (b: Partial<SettingsMap>) => req<SettingsMap>("/admin/settings", put(b)),
   adminAudit: (o: { actor?: string; action?: string; date_from?: string; date_to?: string; limit?: number; offset?: number } = {}) =>

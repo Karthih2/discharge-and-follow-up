@@ -1,16 +1,14 @@
 import { FileUp, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Skeleton } from "../components/ui";
+import { Button, Card } from "../components/ui";
 import { api, type Created } from "../lib/api";
 import { LANG_NAMES, useLang } from "../lib/lang";
-import { useQuery } from "../lib/query";
 import type { Lang } from "../lib/types";
 
 export default function Upload() {
   const nav = useNavigate();
   const { t, lang: ui } = useLang();
-  const { data: samples } = useQuery("samples", api.samples);
   const [text, setText] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [lang, setLang] = useState<Lang>(ui);
@@ -62,7 +60,7 @@ export default function Upload() {
       </header>
 
       <div className="grid gap-10 lg:grid-cols-2">
-        <section aria-labelledby="h-own" className="space-y-4 rounded-[10px] border border-line bg-surface p-6">
+        <section aria-labelledby="h-own" className="space-y-4 rounded-panel border border-line bg-surface p-6 shadow-card">
           <h2 id="h-own" className="text-2xl">{t("pasteOrPdf")}</h2>
           <label className="block">
             <span className="mb-1 block font-semibold">{t("summaryText")}</span>
@@ -91,27 +89,16 @@ export default function Upload() {
           </Button>
         </section>
 
-        <section aria-labelledby="h-samples" className="space-y-3">
-          <h2 id="h-samples" className="text-2xl">{t("orSample")}</h2>
-          {!samples && (
-            <div className="space-y-3">
-              {[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-20 w-full" />)}
-            </div>
-          )}
-          <ul className="space-y-3">
-            {samples?.map((s) => (
-              <Card key={s.key} as="li" className="flex items-center justify-between gap-4 p-4">
-                <div>
-                  <h3 className="text-lg">{s.title}</h3>
-                  <p className="text-muted">{s.blurb}</p>
-                  <p className="text-sm text-muted">{s.patient_alias}. {s.city}.</p>
-                </div>
-                <Button look="quiet" className="shrink-0" disabled={busy} onClick={() => go(() => api.createDocument({ sample_key: s.key }))}>
-                  {t("useThis")}
-                </Button>
-              </Card>
+        <section aria-labelledby="h-next" className="space-y-4 self-start rounded-panel border border-line bg-[linear-gradient(160deg,#f0f8ff_0%,#ffffff_45%,#f8f9e4_100%)] p-6">
+          <h2 id="h-next" className="text-xl">{t("howItWorks")}</h2>
+          <ol className="space-y-4">
+            {([["step1T", "step1D"], ["step2T", "step2D"], ["step3T", "step3D"], ["step4T", "step4D"]] as const).map(([h, d], i) => (
+              <li key={h} className="grid grid-cols-[2rem_1fr] gap-3">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-white text-sm font-semibold text-brand-700 shadow-card">{i + 1}</span>
+                <span><strong className="block text-ink">{t(h)}</strong><span className="text-sm text-muted">{t(d)}</span></span>
+              </li>
             ))}
-          </ul>
+          </ol>
         </section>
       </div>
     </div>

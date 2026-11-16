@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { NearbyMap } from "../components/NearbyMap";
-import { km } from "../components/ProviderMap";
+import { km } from "../lib/geo";
 import { ProviderCard, TYPE_LABEL } from "../components/ProviderCard";
 import { ListSkeleton } from "../components/ui";
 import { api } from "../lib/api";
@@ -54,7 +54,7 @@ export default function Providers() {
         <div>
           <h1>Providers</h1>
           <p className="mt-1 text-muted">
-            Every provider here is invented for this demo. Matches are suggestions only. Please call to confirm availability.
+            Matches are suggestions only. Please call to confirm availability before you go.
           </p>
           {id && <Link to={`/plan/${id}`} className="mt-2 inline-block text-sm">Back to the plan</Link>}
         </div>

@@ -15,11 +15,11 @@ from sqlmodel import Session, select
 from .. import routing
 from ..auth import hash_password, require
 from ..db import audit, clock_now, get_session, pairs, get_setting, set_setting, sim_now, sim_today
-from ..models import (AuditLog, CallbackRequest, CaregiverAlert, Doctor, Document, Item, ReviewQueue, Task, User)
+from ..models import (AuditLog, CallbackRequest, CaregiverAlert, Doctor, Document, Item, Provider, ReviewQueue, Task, User)
 from ..seed import load_demo_data
 from ..seed_demo import seed_demo_extras
 from .auth_routes import LANGS, user_dict
-from .clinical import OPEN_CALLS, AvailIn, callback_rows, entries, page, set_availability
+from .clinical import OPEN_CALLS, AvailIn, callback_rows, entries, page, pipeline_stage, set_availability
 
 router = APIRouter(prefix="/api/admin", dependencies=[Depends(require("management"))])
 
@@ -408,8 +408,19 @@ def callback_assign(cid: int, body: AssignIn, s: Session = Depends(get_session))
 
 # ---------- patients (no clinical text) ----------
 @router.get("/patients")
-def patients(response: Response, q: Optional[str] = None, limit: int = 50, offset: int = 0, s: Session = Depends(get_session)):
+def patients(response: Response, q: Optional[str] = None, attention: bool = False, limit: int = 50, offset: int = 0,
+             s: Session = Depends(get_session)):
+    """attention=true keeps only patients who need someone now: an overdue task, an open review, callback or family alert."""
     stmt = select(User).where(User.role == "patient")
+    if attention:
+        now = sim_now(s)
+        late_docs = select(Task.document_id).where(Task.status == "Pending", Task.due_at < now)
+        review_docs = select(ReviewQueue.document_id).where(ReviewQueue.state == "open")
+        call_docs = select(CallbackRequest.document_id).where(CallbackRequest.state.in_(OPEN_CALLS))
+        alert_docs = select(CaregiverAlert.document_id).where(CaregiverAlert.acknowledged_at.is_(None))
+        owners = select(Document.owner_id).where(Document.id.in_(late_docs) | Document.id.in_(review_docs)
+                                                 | Document.id.in_(call_docs) | Document.id.in_(alert_docs))
+        stmt = stmt.where(User.id.in_(owners))
     if q:
         stmt = stmt.where(func.lower(User.name).like(f"%{q.strip().lower()}%"))
     users_ = page(s, stmt.order_by(User.id), response, limit, offset)
@@ -428,6 +439,10 @@ def patients(response: Response, q: Optional[str] = None, limit: int = 50, offse
                                                                     Task.due_at < now).group_by(Task.document_id))
     last = pairs(s, select(AuditLog.document_id, func.max(AuditLog.created_at)).where(AuditLog.document_id.in_(doc_ids))
                        .group_by(AuditLog.document_id))
+    reviews = pairs(s, select(ReviewQueue.document_id, func.count()).where(ReviewQueue.document_id.in_(doc_ids), ReviewQueue.state == "open")
+                          .group_by(ReviewQueue.document_id))
+    calls = pairs(s, select(CallbackRequest.document_id, func.count()).where(CallbackRequest.document_id.in_(doc_ids),
+                                                                             CallbackRequest.state.in_(OPEN_CALLS)).group_by(CallbackRequest.document_id))
     out = []
     for u in users_:
         mine = by_owner.get(u.id, [])
@@ -436,8 +451,88 @@ def patients(response: Response, q: Optional[str] = None, limit: int = 50, offse
         out.append({"id": u.id, "alias": mine[0].patient_alias if mine else u.name.split()[0] + " (no plan yet)",
                     "city": mine[0].city if mine else None, "language": u.language, "plans": len(mine),
                     "completion_rate": _pct(t_all, d_all), "overdue_tasks": sum(late.get(d.id, 0) for d in mine),
-                    "last_activity": max(stamps).isoformat() if stamps else None})
+                    "last_activity": max(stamps).isoformat() if stamps else None,
+                    "open_reviews": sum(reviews.get(d.id, 0) for d in mine), "open_callbacks": sum(calls.get(d.id, 0) for d in mine),
+                    "plan_state": mine[0].plan_state if mine else None})
     return out
+
+
+SAFE_DETAIL = {"review_id", "item_id", "task_id", "role", "doctor", "from", "to", "moved", "available", "callback_id", "due_at", "reason"}
+
+
+@router.get("/patients/{user_id}")
+def patient_detail(user_id: int, s: Session = Depends(get_session)):
+    """One patient for management: plan make-up next to the approval timeline, the edit history and the follow-up checklist.
+    Categories, states, people and times only. No clinical wording."""
+    u = s.get(User, user_id)
+    if not u or u.role != "patient":
+        raise HTTPException(404, "Patient not found")
+    docs = s.exec(select(Document).where(Document.owner_id == u.id).order_by(Document.id.desc())).all()
+    ids = [d.id for d in docs] or [0]
+    items = s.exec(select(Item).where(Item.document_id.in_(ids))).all()
+    cat_of = {i.id: i.category for i in items}
+    reviews = s.exec(select(ReviewQueue).where(ReviewQueue.document_id.in_(ids)).order_by(ReviewQueue.created_at)).all()
+    staff = {x.id: x.name for x in s.exec(select(User).where(User.role.in_(["doctor", "management"])))}
+    now = sim_now(s)
+    tasks = s.exec(select(Task).where(Task.document_id.in_(ids), Task.title.notlike("% medicines:%")).order_by(Task.due_at)).all()
+    meds_due = s.exec(select(func.count()).select_from(Task).where(Task.document_id.in_(ids), Task.title.like("% medicines:%"), Task.due_at <= now)).one()
+    meds_done = s.exec(select(func.count()).select_from(Task).where(Task.document_id.in_(ids), Task.title.like("% medicines:%"),
+                                                                    Task.due_at <= now, Task.status == "Completed")).one()
+    logs = s.exec(select(AuditLog).where(AuditLog.document_id.in_(ids)).order_by(AuditLog.id.desc()).limit(80)).all()
+    names = {f"user:{k}": v for k, v in {x.id: x.name for x in s.exec(select(User).where(User.id.in_(
+        {int(a.actor.split(":")[1]) for a in logs if a.actor.startswith("user:") and a.actor.split(":")[1].isdigit()} or {0})))}.items()}
+    stages = pipeline_stage(s, ids)
+    makeup: dict[str, dict[str, int]] = {}
+    for i in items:
+        row = makeup.setdefault(i.category, {"total": 0, "held": 0, "removed": 0})
+        row["total"] += 1
+        row["held"] += i.status == "Needs Review"
+        row["removed"] += i.status == "Rejected"
+    return {
+        "patient": {"id": u.id, "alias": docs[0].patient_alias if docs else u.name.split()[0], "language": u.language,
+                    "city": docs[0].city if docs else None},
+        "plans": [{"id": d.id, "title_hidden": True, "department": d.department, "discharge_date": d.discharge_date.isoformat(),
+                   "plan_state": d.plan_state, "checked_by": staff.get(d.checked_by) if d.checked_by else None,
+                   "checked_at": d.checked_at.isoformat() if d.checked_at else None, "pipeline": stages.get(d.id, "queued")} for d in docs],
+        "makeup": [{"category": k, **v} for k, v in sorted(makeup.items())],
+        "medicines": {"due": meds_due, "done": meds_done},
+        "timeline": [{"id": r.id, "document_id": r.document_id, "category": cat_of.get(r.item_id, "other"), "severity": r.severity,
+                      "state": r.state, "codes": r.codes or [], "doctor": staff.get(r.assigned_doctor_id),
+                      "created_at": r.created_at.isoformat(), "resolved_at": r.resolved_at.isoformat() if r.resolved_at else None}
+                     for r in reviews],
+        "history": [{"id": a.id, "action": a.action, "actor": names.get(a.actor, a.actor.split(":")[0]),
+                     "detail": {k: v for k, v in (a.detail or {}).items() if k in SAFE_DETAIL}, "created_at": a.created_at.isoformat()}
+                    for a in logs],
+        "checklist": [{"task_id": t.id, "category": cat_of.get(t.item_id, "other"), "due_at": t.due_at.isoformat(), "status": t.status,
+                       "overdue": t.status == "Pending" and t.due_at < now} for t in tasks],
+    }
+
+
+@router.get("/coverage")
+def coverage(s: Session = Depends(get_session)):
+    """Providers on the map next to where active patients live (grouped by pincode), so gaps in cover show up."""
+    providers = s.exec(select(Provider)).all()
+    docs = s.exec(select(Document)).all()
+    by_pin: dict[str, list[Provider]] = {}
+    for p in providers:
+        by_pin.setdefault(p.pincode, []).append(p)
+    demand: dict[str, dict] = {}
+    for d in docs:
+        row = demand.setdefault(d.pincode or "?", {"pincode": d.pincode, "city": d.city, "patients": set(), "plans": 0})
+        row["patients"].add(d.owner_id)
+        row["plans"] += 1
+    areas = []
+    for pin, row in demand.items():
+        near = by_pin.get(pin, [])
+        at = [sum(p.lat for p in near) / len(near), sum(p.lng for p in near) / len(near)] if near else None
+        areas.append({"pincode": row["pincode"], "city": row["city"], "patients": len(row["patients"]), "plans": row["plans"],
+                      "providers": len(near), "at": at})
+    return {
+        "providers": [{"id": p.id, "name": p.name, "type": p.type, "city": p.city, "pincode": p.pincode, "lat": p.lat, "lng": p.lng,
+                       "specialties": [x for x in p.specialties.split(";") if x] if isinstance(p.specialties, str) else p.specialties}
+                      for p in providers],
+        "areas": sorted(areas, key=lambda a: (-a["patients"], a["pincode"] or "")),
+    }
 
 
 # ---------- settings ----------

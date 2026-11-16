@@ -494,7 +494,7 @@ def sent_messages(u: User = Depends(require("patient")), s: Session = Depends(ge
 @router.get("/sos")
 def sos_info(u: User = Depends(current_user), s: Session = Depends(get_session)):
     from ..models import HubMember, Item
-    hospital_phone = "044-5550-0100"
+    hospital_phone = os.getenv("HOSPITAL_PHONE") or None  # set by the hospital; no number is invented
     manager_phone = None
     manager_name = None
 
@@ -507,7 +507,7 @@ def sos_info(u: User = Depends(current_user), s: Session = Depends(get_session))
             mgr = s.get(User, members[0].user_id)
             if mgr:
                 manager_name = mgr.name
-                manager_phone = mgr.mobile or "+91 90000 00005"
+                manager_phone = mgr.mobile or None
 
     warnings = []
     if u.role == "patient":

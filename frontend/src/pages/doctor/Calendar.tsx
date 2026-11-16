@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { m as motion } from "motion/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Badge, Button, Card, EmptyState, PageHead } from "../../components/ui";
 import { api } from "../../lib/api";
 import { useLang } from "../../lib/lang";
@@ -67,11 +67,27 @@ export default function DoctorCalendar() {
   const grid = useMemo(() => buildGrid(cursor.year, cursor.month), [cursor.year, cursor.month]);
   const byDay = useMemo(() => eventsByDay(cal.data?.events ?? []), [cal.data]);
 
-  const prev = () => setCursor((c) => c.month === 0 ? { year: c.year - 1, month: 11 } : { ...c, month: c.month - 1 });
-  const next = () => setCursor((c) => c.month === 11 ? { year: c.year + 1, month: 0 } : { ...c, month: c.month + 1 });
+  // Open on the server's today (the hospital clock), not the browser's, until the doctor moves months.
+  const moved = useRef(false);
+  useEffect(() => {
+    if (moved.current || !cal.data?.today) return;
+    const [y, m] = cal.data.today.split("-").map(Number);
+    if (y !== cursor.year || m - 1 !== cursor.month) setCursor({ year: y, month: m - 1 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cal.data?.today]);
+  const go = (d: number) => {
+    moved.current = true;
+    setSelected(null);
+    setCursor((c) => {
+      const n = new Date(c.year, c.month + d, 1);
+      return { year: n.getFullYear(), month: n.getMonth() };
+    });
+  };
+  const prev = () => go(-1);
+  const next = () => go(1);
 
   const monthName = new Date(cursor.year, cursor.month).toLocaleString("en", { month: "long", year: "numeric" });
-  const selectedDay = selected ?? today;
+  const selectedDay = selected ?? (today.slice(0, 7) === mk ? today : `${mk}-01`);
   const dayEvents = byDay[selectedDay] ?? [];
 
   return (
@@ -83,7 +99,7 @@ export default function DoctorCalendar() {
         <Card className="p-4">
           <div className="mb-4 flex items-center justify-between">
             <Button small look="quiet" onClick={prev} aria-label="Previous month"><ChevronLeft size={18} /></Button>
-            <h3 className="font-heading text-xl">{monthName}</h3>
+            <h2 className="text-xl">{monthName}</h2>
             <Button small look="quiet" onClick={next} aria-label="Next month"><ChevronRight size={18} /></Button>
           </div>
           <div className="grid grid-cols-7 text-center text-sm font-semibold text-muted">
@@ -100,10 +116,13 @@ export default function DoctorCalendar() {
               return (
                 <button
                   key={dk}
+                  type="button"
                   onClick={() => setSelected(dk)}
+                  aria-pressed={isSel}
+                  aria-label={`${dk}${has ? `, ${byDay[dk].length} events` : ""}`}
                   className={[
-                    "relative mx-auto flex h-10 w-10 items-center justify-center rounded-full text-sm transition-colors",
-                    isSel ? "bg-primary text-surface font-bold" : isToday ? "ring-2 ring-primary font-semibold" : "hover:bg-bg",
+                    "relative mx-auto my-0.5 flex h-11 w-11 items-center justify-center rounded-input text-sm tnum transition-colors",
+                    isSel ? "bg-primary font-semibold text-white shadow-card" : isToday ? "font-semibold text-primary ring-2 ring-inset ring-primary/60" : "text-ink hover:bg-brand-50",
                   ].join(" ")}
                 >
                   {day}
@@ -118,7 +137,7 @@ export default function DoctorCalendar() {
 
         {/* Day detail */}
         <div className="space-y-3">
-          <h3 className="font-heading text-lg">
+          <h3 className="text-lg">
             {new Date(selectedDay + "T00:00").toLocaleDateString("en", { weekday: "long", day: "numeric", month: "long" })}
           </h3>
           {dayEvents.length === 0 && <EmptyState title={t("noEvents")} text={t("noEventsText")} />}

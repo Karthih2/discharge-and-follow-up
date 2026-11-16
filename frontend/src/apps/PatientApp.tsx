@@ -1,10 +1,10 @@
 import { AnimatePresence, m as motion } from "motion/react";
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { Footer, Header } from "../components/Layout";
+import { Footer, Header, TabBar } from "../components/Layout";
 import { ListSkeleton } from "../components/ui";
 import { Welcome } from "../components/Welcome";
-import { Guard } from "../lib/auth";
+import { Guard, useAuth } from "../lib/auth";
 import { useMotionT } from "../lib/motion";
 
 const Landing = lazy(() => import("../pages/Landing"));
@@ -30,6 +30,8 @@ export default function PatientApp() {
   const loc = useLocation();
   const mt = useMotionT();
   const bare = CHROMELESS.has(loc.pathname);
+  const { user } = useAuth();
+  const tabs = !bare && !!user;
   return (
     <>
       <a href="#main" className="no-print sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:bg-surface focus:p-2">
@@ -45,7 +47,7 @@ export default function PatientApp() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={mt(0.15)}
-          className={bare ? "" : "mx-auto max-w-[1480px] px-5 py-10"}
+          className={bare ? "" : `mx-auto max-w-wide px-4 py-6 sm:px-6 md:py-10 lg:px-10 ${tabs ? "pb-tabbar md:pb-10" : ""}`}
         >
           <Suspense fallback={<ListSkeleton rows={3} />}>
             <Routes location={loc}>
@@ -75,6 +77,7 @@ export default function PatientApp() {
         </motion.main>
       </AnimatePresence>
       {!bare && <Footer />}
+      {tabs && <TabBar />}
     </>
   );
 }

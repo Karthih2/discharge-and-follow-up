@@ -15,6 +15,9 @@ export default {
           800: "#044e6b",
           900: "#032d40",
         },
+        primary: "#05668D",
+        secondary: "#028090",
+        bg: "#f4f8f9",
         accent: "#02C39A",
         mint: "#02C39A",
         verdigris: "#00A896",
@@ -33,19 +36,19 @@ export default {
         "amber-text": "#92400e",
       },
       fontFamily: {
-        heading: ['"Newsreader"', "Georgia", "serif"],
-        sans: ['"DM Sans"', "system-ui", "-apple-system", "sans-serif"],
-        mono: ['"DM Mono"', "ui-monospace", "monospace"],
-        tamil: ['"Noto Sans Tamil"', '"DM Sans"', "sans-serif"],
-        devanagari: ['"Noto Sans Devanagari"', '"DM Sans"', "sans-serif"],
-        telugu: ['"Noto Sans Telugu"', '"DM Sans"', "sans-serif"],
-        kannada: ['"Noto Sans Kannada"', '"DM Sans"', "sans-serif"],
-        malayalam: ['"Noto Sans Malayalam"', '"DM Sans"', "sans-serif"],
+        heading: ['"IBM Plex Sans"', "system-ui", "-apple-system", "sans-serif"],
+        sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "sans-serif"],
+        mono: ['"IBM Plex Mono"', "ui-monospace", "monospace"],
+        tamil: ['"Noto Sans Tamil"', '"IBM Plex Sans"', "sans-serif"],
+        devanagari: ['"Noto Sans Devanagari"', '"IBM Plex Sans"', "sans-serif"],
+        telugu: ['"Noto Sans Telugu"', '"IBM Plex Sans"', "sans-serif"],
+        kannada: ['"Noto Sans Kannada"', '"IBM Plex Sans"', "sans-serif"],
+        malayalam: ['"Noto Sans Malayalam"', '"IBM Plex Sans"', "sans-serif"],
       },
       fontSize: {
-        display: ["2.5rem", { lineHeight: "3rem", fontWeight: "700", letterSpacing: "-0.02em" }],
-        "display-sm": ["2rem", { lineHeight: "2.5rem", fontWeight: "700", letterSpacing: "-0.02em" }],
-        h1: ["1.75rem", { lineHeight: "2.25rem", fontWeight: "700" }],
+        display: ["2.5rem", { lineHeight: "3rem", fontWeight: "600", letterSpacing: "-0.02em" }],
+        "display-sm": ["2rem", { lineHeight: "2.5rem", fontWeight: "600", letterSpacing: "-0.02em" }],
+        h1: ["1.75rem", { lineHeight: "2.25rem", fontWeight: "600" }],
         h2: ["1.25rem", { lineHeight: "1.75rem", fontWeight: "600" }],
         h3: ["1rem", { lineHeight: "1.5rem", fontWeight: "600" }],
         body: ["0.9375rem", { lineHeight: "1.5rem", fontWeight: "400" }],
@@ -55,6 +58,7 @@ export default {
       borderRadius: {
         card: "12px",
         input: "10px",
+        panel: "16px",
         badge: "9999px",
       },
       boxShadow: {
@@ -64,6 +68,7 @@ export default {
       },
       maxWidth: {
         content: "1200px",
+        wide: "1440px",
       },
       keyframes: {
         "fade-in-up": {

@@ -67,8 +67,9 @@ function DoctorCard({ d, all }: { d: DoctorRow; all: DoctorRow[] }) {
     setBusy(kind);
     setErr(null);
     try {
-      await fn();
-      toast(ok);
+      const out = await fn();
+      const moved = (out as { moved?: number } | null)?.moved;
+      toast(moved ? `${ok} ${t("autoMoved").replace("{n}", String(moved))}` : ok);
       invalidate("admin");
     } catch (e) {
       setErr((e as Error).message);
@@ -77,8 +78,7 @@ function DoctorCard({ d, all }: { d: DoctorRow; all: DoctorRow[] }) {
     }
   };
 
-  const total = d.open_items + (d.overdue_items ?? 0);
-  const load = total > 20 ? "high" : total > 8 ? "medium" : "low";
+  const max = Math.max(1, ...all.map((x) => x.open_items));
 
   return (
     <motion.li layout transition={mt(0.2)}>
@@ -86,7 +86,7 @@ function DoctorCard({ d, all }: { d: DoctorRow; all: DoctorRow[] }) {
         {/* Header row */}
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className={`flex h-11 w-11 items-center justify-center rounded-full text-lg font-bold text-white ${d.available ? "bg-primary" : "bg-muted"}`}>
+            <span className={`flex h-11 w-11 items-center justify-center rounded-full text-lg font-semibold text-white ${d.available ? "bg-primary" : "bg-muted"}`}>
               {d.name.charAt(0).toUpperCase()}
             </span>
             <div className="min-w-0">
@@ -104,14 +104,16 @@ function DoctorCard({ d, all }: { d: DoctorRow; all: DoctorRow[] }) {
           </div>
         </div>
 
-        {/* Workload summary */}
-        <div className="flex flex-wrap items-center gap-4 rounded-lg border border-line bg-bg px-4 py-2.5">
-          <span className="text-sm"><span className="tnum font-bold">{d.open_items}</span> <span className="text-muted">{t("open")}</span></span>
-          {d.overdue_items > 0 && <span className="text-sm text-attention"><span className="tnum font-bold">{d.overdue_items}</span> {t("overdue")}</span>}
-          <span className={`ml-auto rounded-full px-2 py-0.5 text-xs font-semibold ${load === "high" ? "bg-attention/10 text-attention" : load === "medium" ? "bg-amber-100 text-amber-700" : "bg-primary/10 text-primary"}`}>
-            {load} load
-          </span>
-          {d.backup && <span className="text-xs text-muted">Backup: {d.backup.name}</span>}
+        {/* Workload: open items against the busiest doctor; overdue turns the bar warm. */}
+        <div className="space-y-2 rounded-input border border-line bg-[linear-gradient(90deg,#f6fafb,#ffffff)] px-4 py-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
+            <span className="font-medium text-ink">{t("workload")}</span>
+            <span className="text-muted"><span className="tnum font-semibold text-ink">{d.open_items}</span> {t("open")}{d.overdue_items > 0 && <>, <span className="tnum font-semibold text-attention">{d.overdue_items}</span> {t("overdue")}</>}</span>
+          </div>
+          <div className={`meter ${d.overdue_items > 0 ? "hot" : ""}`} role="meter" aria-valuemin={0} aria-valuemax={max} aria-valuenow={d.open_items} aria-label={t("workload")}>
+            <i style={{ width: `${max ? Math.max(4, (d.open_items / max) * 100) : 0}%` }} />
+          </div>
+          {d.backup && <p className="text-xs text-muted">{t("backupDoctor")}: {d.backup.name}</p>}
         </div>
 
         {/* Controls */}
@@ -160,7 +162,7 @@ export default function Doctors() {
       <CreateDoctor />
       {docs.error && <p role="alert" className="text-attention">{docs.error}</p>}
       {docs.loading && <ListSkeleton rows={4} />}
-      <motion.ul {...rise(0)} className="space-y-3">
+      <motion.ul {...rise(0)} className="grid gap-4 xl:grid-cols-2">
         <AnimatePresence initial={false}>
           {docs.data?.map((d) => <DoctorCard key={d.id} d={d} all={docs.data!} />)}
         </AnimatePresence>

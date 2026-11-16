@@ -16,7 +16,7 @@ from ..agents.triage import triage_rules
 from .plans import PLAIN
 from ..auth import require
 from ..db import audit, clock_now, get_session, pairs, get_setting, sim_now
-from ..models import CallbackRequest, Doctor, Document, Item, ItemText, ReviewQueue, SourceLine, Task, User
+from ..models import CallbackRequest, Doctor, Document, Item, ItemText, PipelineRun, Reminder, ReviewQueue, SourceLine, Task, User
 
 router = APIRouter(prefix="/api")
 
@@ -267,9 +267,128 @@ def doctor_patients(response: Response, q: Optional[str] = None, limit: int = 50
         mine, ReviewQueue.state != "open", ReviewQueue.document_id.in_(ids)).group_by(ReviewQueue.document_id))
     late_by = pairs(s, select(Task.document_id, func.count()).where(
         Task.document_id.in_(ids), Task.status == "Pending", Task.due_at < sim_now(s)).group_by(Task.document_id))
+    stages = pipeline_stage(s, ids)
     return [{"document_id": d.id, "patient_alias": d.patient_alias, "title": d.title, "department": d.department,
              "discharge_date": d.discharge_date.isoformat(), "open_reviews": open_by.get(d.id, 0),
-             "reviewed": done_by.get(d.id, 0), "overdue_tasks": late_by.get(d.id, 0)} for d in docs]
+             "reviewed": done_by.get(d.id, 0), "overdue_tasks": late_by.get(d.id, 0),
+             "plan_state": d.plan_state, "pipeline": stages.get(d.id, "queued")} for d in docs]
+
+
+def pipeline_stage(s: Session, doc_ids: list[int]) -> dict[int, str]:
+    """Where each document is in the reading pipeline: queued (no run yet), processing, failed or ready."""
+    out: dict[int, str] = {}
+    for r in s.exec(select(PipelineRun).where(PipelineRun.document_id.in_(doc_ids or [0])).order_by(PipelineRun.id)).all():
+        prev = out.get(r.document_id)
+        if r.state == "failed":
+            out[r.document_id] = "failed"
+        elif r.state == "running" and prev != "failed":
+            out[r.document_id] = "processing"
+        elif prev not in ("failed", "processing"):
+            out[r.document_id] = "ready"
+    return out
+
+
+# ---------- doctor: remove, restore and add plan lines ----------
+def _my_doc(s: Session, u: User, doc_id: int) -> Document:
+    """A doctor may change a plan only when they hold a review for it."""
+    doc = s.get(Document, doc_id)
+    mine = s.exec(select(ReviewQueue.id).where(ReviewQueue.document_id == doc_id, or_(
+        ReviewQueue.assigned_doctor_id == u.id, ReviewQueue.fallback_doctor_id == u.id))).first()
+    if not doc or not mine:
+        raise HTTPException(404, "Plan not found")
+    return doc
+
+
+def _drop_pending_tasks(s: Session, item_id: int) -> None:
+    for t in s.exec(select(Task).where(Task.item_id == item_id, Task.status == "Pending")).all():
+        for r in s.exec(select(Reminder).where(Reminder.task_id == t.id)):
+            s.delete(r)
+        s.delete(t)
+
+
+class ItemNote(BaseModel):
+    note: Optional[str] = None
+
+
+@router.post("/doctor/items/{item_id}/remove")
+def remove_item(item_id: int, body: ItemNote, u: User = Depends(require("doctor")), s: Session = Depends(get_session)):
+    """Take a line out of the patient's plan. Its open review closes as rejected and its future tasks go."""
+    item = s.get(Item, item_id)
+    if not item:
+        raise HTTPException(404, "Item not found")
+    doc = _my_doc(s, u, item.document_id)
+    if item.status == "Rejected":
+        raise HTTPException(409, "Already removed")
+    for r in s.exec(select(ReviewQueue).where(ReviewQueue.item_id == item.id, ReviewQueue.state == "open")).all():
+        r.state, r.reviewer_note, r.resolved_at = "rejected", body.note, clock_now()
+        s.add(r)
+    item.status, item.reviewed_by = "Rejected", u.id
+    s.add(item)
+    _drop_pending_tasks(s, item.id)
+    s.commit()
+    if item.category == "medication":
+        plan_medicines(s, doc)
+    audit(s, doc.id, f"user:{u.id}", "item_removed", {"item_id": item.id, "note": body.note})
+    routing.notify(s, doc.owner_id, doc.id, f"{u.name} removed: {item.title}")
+    return {"id": item.id, "status": item.status}
+
+
+@router.post("/doctor/items/{item_id}/restore")
+def restore_item(item_id: int, u: User = Depends(require("doctor")), s: Session = Depends(get_session)):
+    """Put a removed line back. The doctor restoring it counts as the check."""
+    item = s.get(Item, item_id)
+    if not item:
+        raise HTTPException(404, "Item not found")
+    doc = _my_doc(s, u, item.document_id)
+    if item.status != "Rejected":
+        raise HTTPException(409, "Only removed lines can be restored")
+    item.status, item.reviewed_by = "Pending", u.id
+    s.add(item)
+    s.commit()
+    plan_item(s, item)
+    if item.category == "medication":
+        plan_medicines(s, doc)
+    audit(s, doc.id, f"user:{u.id}", "item_restored", {"item_id": item.id})
+    routing.notify(s, doc.owner_id, doc.id, f"{u.name} restored: {item.title}")
+    return {"id": item.id, "status": item.status}
+
+
+class AppointmentIn(BaseModel):
+    title: str
+    date: str  # YYYY-MM-DD
+    time: str = "10:00"  # HH:MM
+    note: Optional[str] = None
+
+
+@router.post("/doctor/patients/{doc_id}/appointment")
+def make_appointment(doc_id: int, body: AppointmentIn, u: User = Depends(require("doctor")), s: Session = Depends(get_session)):
+    """A doctor books a follow-up visit straight into the plan. It is doctor written, so it needs no further review."""
+    doc = _my_doc(s, u, doc_id)
+    title = body.title.strip()
+    if not 3 <= len(title) <= 160:
+        raise HTTPException(422, "Give the visit a short title")
+    try:
+        due = datetime.fromisoformat(f"{body.date}T{body.time}")
+    except ValueError:
+        raise HTTPException(422, "Date must look like 2026-11-20 and time like 10:30")
+    if due.date() < sim_now(s).date():
+        raise HTTPException(422, "Pick today or a later date")
+    text = f"{title}. Booked by Dr. {u.name}." + (f" {body.note.strip()}" if body.note and body.note.strip() else "")
+    item = Item(document_id=doc.id, category="appointment", title=title, original_text=text, date_raw=body.date,
+                date_resolved=due.date(), time_of_day=body.time, confidence=1.0, status="Pending", reviewed_by=u.id)
+    s.add(item)
+    s.commit()
+    s.refresh(item)
+    s.add(ItemText(item_id=item.id, language="en", simple_text=text, numbers_verified=True))
+    task = Task(item_id=item.id, document_id=doc.id, title=title, due_at=due)
+    s.add(task)
+    s.commit()
+    s.refresh(task)
+    s.add(Reminder(task_id=task.id, remind_at=due - timedelta(days=1)))
+    s.commit()
+    audit(s, doc.id, f"user:{u.id}", "appointment_made", {"item_id": item.id, "due_at": due.isoformat()})
+    routing.notify(s, doc.owner_id, doc.id, f"Dr. {u.name} booked a visit: {title}, {due.strftime('%d %b %H:%M')}")
+    return {"item_id": item.id, "task_id": task.id, "due_at": due.isoformat()}
 
 
 # ---------- callbacks ----------

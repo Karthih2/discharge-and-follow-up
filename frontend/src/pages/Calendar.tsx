@@ -82,16 +82,16 @@ export default function Calendar() {
                 const open = list.filter((x) => x.status === "Pending").length;
                 return (
                   <button key={d} onClick={() => setPick(d)} aria-pressed={d === selected} aria-label={`${d}, ${list.length}`}
-                    className={`flex h-16 flex-col items-center rounded-lg border p-1 text-sm ${d === selected ? "border-primary bg-primary text-surface" : d === today ? "border-primary bg-surface" : "border-line bg-bg hover:border-primary"}`}>
+                    type="button" className={`flex h-16 flex-col items-center rounded-input border p-1 text-sm transition-colors ${d === selected ? "border-primary bg-primary text-white shadow-card" : d === today ? "border-primary/60 bg-brand-50 text-ink" : "border-line bg-surface text-ink hover:border-primary/50 hover:bg-brand-50"}`}>
                     <span className="tnum font-semibold">{i + 1}</span>
                     {list.length > 0 && (
                       <span className="mt-auto flex gap-0.5" aria-hidden>
-                        {list.some((x) => x.kind === "medicine") && <i className={`h-1.5 w-1.5 rounded-full ${d === selected ? "bg-surface" : "bg-primary"}`} />}
-                        {list.some((x) => x.kind !== "medicine") && <i className={`h-1.5 w-1.5 rounded-sm ${d === selected ? "bg-surface" : "bg-ink"}`} />}
+                        {list.some((x) => x.kind === "medicine") && <i className={`h-1.5 w-1.5 rounded-full ${d === selected ? "bg-white" : "bg-primary"}`} />}
+                        {list.some((x) => x.kind !== "medicine") && <i className={`h-1.5 w-1.5 rounded-sm ${d === selected ? "bg-white" : "bg-ink"}`} />}
                         {late && <i className="h-1.5 w-1.5 rounded-full bg-attention" />}
                       </span>
                     )}
-                    {open > 0 && <span className={`tnum text-[0.7rem] ${d === selected ? "" : "text-muted"}`}>{open}</span>}
+                    {open > 0 && <span className={`tnum text-[0.7rem] ${d === selected ? "text-white/90" : "text-muted"}`}>{open}</span>}
                   </button>
                 );
               })}

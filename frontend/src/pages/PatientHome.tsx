@@ -178,7 +178,7 @@ export default function PatientHome() {
               <p className="flex items-center gap-2"><CategoryIcon category={d.next_event.category ?? "appointment"} size={16} /><strong className="lang-text">{d.next_event.title}</strong></p>
               <div className="mt-2">
                 <Props rows={[
-                  [t("date"), <span className="font-mono">{fmtDate(d.next_event.due_at, { day: "numeric", month: "short" })}, {fmtTime(d.next_event.due_at)}</span>],
+                  [t("date"), <span className="tnum">{fmtDate(d.next_event.due_at, { day: "numeric", month: "short" })}, {fmtTime(d.next_event.due_at)}</span>],
                   [t("place"), <span className="flex items-center gap-1"><MapPin size={14} aria-hidden />{d.next_event.place}</span>],
                   [t("plan"), <Link to={`/plan/${d.next_event.document_id}`}>{t("openPlan")}</Link>],
                 ]} />
@@ -211,7 +211,7 @@ export default function PatientHome() {
           ) : (
             <ul className="rule-list text-sm">
               {d.upcoming.slice(0, 5).map((e) => (
-                <li key={e.task_id} className="flex justify-between gap-2 py-1"><span className="lang-text truncate">{e.title}</span><span className="shrink-0 font-mono text-xs text-muted">{fmtDate(e.due_at, { day: "numeric", month: "short" })}</span></li>
+                <li key={e.task_id} className="flex justify-between gap-2 py-1"><span className="lang-text truncate">{e.title}</span><span className="shrink-0 tnum text-xs text-muted">{fmtDate(e.due_at, { day: "numeric", month: "short" })}</span></li>
               ))}
             </ul>
           )}
@@ -239,8 +239,8 @@ export default function PatientHome() {
           <ul className="rule-list">
             {docs.data?.map((p) => (
               <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 py-1.5">
-                <span className="min-w-0 text-sm"><Link to={`/plan/${p.id}`} className="font-semibold">{p.title}</Link> <span className="font-mono text-xs text-muted">{fmtDate(p.discharge_date, { day: "numeric", month: "short" })}</span></span>
-                <span className="font-mono text-xs text-muted">{p.items ?? 0} {t("instructions")}{p.needs_review ? `, ${p.needs_review} ${t("waitingForDoctor")}` : ""}</span>
+                <span className="min-w-0 text-sm"><Link to={`/plan/${p.id}`} className="font-semibold">{p.title}</Link> <span className="tnum text-xs text-muted">{fmtDate(p.discharge_date, { day: "numeric", month: "short" })}</span></span>
+                <span className="tnum text-xs text-muted">{p.items ?? 0} {t("instructions")}{p.needs_review ? `, ${p.needs_review} ${t("waitingForDoctor")}` : ""}</span>
               </li>
             ))}
           </ul>

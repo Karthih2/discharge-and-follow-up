@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 from ..auth import require
 from ..voices import speak_text
 from ..db import get_session, sim_now, sim_today
-from ..models import (CallbackRequest, CaregiverAlert, Consent, Document, HubMember, Item, Provider, ProviderMatch, Task, User)
+from ..models import (AuditLog, CallbackRequest, CaregiverAlert, Consent, Document, HubMember, Item, ItemText, Provider, ProviderMatch, Task, User)
 from .plans import PLAIN, alert_dict
 
 router = APIRouter(prefix="/api")
@@ -42,12 +42,13 @@ def today(u: User = Depends(require("patient")), s: Session = Depends(get_sessio
     items = {i.id: i for i in s.exec(select(Item).where(Item.document_id.in_(ids or [0])))}
     start, end = datetime.combine(day, time.min), datetime.combine(day, time.max)
 
+    todays = [t for t in tasks if _slot(t.title) and start <= t.due_at <= end]
+    marked = _marked_by(s, [t.id for t in todays if t.status == "Completed"], u, ids)
     meds = {k: [] for k in SLOTS}
-    for t in tasks:
-        slot = _slot(t.title)
-        if slot and start <= t.due_at <= end:
-            meds[slot].append({"task_id": t.id, "document_id": t.document_id, "status": t.status, "due_at": t.due_at.isoformat(),
-                               "medicines": [m.strip() for m in t.title.split(":", 1)[1].split(",")]})
+    for t in todays:
+        meds[_slot(t.title)].append({"task_id": t.id, "document_id": t.document_id, "status": t.status, "due_at": t.due_at.isoformat(),
+                                     "medicines": [m.strip() for m in t.title.split(":", 1)[1].split(",")],
+                                     "marked_by": marked.get(t.id)})
     others = [t for t in tasks if not _slot(t.title)]
     places = _places(s, [t.item_id for t in others if t.status == "Pending" and t.due_at >= start])
     coming = [t for t in others if t.status == "Pending" and t.due_at >= start]
@@ -70,7 +71,37 @@ def today(u: User = Depends(require("patient")), s: Session = Depends(get_sessio
         "progress": {"done": sum(t.status == "Completed" for t in due), "due": len(due),
                      "overdue": sum(t.status == "Pending" and t.due_at < now for t in mine), "total": len(mine)},
         "upcoming": week, "open_callbacks": len(calls),
+        "plan_state": latest.plan_state if latest else None,
+        "missed_today": sum(t.status == "Pending" and start <= t.due_at < now for t in tasks),
+        "warnings": _warnings(s, latest, u.language) if latest else [],
     }
+
+
+def _marked_by(s: Session, task_ids: list[int], me: User, doc_ids: list[int]) -> dict[int, str]:
+    """Who ticked each task, from the audit log: "you" for the patient, the person's name for family."""
+    if not task_ids:
+        return {}
+    rows = s.exec(select(AuditLog).where(AuditLog.action == "task_completed", AuditLog.document_id.in_(doc_ids or [0])).order_by(AuditLog.id)).all()
+    last: dict[int, str] = {}
+    for r in rows:
+        tid = (r.detail or {}).get("task_id")
+        if tid in task_ids:
+            last[tid] = r.actor
+    ids = {int(a.split(":", 1)[1]) for a in last.values() if a.startswith("user:") and a.split(":", 1)[1].isdigit()}
+    names = {x.id: x.name for x in s.exec(select(User).where(User.id.in_(ids or {0})))}
+    out = {}
+    for tid, actor in last.items():
+        uid = int(actor.split(":", 1)[1]) if actor.startswith("user:") and actor.split(":", 1)[1].isdigit() else None
+        out[tid] = "you" if uid == me.id else names.get(uid, "family")
+    return out
+
+
+def _warnings(s: Session, doc: Document, lang: str) -> list[dict]:
+    """Warning signs a doctor has let through (not held, not removed), in the patient's language when a version exists."""
+    items = s.exec(select(Item).where(Item.document_id == doc.id, Item.category == "warning_sign",
+                                      Item.status.notin_(["Needs Review", "Rejected"]))).all()
+    texts = {(t.item_id, t.language): t.simple_text for t in s.exec(select(ItemText).where(ItemText.item_id.in_([i.id for i in items] or [0])))}
+    return [{"item_id": i.id, "text": texts.get((i.id, lang)) or texts.get((i.id, "en")) or i.original_text} for i in items]
 
 
 def _member_scopes(s: Session, u: User, with_unshared: bool = False) -> list[tuple[Consent, User]]:

@@ -1,73 +1,63 @@
-import { useState } from "react";
+import { ArrowRight, ChevronDown, Users } from "lucide-react";
+import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LangToggle } from "../components/LangToggle";
-import { Logo } from "../components/Icons";
+import { AuthField, AuthShell } from "../components/AuthShell";
 import { api } from "../lib/api";
 import { HOME, useAuth } from "../lib/auth";
 import { useLang } from "../lib/lang";
-import { Button } from "../components/ui";
+
+const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 export default function Register() {
   const { signIn } = useAuth();
   const { lang, t } = useLang();
   const nav = useNavigate();
   const [f, setF] = useState({ name: "", email: "", password: "", role: "patient" });
-  const [err, setErr] = useState<string | null>(null);
+  const [errs, setErrs] = useState<Record<string, string | undefined>>({});
   const [busy, setBusy] = useState(false);
-  const set = (k: string) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });
+  const set = (k: keyof typeof f) => (e: { target: { value: string } }) => { setF({ ...f, [k]: e.target.value }); setErrs({ ...errs, [k]: undefined }); };
+
+  const submit = async (ev: FormEvent) => {
+    ev.preventDefault();
+    const next: Record<string, string> = {};
+    if (f.name.trim().length < 2) next.name = t("errName");
+    if (!EMAIL.test(f.email.trim())) next.email = t("errEmail");
+    if (f.password.length < 8) next.password = t("errPassword8");
+    setErrs(next);
+    if (Object.keys(next).length) return;
+    setBusy(true);
+    try {
+      const out = await api.register({ ...f, name: f.name.trim(), email: f.email.trim(), language: lang });
+      signIn(out);
+      nav(HOME[out.user.role], { replace: true });
+    } catch (x) {
+      setErrs({ email: (x as Error).message });
+      setBusy(false);
+    }
+  };
 
   return (
-    <div className="auth-page">
-      <form
-        className="auth-card"
-        onSubmit={async (ev) => {
-          ev.preventDefault();
-          setBusy(true);
-          setErr(null);
-          try {
-            const out = await api.register({ ...f, language: lang });
-            signIn(out);
-            nav(HOME[out.user.role], { replace: true });
-          } catch (x) {
-            setErr((x as Error).message);
-            setBusy(false);
-          }
-        }}
-      >
-        <div className="auth-logo">
-          <Logo size={28} />
-          <span>CareBridge</span>
-        </div>
-        <h1 className="text-2xl font-bold">{t("createAnAccount")}</h1>
-        <p className="mt-1 text-sm text-muted">{t("registerIntro")}</p>
-        <div className="mt-6 space-y-4">
-          <label className="block">
-            <span className="mb-1 block text-sm font-semibold">{t("name")}</span>
-            <input className="field" value={f.name} onChange={set("name")} required minLength={2} />
-          </label>
-          <label className="block">
-            <span className="mb-1 block text-sm font-semibold">{t("email")}</span>
-            <input className="field" type="email" value={f.email} onChange={set("email")} required />
-          </label>
-          <label className="block">
-            <span className="mb-1 block text-sm font-semibold">{t("password")}</span>
-            <input className="field" type="password" value={f.password} onChange={set("password")} required minLength={8} autoComplete="new-password" placeholder="At least 8 characters" />
-          </label>
-          <label className="block">
-            <span className="mb-1 block text-sm font-semibold">{t("iAmA")}</span>
-            <select className="field" value={f.role} onChange={set("role")}>
-              <option value="patient">{t("rolePatient")}</option>
-              <option value="manager">{t("managerCaregiver")}</option>
+    <AuthShell title={t("joinTitle")} subtitle={t("startJourney")}>
+      <form className="au-stack" onSubmit={submit} noValidate>
+        <AuthField icon="user" label={t("fullName")} autoComplete="name" value={f.name} error={errs.name} onChange={set("name")} />
+        <AuthField icon="mail" label={t("emailAddress")} type="email" autoComplete="email" value={f.email} error={errs.email} onChange={set("email")} />
+        <AuthField icon="lock" label={t("password")} type="password" autoComplete="new-password" value={f.password} error={errs.password} onChange={set("password")} />
+        <div>
+          <label htmlFor="au-role" className="sr-only">{t("iAmA")}</label>
+          <div className="au-field">
+            <Users size={19} className="au-field-ic" aria-hidden />
+            <select id="au-role" value={f.role} onChange={set("role")}>
+              <option value="patient">{t("iAmA")}: {t("rolePatient")}</option>
+              <option value="manager">{t("iAmA")}: {t("managerCaregiver")}</option>
             </select>
-          </label>
-          <LangToggle />
-          {err && <p role="alert" className="text-sm text-attention">{err}</p>}
-          <div className="flex items-center gap-3">
-            <Button type="submit" disabled={busy}>{t("createAnAccount")}</Button>
-            <Link to="/login" className="text-sm">{t("haveAccount")}</Link>
+            <ChevronDown size={18} className="pointer-events-none absolute right-4 text-[#3e4b42]" aria-hidden />
           </div>
         </div>
+        <button type="submit" className="au-submit" disabled={busy} aria-busy={busy}>
+          {t("createAnAccount")} {busy ? <span className="dots" aria-hidden><i /><i /><i /></span> : <ArrowRight size={20} aria-hidden />}
+        </button>
       </form>
-    </div>
+      <p className="au-foot">{t("haveAccountQ")}<Link to="/login" replace>{t("tabLogin")}</Link></p>
+    </AuthShell>
   );
 }

@@ -13,7 +13,7 @@ export function Tile({ title, aside, className = "", children, id }: { title?: s
       {title && (
         <header className="flex items-center justify-between gap-2 border-b border-line px-3 py-2">
           <h2 id={id} className="text-sm font-bold">{title}</h2>
-          {aside && <span className="font-mono text-xs text-muted">{aside}</span>}
+          {aside && <span className="text-xs text-muted">{aside}</span>}
         </header>
       )}
       <div className="min-h-0 flex-1 p-3">{children}</div>
@@ -28,10 +28,10 @@ export function DateTile({ today, hello, sub }: { today: string; hello: string; 
     <section className="card relative flex flex-col items-center justify-center gap-1 overflow-hidden p-4 text-center" aria-label={fmtDate(today)}>
       <p className="text-sm font-semibold text-muted">{hello}</p>
       <div className="flex h-28 w-28 items-center justify-center bg-secondary" style={{ clipPath: "polygon(50% 0%, 61% 8%, 75% 6%, 82% 18%, 94% 25%, 92% 39%, 100% 50%, 92% 61%, 94% 75%, 82% 82%, 75% 94%, 61% 92%, 50% 100%, 39% 92%, 25% 94%, 18% 82%, 6% 75%, 8% 61%, 0% 50%, 8% 39%, 6% 25%, 18% 18%, 25% 6%, 39% 8%)" }} aria-hidden>
-        <span className="font-mono text-5xl font-semibold text-ink">{d.getDate()}</span>
+        <span className="text-5xl font-semibold text-ink">{d.getDate()}</span>
       </div>
-      <p className="font-mono text-sm font-semibold text-primary">{d.toLocaleDateString("en-IN", { month: "long", year: "numeric" })}</p>
-      <p className="font-mono text-xs text-muted">{d.toLocaleDateString("en-IN", { weekday: "long" })}{sub ? `. ${sub}` : ""}</p>
+      <p className="text-sm font-semibold text-primary">{d.toLocaleDateString("en-IN", { month: "long", year: "numeric" })}</p>
+      <p className="text-xs text-muted">{d.toLocaleDateString("en-IN", { weekday: "long" })}{sub ? `. ${sub}` : ""}</p>
     </section>
   );
 }
@@ -47,7 +47,7 @@ export function MiniCalendar({ tasks, today }: { tasks: CalTask[]; today: string
   for (const t of tasks) by.set(t.due_at.slice(0, 10), [...(by.get(t.due_at.slice(0, 10)) ?? []), t]);
   return (
     <div>
-      <div className="grid grid-cols-7 gap-y-0.5 text-center font-mono text-[0.7rem] text-muted" aria-hidden>
+      <div className="grid grid-cols-7 gap-y-0.5 text-center text-[0.7rem] text-muted" aria-hidden>
         {["M", "T", "W", "T", "F", "S", "S"].map((x, i) => <span key={i}>{x}</span>)}
       </div>
       <div className="grid grid-cols-7 gap-y-0.5">
@@ -59,7 +59,7 @@ export function MiniCalendar({ tasks, today }: { tasks: CalTask[]; today: string
           const isToday = date === today;
           return (
             <button key={date} onClick={() => nav("/calendar")} aria-label={`${date}, ${list.length}`}
-              className={`flex h-8 flex-col items-center justify-center rounded-md font-mono text-xs ${isToday ? "bg-primary font-semibold text-surface" : "hover:bg-line"}`}>
+              className={`flex h-8 flex-col items-center justify-center rounded-md text-xs ${isToday ? "bg-primary font-semibold text-surface" : "hover:bg-line"}`}>
               {i + 1}
               <i className={`h-1 w-1 rounded-full ${list.length === 0 ? "bg-transparent" : late ? "bg-attention" : isToday ? "bg-surface" : "bg-primary"}`} />
             </button>
@@ -88,7 +88,7 @@ export function ActivityDots({ tasks, today }: { tasks: CalTask[]; today: string
             style={{ background: future ? "transparent" : n === 0 ? "var(--line)" : "var(--primary)", opacity: n === 0 ? 0.6 : 0.3 + (0.7 * n) / max, border: future ? "1px dashed var(--line)" : "none" }} />;
         })}
       </div>
-      <p className="mt-2 flex items-center justify-end gap-1 font-mono text-[0.7rem] text-muted">Less {[0.3, 0.55, 0.8, 1].map((o) => <i key={o} className="h-2.5 w-2.5 rounded-sm bg-primary" style={{ opacity: o }} />)} More</p>
+      <p className="mt-2 flex items-center justify-end gap-1 text-[0.7rem] text-muted">Less {[0.3, 0.55, 0.8, 1].map((o) => <i key={o} className="h-2.5 w-2.5 rounded-sm bg-primary" style={{ opacity: o }} />)} More</p>
     </div>
   );
 }
@@ -97,7 +97,7 @@ export function ActivityDots({ tasks, today }: { tasks: CalTask[]; today: string
 export function Stat({ n, label, warn }: { n: number | string; label: string; warn?: boolean }) {
   return (
     <div className="card flex flex-col items-center justify-center rounded-[10px] px-2 py-3 text-center transition-transform hover:scale-[1.02]">
-      <span className={`font-mono text-2xl font-semibold ${warn ? "text-attention" : "text-ink"}`}>{n}</span>
+      <span className={`text-2xl font-semibold ${warn ? "text-attention" : "text-ink"}`}>{n}</span>
       <span className="text-xs text-muted">{label}</span>
     </div>
   );
@@ -122,7 +122,7 @@ export function Props({ rows }: { rows: [string, ReactNode][] }) {
     <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
       {rows.map(([k, v]) => (
         <div key={k} className="contents">
-          <dt className="font-mono text-xs text-muted">{k}</dt>
+          <dt className="text-xs text-muted">{k}</dt>
           <dd className="min-w-0">{v}</dd>
         </div>
       ))}
