@@ -77,21 +77,44 @@ function DoctorCard({ d, all }: { d: DoctorRow; all: DoctorRow[] }) {
     }
   };
 
+  const total = d.open_items + (d.overdue_items ?? 0);
+  const load = total > 20 ? "high" : total > 8 ? "medium" : "low";
+
   return (
     <motion.li layout transition={mt(0.2)}>
-      <Card className={`space-y-3 p-4 ${d.active ? "" : "bg-bg"}`}>
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="min-w-0">
-            <h3 className="text-xl">{d.name}</h3>
-            <p className="text-muted">{d.email}</p>
+      <Card className={`space-y-4 p-5 ${d.active ? "" : "bg-bg opacity-75"}`}>
+        {/* Header row */}
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className={`flex h-11 w-11 items-center justify-center rounded-full text-lg font-bold text-white ${d.available ? "bg-primary" : "bg-muted"}`}>
+              {d.name.charAt(0).toUpperCase()}
+            </span>
+            <div className="min-w-0">
+              <h3 className="text-lg font-bold">{d.name}</h3>
+              <p className="text-sm text-muted">{d.email}</p>
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary capitalize">{d.specialty}</span>
             {!d.active && <Badge>{t("deactivated")}</Badge>}
-            <Badge tone={d.available ? "good" : "warn"}>{d.available ? t("available") : t("unavailable")}</Badge>
-            <Badge><span className="tnum">{d.open_items}</span>&nbsp;{t("open")}</Badge>
-            {d.overdue_items > 0 && <Badge tone="warn"><span className="tnum">{d.overdue_items}</span>&nbsp;{t("overdue")}</Badge>}
+            <span className="relative inline-flex items-center gap-1.5">
+              <span className={`avail-dot ${d.available ? "" : "off"}`} />
+              <span className="text-xs font-medium">{d.available ? t("available") : t("unavailable")}</span>
+            </span>
           </div>
         </div>
+
+        {/* Workload summary */}
+        <div className="flex flex-wrap items-center gap-4 rounded-lg border border-line bg-bg px-4 py-2.5">
+          <span className="text-sm"><span className="tnum font-bold">{d.open_items}</span> <span className="text-muted">{t("open")}</span></span>
+          {d.overdue_items > 0 && <span className="text-sm text-attention"><span className="tnum font-bold">{d.overdue_items}</span> {t("overdue")}</span>}
+          <span className={`ml-auto rounded-full px-2 py-0.5 text-xs font-semibold ${load === "high" ? "bg-attention/10 text-attention" : load === "medium" ? "bg-amber-100 text-amber-700" : "bg-primary/10 text-primary"}`}>
+            {load} load
+          </span>
+          {d.backup && <span className="text-xs text-muted">Backup: {d.backup.name}</span>}
+        </div>
+
+        {/* Controls */}
         <div className="grid gap-3 md:grid-cols-2">
           <Select label={t("department")} value={d.specialty} disabled={busy === "dept"}
             onChange={(e) => run("dept", () => api.editDoctor(d.id, { specialty: e.target.value }), t("toastSaved"))}>
@@ -103,7 +126,7 @@ function DoctorCard({ d, all }: { d: DoctorRow; all: DoctorRow[] }) {
             {all.filter((x) => x.id !== d.id && x.active).map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}
           </Select>
         </div>
-        <div className="flex flex-wrap items-end gap-2">
+        <div className="flex flex-wrap items-end gap-2 border-t border-line pt-3">
           <Button small look="quiet" loading={busy === "avail"} onClick={() => run("avail", () => api.adminAvailability(d.id, !d.available), d.available ? t("toastUnavailable") : t("toastAvailable"))}>
             {d.available ? t("setUnavailable") : t("setAvailable")}
           </Button>

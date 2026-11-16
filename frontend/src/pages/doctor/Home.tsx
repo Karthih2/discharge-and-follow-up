@@ -49,10 +49,12 @@ export default function DoctorHome() {
   return (
     <div className="space-y-8">
       {h && (
-        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}>
-          <p className="text-muted text-sm">{greeting()}</p>
-          <h1 className="font-heading text-3xl">{h.name.startsWith("Dr") ? h.name : `Dr. ${h.name}`}</h1>
-          <p className="text-muted">{h.specialty}</p>
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }} className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-muted text-sm">{greeting()}</p>
+            <h1 className="font-heading text-3xl">{h.name.startsWith("Dr") ? h.name : `Dr. ${h.name}`}</h1>
+            <span className="mt-1 inline-block rounded-full bg-primary/10 px-3 py-0.5 text-sm font-semibold text-primary capitalize">{h.specialty}</span>
+          </div>
         </motion.div>
       )}
 

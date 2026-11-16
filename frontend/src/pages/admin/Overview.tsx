@@ -58,7 +58,7 @@ export default function Overview() {
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}>
         <p className="text-muted text-sm">{greeting()}</p>
         <h1 className="font-heading text-3xl">{user?.name ?? t("overview")}</h1>
-        <p className="text-muted">{t("overviewIntro")}</p>
+        <p className="text-muted">{t("overviewIntro")} &middot; {days}-day window</p>
       </motion.div>
       <div className="flex flex-wrap items-end gap-4">
         <div role="group" aria-label={t("dateRange")} className="flex gap-2">

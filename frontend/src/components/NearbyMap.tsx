@@ -13,6 +13,7 @@ const COLOR: Record<string, string> = {
   pharmacy: "#6B7280",
   physio: "var(--primary)",
   home_care: "#6B7280",
+  blood_bank: "#991B1B",
 };
 
 interface Props {

@@ -149,3 +149,30 @@ Dawn Scan and Lab Centre,lab,radiology;pathology,Delhi,110001,28.62242,77.21531,
 Cedar Physiotherapy Centre,physio,physiotherapy;orthopaedic rehabilitation;cardiac rehabilitation,Delhi,110085,28.73924,77.05028,en;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,011-5550-0247,true
 Aster Medicals,pharmacy,pharmacy,Delhi,110070,28.50975,77.16307,en;hi;ta,CGHS;Private,Mon-Sat,011-5550-0248,true
 Lily Home Care Services,home_care,home nursing;wound care,Delhi,110024,28.57451,77.25283,en;hi,Ayushman Bharat;Private,Mon-Sun,011-5550-0249,true
+Aarohan Multispeciality Centre,hospital,cardiology;neurology;general medicine;emergency,Chennai,600008,13.0785,80.2612,en;ta;hi,Ayushman Bharat;Private,24 Hours,+91-9000000001,true
+Bluehaven General Hospital,hospital,general medicine;orthopaedics;paediatrics,Chennai,600040,13.0850,80.2101,en;ta,Ayushman Bharat;CGHS;Private,24 Hours,+91-9000000002,true
+Crestline Heart and Care Hospital,hospital,cardiology;cardiac rehabilitation;diagnostics,Chennai,600020,13.0012,80.2565,en;ta,Private,24 Hours,+91-9000000003,true
+Everwell Community Hospital,hospital,general medicine;maternity;paediatrics;emergency,Chennai,600045,12.9249,80.1000,en;ta;hi,Ayushman Bharat;Private,24 Hours,+91-9000000004,true
+Northstar Medical Centre,hospital,general medicine;pulmonology;orthopaedics,Chennai,600051,13.1482,80.2314,en;ta,CGHS;Private,24 Hours,+91-9000000005,true
+Greenfield Family Hospital,hospital,family medicine;dermatology;ENT,Chennai,600053,13.1143,80.1548,en;ta;hi,Ayushman Bharat;Private,24 Hours,+91-9000000006,true
+Meridian Women's Health Hospital,hospital,gynaecology;obstetrics;maternity;neonatal care,Chennai,600042,12.9750,80.2210,en;ta,Private,24 Hours,+91-9000000007,true
+Horizon Emergency and Trauma Centre,hospital,trauma care;emergency medicine;orthopaedics;surgery,Chennai,600116,13.0358,80.1574,en;ta;hi,Ayushman Bharat;CGHS;Private,24 Hours,+91-9000000008,true
+Silveroak Medical Institute,hospital,general medicine;surgery;paediatrics;teaching,Chennai,603103,12.7908,80.2206,en;ta,Ayushman Bharat;Private,24 Hours,+91-9000000009,true
+Suncrest Regional Hospital,hospital,general medicine;surgery;cardiology;emergency,Chengalpattu,603001,12.6819,79.9888,en;ta,Ayushman Bharat;CGHS;Private,24 Hours,+91-9000000010,true
+LittleSteps Paediatric Clinic,clinic,child health;vaccination;growth monitoring,Chennai,600017,13.0418,80.2341,en;ta,Private,Mon-Sat,+91-9000000011,true
+OralCare Dental Studio,clinic,dental consultation;root canal;oral hygiene,Chennai,600034,13.0569,80.2425,en;ta;hi,Private,Mon-Sat,+91-9000000012,true
+WellSpring Family Clinic,clinic,general consultation;fever care;preventive health,Chennai,600012,13.1197,80.2330,en;ta,Ayushman Bharat;Private,Mon-Sat,+91-9000000013,true
+MotionPlus Physiotherapy Clinic,physio,physiotherapy;sports rehabilitation;post-surgery recovery,Chennai,600119,12.9010,80.2279,en;ta,Private,Mon-Sat,+91-9000000014,true
+ClearSight Eye Clinic,clinic,eye examination;vision testing;cataract consultation,Chennai,600043,12.9675,80.1491,en;ta;hi,Ayushman Bharat;Private,Mon-Sat,+91-9000000015,true
+BreatheWell Respiratory Clinic,clinic,respiratory consultation;asthma follow-up;lung function testing,Chennai,600004,13.0338,80.2676,en;ta,Private,Mon-Sat,+91-9000000016,true
+NovaPath Diagnostic Centre,lab,complete blood count;lipid profile;liver function test;kidney function test,Chennai,600024,13.0522,80.2255,en;ta;hi,Ayushman Bharat;Private,Mon-Sat,+91-9000000017,true
+PulsePoint Blood Testing Lab,lab,blood glucose;HbA1c;thyroid profile;vitamin D,Chennai,600044,12.9516,80.1462,en;ta,Private,Mon-Sat,+91-9000000018,true
+ImagingSphere Diagnostics,lab,X-ray;ultrasound;CT scan;MRI,Chennai,600032,13.0067,80.2206,en;ta;hi,Ayushman Bharat;CGHS;Private,Mon-Sat,+91-9000000019,true
+HealthGrid Pathology Lab,lab,urine analysis;blood tests;microbiology;biochemistry,Chennai,600053,13.1086,80.1570,en;ta,Private,Mon-Sat,+91-9000000020,true
+MediCheck Advanced Diagnostics,lab,hormone testing;allergy testing;biochemistry;immunology,Chennai,600097,12.9377,80.2362,en;ta;hi,Ayushman Bharat;Private,Mon-Sat,+91-9000000021,true
+RedBridge Blood Centre,blood_bank,blood donation;blood group testing;blood component services,Chennai,600010,13.0822,80.2421,en;ta,Private,24 Hours,+91-9000000022,true
+LifeDrop Blood Services,blood_bank,blood donation;blood grouping;component separation,Chennai,600042,12.9794,80.2180,en;ta,Private,Mon-Sat,+91-9000000023,true
+VitalDrop Blood Resource Centre,blood_bank,blood group testing;blood donation coordination,Chennai,600056,13.0480,80.0950,en;ta;hi,Private,Mon-Sat,+91-9000000024,true
+ReNew Rehabilitation Centre,physio,post-surgery rehabilitation;mobility training;physiotherapy,Chennai,600041,12.9140,80.2510,en;ta,Private,Mon-Sat,+91-9000000028,true
+RestoreWell Recovery Centre,physio,elderly care;mobility support;recovery monitoring,Kanchipuram,631501,12.8342,79.7036,en;ta,Private,Mon-Sat,+91-9000000029,true
+Westgate Regional Medical Centre,hospital,general medicine;emergency;surgery;diagnostics,Sriperumbudur,602105,12.9675,79.9410,en;ta;hi,Ayushman Bharat;CGHS;Private,24 Hours,+91-9000000030,true

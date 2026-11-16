@@ -1,15 +1,16 @@
 import type { LucideIcon } from "lucide-react";
-import { Cross, FlaskConical, HeartPulse, Activity, Home, Phone, Pill, MapPin } from "lucide-react";
+import { Cross, Droplets, FlaskConical, HeartPulse, Activity, Home, Phone, Pill, MapPin } from "lucide-react";
 import type { Provider } from "../lib/types";
 import { Card } from ".//ui";
 
 export const TYPE_LABEL: Record<string, string> = {
   hospital: "Hospital",
   clinic: "Clinic",
-  lab: "Lab",
+  lab: "Lab / Diagnostics",
   pharmacy: "Pharmacy",
-  physio: "Physiotherapy",
-  home_care: "Home care",
+  physio: "Physiotherapy / Rehab",
+  home_care: "Home Care",
+  blood_bank: "Blood Bank",
 };
 const TYPE_ICON: Record<string, LucideIcon> = {
   hospital: Cross,
@@ -18,6 +19,7 @@ const TYPE_ICON: Record<string, LucideIcon> = {
   pharmacy: Pill,
   physio: Activity,
   home_care: Home,
+  blood_bank: Droplets,
 };
 const TYPE_COLOR: Record<string, string> = {
   hospital: "bg-attention/10 text-attention border-attention/20",
@@ -26,6 +28,7 @@ const TYPE_COLOR: Record<string, string> = {
   pharmacy: "bg-secondary/20 text-ink border-secondary/30",
   physio: "bg-primary/10 text-primary border-primary/20",
   home_care: "bg-secondary/20 text-ink border-secondary/30",
+  blood_bank: "bg-attention/10 text-attention border-attention/20",
 };
 const LANG_LABEL: Record<string, string> = { en: "English", ta: "Tamil", hi: "Hindi", kn: "Kannada", te: "Telugu", ml: "Malayalam" };
 

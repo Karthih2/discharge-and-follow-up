@@ -228,7 +228,7 @@ def test_fallback_when_doctor_unavailable(client):
     fb = mine[0]["fallback_doctor"]["id"]
     r = client.put(f"/api/admin/doctors/{primary}/availability", json={"available": False}, headers=adm)
     assert r.json()["moved"] >= 1
-    q2 = [x for x in client.get("/api/admin/queue", headers=adm).json() if x["id"] == mine[0]["id"]][0]
+    q2 = [x for x in client.get("/api/admin/queue?limit=500", headers=adm).json() if x["id"] == mine[0]["id"]][0]
     assert q2["assigned_doctor"]["id"] != primary
     assert q2["assigned_doctor"]["id"] == fb
     # management can assign explicitly
