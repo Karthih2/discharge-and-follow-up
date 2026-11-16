@@ -7,6 +7,7 @@ interface Ctx {
   setLang: (l: Lang) => void;
   t: (k: StringKey) => string;
   cat: (c: string) => string;
+  needsPick: boolean;
 }
 
 const LangContext = createContext<Ctx>(null as unknown as Ctx);
@@ -18,6 +19,10 @@ export const LANG_NAMES: { code: Lang; label: string }[] = [
   { code: "kn", label: "ಕನ್ನಡ" },
   { code: "ml", label: "മലയാളം" },
 ];
+
+function hasStored(): boolean {
+  try { return !!localStorage.getItem("cb_lang"); } catch { return false; }
+}
 
 function initial(): Lang {
   try {
@@ -31,11 +36,13 @@ function initial(): Lang {
 
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(initial);
+  const [needsPick, setNeedsPick] = useState(() => !hasStored());
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
   const setLang = (l: Lang) => {
     setLangState(l);
+    setNeedsPick(false);
     try {
       localStorage.setItem("cb_lang", l);
     } catch {
@@ -44,7 +51,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
   };
   const t = (k: StringKey) => STRINGS[k][lang];
   const cat = (c: string) => (CATEGORY_LABEL[c] ?? CATEGORY_LABEL.other)[lang];
-  return <LangContext.Provider value={{ lang, setLang, t, cat }}>{children}</LangContext.Provider>;
+  return <LangContext.Provider value={{ lang, setLang, t, cat, needsPick }}>{children}</LangContext.Provider>;
 }
 
 export const useLang = () => useContext(LangContext);

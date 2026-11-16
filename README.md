@@ -122,7 +122,7 @@ JWT_SECRET=your_long_random_secret
 **Quick start (Windows):**
 
 ```powershell
-.\run_demo.bat
+.\scripts\run_demo.bat
 ```
 
 **Development:**

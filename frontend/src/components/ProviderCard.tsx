@@ -1,5 +1,5 @@
-import type { Icon as PhIcon } from "@phosphor-icons/react";
-import { FirstAid, Flask, Heartbeat, Horse, House, Phone, Pill, MapPin } from "@phosphor-icons/react";
+import type { LucideIcon } from "lucide-react";
+import { Cross, FlaskConical, HeartPulse, Activity, Home, Phone, Pill, MapPin } from "lucide-react";
 import type { Provider } from "../lib/types";
 import { Card } from ".//ui";
 
@@ -11,13 +11,13 @@ export const TYPE_LABEL: Record<string, string> = {
   physio: "Physiotherapy",
   home_care: "Home care",
 };
-const TYPE_ICON: Record<string, PhIcon> = {
-  hospital: FirstAid,
-  clinic: Heartbeat,
-  lab: Flask,
+const TYPE_ICON: Record<string, LucideIcon> = {
+  hospital: Cross,
+  clinic: HeartPulse,
+  lab: FlaskConical,
   pharmacy: Pill,
-  physio: Horse,
-  home_care: House,
+  physio: Activity,
+  home_care: Home,
 };
 const TYPE_COLOR: Record<string, string> = {
   hospital: "bg-attention/10 text-attention border-attention/20",
@@ -30,14 +30,14 @@ const TYPE_COLOR: Record<string, string> = {
 const LANG_LABEL: Record<string, string> = { en: "English", ta: "Tamil", hi: "Hindi", kn: "Kannada", te: "Telugu", ml: "Malayalam" };
 
 export function ProviderCard({ p, reasons, rank, compact }: { p: Provider; reasons?: string[]; rank?: number; compact?: boolean }) {
-  const Icon = TYPE_ICON[p.type] ?? FirstAid;
+  const Icon = TYPE_ICON[p.type] ?? Cross;
   const colors = TYPE_COLOR[p.type] ?? "bg-primary/10 text-primary border-primary/20";
 
   return (
     <Card className={`provider-card ${compact ? "p-3" : "p-4"} transition-shadow hover:shadow-md`}>
       <div className="flex items-start gap-3">
         <span className={`provider-type-icon mt-0.5 flex shrink-0 items-center justify-center rounded-[10px] border ${colors} ${compact ? "h-9 w-9" : "h-10 w-10"}`}>
-          <Icon size={compact ? 18 : 20} weight="duotone" aria-hidden />
+          <Icon size={compact ? 18 : 20} aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-baseline justify-between gap-1">
@@ -50,7 +50,7 @@ export function ProviderCard({ p, reasons, rank, compact }: { p: Provider; reaso
             </span>
           </div>
           <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted">
-            <MapPin size={14} weight="bold" aria-hidden className="shrink-0" />
+            <MapPin size={14} aria-hidden className="shrink-0" />
             {p.city} {p.pincode} · {p.open_days}
           </p>
           {!compact && (
@@ -77,7 +77,7 @@ export function ProviderCard({ p, reasons, rank, compact }: { p: Provider; reaso
             </ul>
           )}
           <a href={`tel:${p.phone}`} className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-primary no-underline hover:underline">
-            <Phone size={16} weight="fill" aria-hidden /> {p.phone}
+            <Phone size={16} aria-hidden /> {p.phone}
           </a>
           {p.synthetic && <span className="ml-2 text-xs text-muted">(demo)</span>}
         </div>

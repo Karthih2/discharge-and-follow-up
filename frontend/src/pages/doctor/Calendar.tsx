@@ -1,4 +1,4 @@
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { m as motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { Badge, Button, Card, EmptyState, PageHead } from "../../components/ui";
@@ -82,9 +82,9 @@ export default function DoctorCalendar() {
         {/* Calendar grid */}
         <Card className="p-4">
           <div className="mb-4 flex items-center justify-between">
-            <Button small look="quiet" onClick={prev} aria-label="Previous month"><CaretLeft size={18} /></Button>
+            <Button small look="quiet" onClick={prev} aria-label="Previous month"><ChevronLeft size={18} /></Button>
             <h3 className="font-heading text-xl">{monthName}</h3>
-            <Button small look="quiet" onClick={next} aria-label="Next month"><CaretRight size={18} /></Button>
+            <Button small look="quiet" onClick={next} aria-label="Next month"><ChevronRight size={18} /></Button>
           </div>
           <div className="grid grid-cols-7 text-center text-sm font-semibold text-muted">
             {DAYS.map((d) => <span key={d} className="py-1">{d}</span>)}

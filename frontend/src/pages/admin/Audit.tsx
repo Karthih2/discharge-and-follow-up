@@ -1,4 +1,4 @@
-import { DownloadSimple } from "@phosphor-icons/react";
+import { Download } from "lucide-react";
 import { useState } from "react";
 import { Button, Card, EmptyState, ListSkeleton, PageHead, Pager, Select } from "../../components/ui";
 import { api } from "../../lib/api";
@@ -35,7 +35,7 @@ export default function Audit() {
   return (
     <div className="space-y-5">
       <PageHead title={t("auditLog")} text={t("auditIntro")}>
-        <Button look="quiet" onClick={exportCsv} loading={busy} disabled={!!bad}><DownloadSimple size={18} aria-hidden /> {t("exportCsv")}</Button>
+        <Button look="quiet" onClick={exportCsv} loading={busy} disabled={!!bad}><Download size={18} aria-hidden /> {t("exportCsv")}</Button>
       </PageHead>
       <div className="flex flex-wrap items-end gap-3">
         <Select label={t("actor")} value={f.actor} onChange={set("actor")}>

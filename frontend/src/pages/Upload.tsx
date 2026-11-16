@@ -1,4 +1,4 @@
-import { FileArrowUp, ShieldCheck } from "@phosphor-icons/react";
+import { FileUp, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Skeleton } from "../components/ui";
@@ -85,7 +85,7 @@ export default function Upload() {
             disabled={busy || (!text.trim() && !file)}
             onClick={() => go(() => (file ? api.createFromPdf(file, lang) : api.createDocument({ text, preferred_language: lang })))}
           >
-            <FileArrowUp size={20} aria-hidden /> {t("checkContinue")}
+            <FileUp size={20} aria-hidden /> {t("checkContinue")}
           </Button>
         </section>
 

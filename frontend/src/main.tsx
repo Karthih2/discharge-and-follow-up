@@ -6,6 +6,7 @@ import { ListSkeleton } from "./components/ui";
 import { PORTAL } from "./lib/api";
 import { AuthProvider } from "./lib/auth";
 import { LangProvider } from "./lib/lang";
+import { LangPicker } from "./components/LangPicker";
 import { ToastHost } from "./lib/toast";
 import type { Role } from "./lib/types";
 import "./styles/index.css";
@@ -24,6 +25,7 @@ createRoot(document.getElementById("root")!).render(
   <BrowserRouter basename={base}>
     <LazyMotion features={features}>
       <LangProvider>
+        <LangPicker />
         <AuthProvider allow={allow}>
           <Suspense fallback={<ListSkeleton rows={3} />}>
             <App />

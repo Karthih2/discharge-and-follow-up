@@ -1,4 +1,4 @@
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { m as motion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../lib/api";
@@ -48,7 +48,7 @@ export function CardView(p: ViewProps) {
     <div>
       <div className="mb-3 flex items-center justify-between gap-3">
         <Button look="quiet" small onClick={() => go(-1)} disabled={idx === 0} aria-label={t("previous")}>
-          <CaretLeft size={18} aria-hidden /> {t("previous")}
+          <ChevronLeft size={18} aria-hidden /> {t("previous")}
         </Button>
         <div className="flex flex-wrap justify-center gap-1.5" role="tablist" aria-label="Cards">
           {p.items.map((it, k) => (
@@ -63,7 +63,7 @@ export function CardView(p: ViewProps) {
           ))}
         </div>
         <Button look="quiet" small onClick={() => go(1)} disabled={idx === n - 1} aria-label={t("next")}>
-          {t("next")} <CaretRight size={18} aria-hidden />
+          {t("next")} <ChevronRight size={18} aria-hidden />
         </Button>
       </div>
       <p className="mb-2 text-sm text-muted">{idx + 1} / {n}</p>

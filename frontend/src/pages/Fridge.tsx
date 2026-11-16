@@ -1,4 +1,4 @@
-import { Printer } from "@phosphor-icons/react";
+import { Printer } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { Link, useParams } from "react-router-dom";
 import { CalendarIcon, Logo, SLOT_ICON } from "../components/Icons";

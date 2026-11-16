@@ -1,4 +1,4 @@
-import { PhoneCall } from "@phosphor-icons/react";
+import { Phone } from "lucide-react";
 import { AnimatePresence, m as motion } from "motion/react";
 import { useState } from "react";
 import { Badge, Button, Card, EmptyState, ListSkeleton, PageHead, Textarea } from "../../components/ui";
@@ -41,7 +41,7 @@ function Row({ c }: { c: Callback }) {
       <Card className="space-y-3 p-4">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div className="flex min-w-0 items-start gap-3">
-            <PhoneCall size={24} weight="duotone" className="mt-1 shrink-0 text-primary" aria-hidden />
+            <Phone size={24} className="mt-1 shrink-0 text-primary" aria-hidden />
             <div className="min-w-0">
               <p><strong>{c.patient_alias}</strong> {t("askedAbout")} {c.item_title}.</p>
               <p className="font-mono text-sm text-muted">{c.masked_number}</p>

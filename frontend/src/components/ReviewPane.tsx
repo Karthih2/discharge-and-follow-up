@@ -1,4 +1,4 @@
-import { ArrowUUpLeft, Check, NotePencil } from "@phosphor-icons/react";
+import { Undo2, Check, Pencil } from "lucide-react";
 import { forwardRef, Fragment, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { api } from "../lib/api";
 import { useLang } from "../lib/lang";
@@ -181,12 +181,12 @@ export const ReviewPane = forwardRef<ReviewPaneHandle, { r: ReviewEntry; onAct: 
           <div className="flex flex-wrap gap-2">
             <Button onClick={confirm} loading={busy === "approve"} disabled={!!busy && busy !== "approve"}><Check size={18} aria-hidden /> {t("confirm")} <kbd className="kbd">C</kbd></Button>
             {mode === "correct" ? (
-              <Button look="quiet" onClick={save} loading={busy === "edit"} disabled={(med ? !dose.trim() || timing.length === 0 : !text.trim()) || (!!busy && busy !== "edit")}><NotePencil size={18} aria-hidden /> {t("saveRelease")}</Button>
+              <Button look="quiet" onClick={save} loading={busy === "edit"} disabled={(med ? !dose.trim() || timing.length === 0 : !text.trim()) || (!!busy && busy !== "edit")}><Pencil size={18} aria-hidden /> {t("saveRelease")}</Button>
             ) : (
-              <Button look="quiet" onClick={() => { setMode("correct"); setTimeout(() => firstField.current?.focus(), 30); }}><NotePencil size={18} aria-hidden /> {t("correct")} <kbd className="kbd">E</kbd></Button>
+              <Button look="quiet" onClick={() => { setMode("correct"); setTimeout(() => firstField.current?.focus(), 30); }}><Pencil size={18} aria-hidden /> {t("correct")} <kbd className="kbd">E</kbd></Button>
             )}
             <Button look="quiet" onClick={() => (mode === "back" ? sendBack() : (setMode("back"), setTimeout(() => noteBox.current?.focus(), 30)))} loading={busy === "reject"} disabled={!!busy && busy !== "reject"}>
-              <ArrowUUpLeft size={18} aria-hidden /> {t("sendBack")} <kbd className="kbd">S</kbd>
+              <Undo2 size={18} aria-hidden /> {t("sendBack")} <kbd className="kbd">S</kbd>
             </Button>
           </div>
         </div>

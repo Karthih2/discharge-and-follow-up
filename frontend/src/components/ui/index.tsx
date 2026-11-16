@@ -1,11 +1,11 @@
-import { Eye, EyeSlash } from "@phosphor-icons/react";
+import { Eye, EyeOff } from "lucide-react";
 import { forwardRef, useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from "react";
 import { Link, type LinkProps } from "react-router-dom";
 
-// The one set of building blocks every screen uses. Flat fills, 1px borders, colour-only hover.
+const cx = (...p: (string | false | null | undefined)[]) => p.filter(Boolean).join(" ");
+
 type Look = "solid" | "quiet" | "attention";
 const look: Record<Look, string> = { solid: "", quiet: "btn-quiet", attention: "btn-attention" };
-const cx = (...p: (string | false | null | undefined)[]) => p.filter(Boolean).join(" ");
 
 interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   look?: Look;
@@ -34,7 +34,6 @@ interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
   hideLabel?: string;
 }
 
-/** Label, input and an inline error. Password inputs get a show or hide toggle. */
 export const Input = forwardRef<HTMLInputElement, FieldProps>(function Input({ label, error, hint, showLabel = "Show", hideLabel = "Hide", className, type, id, ...rest }, ref) {
   const auto = useId();
   const fid = id ?? auto;
@@ -42,13 +41,13 @@ export const Input = forwardRef<HTMLInputElement, FieldProps>(function Input({ l
   const pw = type === "password";
   return (
     <div className="block">
-      <label htmlFor={fid} className="mb-1 block font-semibold">{label}</label>
+      <label htmlFor={fid} className="mb-1 block text-small font-semibold text-ink">{label}</label>
       <div className="relative">
         <input ref={ref} id={fid} type={pw && shown ? "text" : type} aria-invalid={!!error} aria-describedby={error ? `${fid}-e` : hint ? `${fid}-h` : undefined}
           className={cx("field", error && "field-error", pw && "pr-16", className)} {...rest} />
         {pw && (
-          <button type="button" className="absolute inset-y-0 right-0 px-3 text-sm font-semibold text-primary hover:underline" onClick={() => setShown(!shown)} aria-pressed={shown}>
-            {shown ? <><EyeSlash size={16} className="mr-1 inline" aria-hidden />{hideLabel}</> : <><Eye size={16} className="mr-1 inline" aria-hidden />{showLabel}</>}
+          <button type="button" className="absolute inset-y-0 right-0 flex items-center gap-1 px-3 text-sm font-semibold text-brand-700 hover:underline" onClick={() => setShown(!shown)} aria-pressed={shown}>
+            {shown ? <><EyeOff size={16} className="inline" aria-hidden />{hideLabel}</> : <><Eye size={16} className="inline" aria-hidden />{showLabel}</>}
           </button>
         )}
       </div>
@@ -61,7 +60,7 @@ export function Select({ label, className, children, ...rest }: SelectHTMLAttrib
   const id = useId();
   return (
     <div className="block">
-      <label htmlFor={id} className="mb-1 block text-sm font-semibold">{label}</label>
+      <label htmlFor={id} className="mb-1 block text-sm font-semibold text-ink">{label}</label>
       <select id={id} className={cx("field", className)} {...rest}>{children}</select>
     </div>
   );
@@ -71,7 +70,7 @@ export function Textarea({ label, className, ...rest }: TextareaHTMLAttributes<H
   const id = useId();
   return (
     <div className="block">
-      <label htmlFor={id} className="mb-1 block font-semibold">{label}</label>
+      <label htmlFor={id} className="mb-1 block font-semibold text-ink">{label}</label>
       <textarea id={id} className={cx("field", className)} {...rest} />
     </div>
   );
@@ -84,20 +83,21 @@ export function Card({ as: Tag = "div", className, children, ...rest }: { as?: "
 type Tone = "plain" | "good" | "warn" | "solid" | "mark";
 const tone: Record<Tone, string> = {
   plain: "border-line text-muted",
-  good: "border-secondary bg-secondary text-ink",
-  warn: "border-attention bg-attention-tint text-attention",
-  solid: "border-attention bg-attention text-surface",
-  mark: "border-primary text-primary",
+  good: "border-accent/30 bg-green-50 text-green-700",
+  warn: "border-amber-300 bg-amber-50 text-amber-700",
+  solid: "border-attention bg-attention text-white",
+  mark: "border-brand-500 text-brand-700",
 };
 
 export function Badge({ tone: t = "plain", children, className }: { tone?: Tone; children: ReactNode; className?: string }) {
-  return <span className={cx("inline-flex items-center rounded-lg border px-2 text-sm font-semibold", tone[t], className)}>{children}</span>;
+  return <span className={cx("inline-flex items-center rounded-full border px-2.5 py-0.5 text-sm font-semibold", tone[t], className)}>{children}</span>;
 }
 
-export function EmptyState({ title, text, action }: { title: string; text?: string; action?: ReactNode }) {
+export function EmptyState({ title, text, action, icon }: { title: string; text?: string; action?: ReactNode; icon?: ReactNode }) {
   return (
-    <div className="card space-y-2 p-6">
-      <h2 className="text-xl">{title}</h2>
+    <div className="card flex flex-col items-center gap-3 p-8 text-center">
+      {icon && <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-100 text-brand-700">{icon}</div>}
+      <h2 className="text-h2">{title}</h2>
       {text && <p className="measure text-muted">{text}</p>}
       {action && <div className="pt-1">{action}</div>}
     </div>
@@ -108,7 +108,6 @@ export function Skeleton({ className = "" }: { className?: string }) {
   return <div className={`skeleton ${className}`} aria-hidden />;
 }
 
-/** Skeleton shaped like the plan page. */
 export function PlanSkeleton() {
   return (
     <div className="space-y-8" role="status" aria-label="Loading">
@@ -131,7 +130,6 @@ export function PlanSkeleton() {
   );
 }
 
-/** Placeholder rows shaped like list cards. */
 export function ListSkeleton({ rows = 4, label = "Loading" }: { rows?: number; label?: string }) {
   return (
     <div className="space-y-3" role="status" aria-label={label}>
@@ -145,7 +143,6 @@ export function ListSkeleton({ rows = 4, label = "Loading" }: { rows?: number; l
   );
 }
 
-/** Placeholder shaped like a row of numbers. */
 export function StatsSkeleton({ n = 4 }: { n?: number }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" role="status" aria-label="Loading">
@@ -159,8 +156,8 @@ export function StatsSkeleton({ n = 4 }: { n?: number }) {
 export function PageHead({ title, text, children }: { title: string; text?: string; children?: ReactNode }) {
   return (
     <header className="flex flex-wrap items-end justify-between gap-4">
-      <div className="max-w-2xl">
-        <h1 className="text-4xl">{title}</h1>
+      <div className="min-w-0 max-w-2xl">
+        <h1 className="text-h1">{title}</h1>
         {text && <p className="mt-2 text-muted">{text}</p>}
       </div>
       {children}
@@ -168,7 +165,6 @@ export function PageHead({ title, text, children }: { title: string; text?: stri
   );
 }
 
-/** Previous and next for a paged list. */
 export function Pager({ offset, limit, total, onPage, labels }: { offset: number; limit: number; total: number; onPage: (offset: number) => void; labels: { prev: string; next: string; of: string } }) {
   if (total <= limit) return null;
   return (

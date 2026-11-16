@@ -1,4 +1,4 @@
-import { CalendarBlank, Lock, MagnifyingGlass, UsersThree } from "@phosphor-icons/react";
+import { Calendar, Lock, Search, Users } from "lucide-react";
 import { AnimatePresence, m as motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -84,8 +84,8 @@ export function FamilyHome() {
         <Tile className="h-full">
           <p className="mb-3 text-sm text-muted">{t("familyIntro")} {user?.role === "manager" ? t("familyManagerCan") : t("familyViewerCan")}</p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <IconTile icon={<CalendarBlank size={24} weight="duotone" />} label={t("calendar")} to="/calendar" />
-            {user?.role === "manager" && <IconTile icon={<UsersThree size={24} weight="duotone" />} label={t("familyHub")} to="/family/hub" />}
+            <IconTile icon={<Calendar size={24} />} label={t("calendar")} to="/calendar" />
+            {user?.role === "manager" && <IconTile icon={<Users size={24} />} label={t("familyHub")} to="/family/hub" />}
             <Stat n={rows.length} label={t("patients")} />
             <Stat n={open} label={t("openAlerts")} warn={open > 0} />
             <Stat n={late} label={t("overdue")} warn={late > 0} />
@@ -172,7 +172,7 @@ export function FamilyHub() {
       <div className="lg:col-span-12"><PageHead title={hub.data?.hub?.name ?? t("familyHub")} text={t("hubIntro")} /></div>
       <Tile title={t("findPerson")} className="lg:col-span-7">
         <div className="relative">
-          <MagnifyingGlass size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
           <input className="field pl-10" placeholder={t("searchPeople")} aria-label={t("findPerson")} value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
         {found.loading && q.length >= 3 && <Skeleton className="mt-3 h-10 w-full" />}

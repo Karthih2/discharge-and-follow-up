@@ -1,4 +1,4 @@
-import { CaretLeft, CaretRight, CheckCircle, Circle, Pill, Stethoscope } from "@phosphor-icons/react";
+import { ChevronLeft, ChevronRight, CheckCircle2, Circle, Pill, Stethoscope } from "lucide-react";
 import { AnimatePresence, m as motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { Badge, Button, Card, EmptyState, PageHead, Skeleton } from "../components/ui";
@@ -56,9 +56,9 @@ export default function Calendar() {
     <div className="space-y-6">
       <PageHead title={t("calendar")} text={t("calendarIntro")} />
       <div className="flex flex-wrap items-center gap-3">
-        <Button small look="quiet" aria-label={t("previous")} onClick={() => step(-1)}><CaretLeft size={16} aria-hidden /></Button>
+        <Button small look="quiet" aria-label={t("previous")} onClick={() => step(-1)}><ChevronLeft size={16} aria-hidden /></Button>
         <h2 className="min-w-[10rem] text-center text-2xl">{month.toLocaleDateString("en-IN", { month: "long", year: "numeric" })}</h2>
-        <Button small look="quiet" aria-label={t("next")} onClick={() => step(1)}><CaretRight size={16} aria-hidden /></Button>
+        <Button small look="quiet" aria-label={t("next")} onClick={() => step(1)}><ChevronRight size={16} aria-hidden /></Button>
         <Button small look="quiet" onClick={() => { setCursor(null); setPick(null); }}>{t("today")}</Button>
         {people.length > 1 && (
           <select className="field w-auto" aria-label={t("patient")} value={who} onChange={(e) => setWho(e.target.value)}>
@@ -115,7 +115,7 @@ export default function Calendar() {
                   <motion.li layout key={x.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={mt(0.18)}
                     className={`rounded-lg border p-2 ${x.overdue ? "border-attention bg-attention-tint" : done ? "border-line bg-bg text-muted" : "border-line bg-surface"}`}>
                     <p className="flex items-start gap-2">
-                      {x.kind === "medicine" ? <Pill size={18} weight="duotone" className="mt-0.5 shrink-0 text-primary" aria-hidden /> : <Stethoscope size={18} weight="duotone" className="mt-0.5 shrink-0 text-primary" aria-hidden />}
+                      {x.kind === "medicine" ? <Pill size={18} className="mt-0.5 shrink-0 text-primary" aria-hidden /> : <Stethoscope size={18} className="mt-0.5 shrink-0 text-primary" aria-hidden />}
                       <span className="lang-text min-w-0">{x.title}</span>
                     </p>
                     <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted">
@@ -124,7 +124,7 @@ export default function Calendar() {
                       {x.overdue && <Badge tone="warn">{t("overdue")}</Badge>}
                       {x.can_tick && (
                         <Button small look={done ? "quiet" : "solid"} className="ml-auto" loading={busy === x.id} onClick={() => flip(x.id, done)} aria-pressed={done}>
-                          {done ? <><CheckCircle size={16} weight="fill" aria-hidden /> {t("done")}</> : <><Circle size={16} aria-hidden /> {t("markDone")}</>}
+                          {done ? <><CheckCircle2 size={16} aria-hidden /> {t("done")}</> : <><Circle size={16} aria-hidden /> {t("markDone")}</>}
                         </Button>
                       )}
                     </p>

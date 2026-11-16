@@ -1,4 +1,4 @@
-import { ChartBar, ClockCounterClockwise, Gear, PhoneCall, Stack, Stethoscope, UsersThree } from "@phosphor-icons/react";
+import { BarChart3, History, Settings as SettingsIcon, Phone, Layers, Stethoscope, Users } from "lucide-react";
 import { lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { StaffShell } from "../components/Layout";
@@ -26,13 +26,13 @@ export default function AdminApp() {
               variant="admin"
               title={t("managementConsole")}
               nav={[
-                { to: "/", label: t("overview"), Icon: ChartBar, end: true },
-                { to: "/reviews", label: t("reviewAssignment"), Icon: Stack },
+                { to: "/", label: t("overview"), Icon: BarChart3, end: true },
+                { to: "/reviews", label: t("reviewAssignment"), Icon: Layers },
                 { to: "/doctors", label: t("doctors"), Icon: Stethoscope },
-                { to: "/callbacks", label: t("callbacks"), Icon: PhoneCall },
-                { to: "/patients", label: t("patients"), Icon: UsersThree },
-                { to: "/settings", label: t("settings"), Icon: Gear },
-                { to: "/audit", label: t("auditLog"), Icon: ClockCounterClockwise },
+                { to: "/callbacks", label: t("callbacks"), Icon: Phone },
+                { to: "/patients", label: t("patients"), Icon: Users },
+                { to: "/settings", label: t("settings"), Icon: SettingsIcon },
+                { to: "/audit", label: t("auditLog"), Icon: History },
               ]}
             />
           </Guard>

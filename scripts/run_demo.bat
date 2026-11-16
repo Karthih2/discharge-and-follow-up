@@ -2,7 +2,7 @@
 rem One command. One address. Everything runs on http://localhost:8000
 rem   run_demo.bat           start the demo (builds the app the first time)
 rem   run_demo.bat rebuild   rebuild the app first, then start
-cd /d "%~dp0"
+cd /d "%~dp0.."
 if not exist backend\.venv (
   echo Creating Python environment...
   python -m venv backend\.venv

@@ -1,4 +1,4 @@
-import { CalendarPlus, Printer, ShareNetwork, TextAa } from "@phosphor-icons/react";
+import { CalendarPlus, Printer, Share2, Type } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PlanView } from "../components/PlanView";
@@ -77,10 +77,10 @@ export default function Plan() {
                 <Printer size={20} aria-hidden /> {t("fridgeSheet")}
               </LinkButton>
               <Button look="quiet" aria-pressed={elderly} onClick={() => { setBig(!elderly); api.setElderly(!elderly).catch(() => undefined); }}>
-                <TextAa size={20} weight="duotone" aria-hidden /> {t("bigText")}
+                <Type size={20} aria-hidden /> {t("bigText")}
               </Button>
               <LinkButton look="quiet" to="/patient/sharing">
-                <ShareNetwork size={20} aria-hidden /> {t("sharing")}
+                <Share2 size={20} aria-hidden /> {t("sharing")}
               </LinkButton>
             </>
           )}

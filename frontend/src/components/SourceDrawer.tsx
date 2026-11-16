@@ -1,4 +1,4 @@
-import { X } from "@phosphor-icons/react";
+import { X } from "lucide-react";
 import { AnimatePresence, m as motion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { api } from "../lib/api";

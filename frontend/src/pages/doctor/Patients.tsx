@@ -1,4 +1,4 @@
-import { ArrowBendUpRight, CheckCircle, MagnifyingGlass } from "@phosphor-icons/react";
+import { CornerUpRight, CheckCircle2, Search } from "lucide-react";
 import { m as motion } from "motion/react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -26,7 +26,7 @@ export function DoctorPatients() {
       <div className="max-w-sm">
         <label htmlFor="pt-search" className="mb-1 block text-sm font-semibold">{t("search")}</label>
         <div className="relative">
-          <MagnifyingGlass size={18} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
+          <Search size={18} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
           <input id="pt-search" className="field pl-9" value={search} onChange={(e) => { setSearch(e.target.value); setOffset(0); }} placeholder={t("searchPatients")} />
         </div>
       </div>
@@ -110,11 +110,11 @@ export function DoctorPatient() {
       {/* Plan state + actions */}
       {p && (
         <div className="flex flex-wrap items-center gap-3">
-          {planState === "doctor_checked" && <Badge tone="good"><CheckCircle size={16} className="mr-1 inline" />{t("planChecked")}</Badge>}
+          {planState === "doctor_checked" && <Badge tone="good"><CheckCircle2 size={16} className="mr-1 inline" />{t("planChecked")}</Badge>}
           {planState === "checking" && <Badge tone="plain">{t("checking")}</Badge>}
           {canCheck && (
             <Button small onClick={markChecked} loading={busy === "check"}>
-              <CheckCircle size={18} aria-hidden /> {t("markPlanChecked")}
+              <CheckCircle2 size={18} aria-hidden /> {t("markPlanChecked")}
             </Button>
           )}
           {hasOpenReviews && planState === "checking" && (
@@ -126,7 +126,7 @@ export function DoctorPatient() {
       {/* Redirect patient to another doctor */}
       {hasOpenReviews && (
         <Card className="flex flex-wrap items-end gap-3 p-4">
-          <ArrowBendUpRight size={22} className="text-primary" aria-hidden />
+          <CornerUpRight size={22} className="text-primary" aria-hidden />
           <Select label={t("redirectPatient")} value={redirectTo} onChange={(e) => setRedirectTo(e.target.value)}>
             <option value="">{t("selectDoctor")}</option>
             {(doctors.data ?? []).map((d) => <option key={d.id} value={d.id}>{d.name} ({d.specialty})</option>)}

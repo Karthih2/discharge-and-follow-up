@@ -1,4 +1,4 @@
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { Search } from "lucide-react";
 import { m as motion } from "motion/react";
 import { useState } from "react";
 import { Badge, Card, EmptyState, ListSkeleton, PageHead, Pager } from "../../components/ui";
@@ -23,7 +23,7 @@ export default function AdminPatients() {
       <div className="max-w-sm">
         <label htmlFor="ap-search" className="mb-1 block text-sm font-semibold">{t("search")}</label>
         <div className="relative">
-          <MagnifyingGlass size={18} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
+          <Search size={18} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
           <input id="ap-search" className="field pl-9" value={search} onChange={(e) => { setSearch(e.target.value); setOffset(0); }} placeholder={t("searchPatients")} />
         </div>
       </div>

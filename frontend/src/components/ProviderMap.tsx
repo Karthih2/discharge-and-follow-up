@@ -1,4 +1,4 @@
-import { MapPin, NavigationArrow } from "@phosphor-icons/react";
+import { MapPin, Navigation } from "lucide-react";
 import { m as motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { api } from "../lib/api";
@@ -101,7 +101,7 @@ export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: 
           </select>
         </label>}
         <Button look="quiet" small onClick={useGps}>
-          <NavigationArrow size={16} weight="duotone" aria-hidden /> Use my location
+          <Navigation size={16} aria-hidden /> Use my location
         </Button>
       </div>
       {note && <p role="status" className="text-sm text-muted">{note}</p>}
@@ -150,7 +150,7 @@ export function ProviderMap({ itemId, pincode, matches, canSelect, onChanged }: 
             <ProviderCard p={m.provider} reasons={[...m.reasons, `${km(origin, [m.provider.lat, m.provider.lng]).toFixed(1)} km from the chosen spot`]} rank={i + 1} />
             {canSelect && (
               <Button look="quiet" small className="mt-1" disabled={m.selected} onClick={() => pick(m.provider.id)}>
-                <MapPin size={16} weight="duotone" aria-hidden /> {m.selected ? t("selected") : t("selectProvider")}
+                <MapPin size={16} aria-hidden /> {m.selected ? t("selected") : t("selectProvider")}
               </Button>
             )}
           </div>

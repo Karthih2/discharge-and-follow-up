@@ -1,4 +1,4 @@
-import { ChartLineUp, CheckCircle, ClipboardText, Clock, Heartbeat, Phone, ShieldCheck, UsersFour, WarningCircle } from "@phosphor-icons/react";
+import { TrendingUp, CheckCircle2, ClipboardList, Clock, HeartPulse, Phone, ShieldCheck, Users, AlertCircle } from "lucide-react";
 import { m as motion } from "motion/react";
 import { lazy, Suspense } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -38,7 +38,7 @@ export default function Overview() {
 
   const n = s?.numbers;
   type Tint = "neutral" | "primary" | "warn";
-  const statIcons = [ClipboardText, ShieldCheck, Clock, Heartbeat, CheckCircle, WarningCircle, ChartLineUp, WarningCircle, Phone, UsersFour];
+  const statIcons = [ClipboardList, ShieldCheck, Clock, HeartPulse, CheckCircle2, AlertCircle, TrendingUp, AlertCircle, Phone, Users];
   const cards: [string, number | null | undefined, string, boolean, number?, Tint?][] = [
     [t("plansCreated"), n?.plans_created, "", false, 0, "primary"],
     [t("needingReview"), n?.needing_review, "", false],
@@ -88,7 +88,7 @@ export default function Overview() {
                       <p className="mt-1 text-sm text-muted">{label}</p>
                     </div>
                     <span className={`rounded-[10px] p-1.5 ${tint === "warn" ? "bg-attention/8 text-attention" : tint === "primary" ? "bg-primary/8 text-primary" : "bg-line text-muted"}`}>
-                      <Icon size={18} weight="duotone" aria-hidden />
+                      <Icon size={18} aria-hidden />
                     </span>
                   </div>
                 </Card>

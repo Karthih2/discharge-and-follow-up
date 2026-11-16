@@ -1,4 +1,4 @@
-import { CalendarBlank, CheckCircle, SpeakerSimpleHigh, SpeakerSimpleSlash, Circle, FilePlus, MagnifyingGlass, MapPin, MapTrifold, Moon, PhoneCall, Printer, ShareNetwork, SpeakerHigh, Sun, SunHorizon } from "@phosphor-icons/react";
+import { Calendar, CheckCircle2, Volume2, VolumeX, Circle, FilePlus, Search, MapPin, Map, Moon, Phone, Printer, Share2, Sun, Sunrise } from "lucide-react";
 import { AnimatePresence, m as motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ import { invalidate, useQuery } from "../lib/query";
 import { toast } from "../lib/toast";
 import type { TodayMed } from "../lib/types";
 
-const SLOT_ICON = { morning: SunHorizon, afternoon: Sun, night: Moon } as const;
+const SLOT_ICON = { morning: Sunrise, afternoon: Sun, night: Moon } as const;
 const SLOTS = ["morning", "afternoon", "night"] as const;
 
 export default function PatientHome() {
@@ -66,13 +66,13 @@ export default function PatientHome() {
 
   const planId = d?.plan?.id;
   const shortcuts = useMemo(() => [
-    { label: t("calendar"), icon: <CalendarBlank size={24} weight="duotone" />, to: "/calendar", act: false },
-    { label: t("listen"), icon: <SpeakerHigh size={24} weight="duotone" />, to: planId ? `/plan/${planId}` : undefined, act: false },
-    { label: t("requestCallback"), icon: <PhoneCall size={24} weight="duotone" />, to: undefined, act: true },
-    { label: t("fridgeSheet"), icon: <Printer size={24} weight="duotone" />, to: planId ? `/plan/${planId}/print` : undefined, act: false },
-    { label: t("shareFamily"), icon: <ShareNetwork size={24} weight="duotone" />, to: "/patient/sharing", act: false },
-    { label: t("findProvider"), icon: <MapTrifold size={24} weight="duotone" />, to: "/providers", act: false },
-    { label: t("addSummary"), icon: <FilePlus size={24} weight="duotone" />, to: "/patient/upload", act: false },
+    { label: t("calendar"), icon: <Calendar size={24} />, to: "/calendar", act: false },
+    { label: t("listen"), icon: <Volume2 size={24} />, to: planId ? `/plan/${planId}` : undefined, act: false },
+    { label: t("requestCallback"), icon: <Phone size={24} />, to: undefined, act: true },
+    { label: t("fridgeSheet"), icon: <Printer size={24} />, to: planId ? `/plan/${planId}/print` : undefined, act: false },
+    { label: t("shareFamily"), icon: <Share2 size={24} />, to: "/patient/sharing", act: false },
+    { label: t("findProvider"), icon: <Map size={24} />, to: "/providers", act: false },
+    { label: t("addSummary"), icon: <FilePlus size={24} />, to: "/patient/upload", act: false },
   ].filter((s) => s.label.toLowerCase().includes(cmd.trim().toLowerCase())), [t, planId, cmd]);
 
   if (today.loading) {
@@ -112,7 +112,7 @@ export default function PatientHome() {
         <Tile className="h-full">
           <label className="relative block">
             <span className="sr-only">{t("search")}</span>
-            <MagnifyingGlass size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
+            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
             <input className="field pl-10" placeholder={t("searchCommand")} value={cmd} onChange={(e) => setCmd(e.target.value)} />
           </label>
           <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -128,7 +128,7 @@ export default function PatientHome() {
             <div className="mb-3 flex flex-wrap items-center gap-3">
             <LangToggle compact />
             <Button small look={talking === "day" ? "attention" : "quiet"} onClick={() => say("day", "all")} aria-pressed={talking === "day"}>
-              {talking === "day" ? <><SpeakerSimpleSlash size={16} aria-hidden /> {t("stopReading")}</> : <><SpeakerSimpleHigh size={16} aria-hidden /> {t("readDayAloud")}</>}
+              {talking === "day" ? <><VolumeX size={16} aria-hidden /> {t("stopReading")}</> : <><Volume2 size={16} aria-hidden /> {t("readDayAloud")}</>}
             </Button>
             </div>
           )}
@@ -141,11 +141,11 @@ export default function PatientHome() {
                 const rows = [...d.medicines[slot]].sort((a, b) => Number(a.status === "Completed") - Number(b.status === "Completed"));
                 return (
                   <div key={slot}>
-                    <h3 className="mb-1 flex items-center gap-1.5 text-sm font-bold"><Icon size={18} weight="duotone" className="text-primary" aria-hidden /> {t(slot)}
+                    <h3 className="mb-1 flex items-center gap-1.5 text-sm font-bold"><Icon size={18} className="text-primary" aria-hidden /> {t(slot)}
                       {canSpeak() && rows.length > 0 && (
                         <button className="ml-auto rounded-md p-1 text-primary hover:bg-line" aria-label={`${t("readAloud")}: ${t(slot)}`} aria-pressed={talking === slot}
                           onClick={() => say(slot, slot)}>
-                          {talking === slot ? <SpeakerSimpleSlash size={18} aria-hidden /> : <SpeakerSimpleHigh size={18} aria-hidden />}
+                          {talking === slot ? <VolumeX size={18} aria-hidden /> : <Volume2 size={18} aria-hidden />}
                         </button>
                       )}
                     </h3>
@@ -156,7 +156,7 @@ export default function PatientHome() {
                           <motion.li layout key={m.task_id} transition={mt(0.2)}>
                             <button onClick={() => flip(m)} disabled={busy === m.task_id} role="checkbox" aria-checked={m.status === "Completed"}
                               className={`flex w-full items-start gap-2 rounded-xl border px-3 py-2 text-left text-sm transition-all duration-150 ${m.status === "Completed" ? "border-line bg-bg text-muted line-through" : "border-line bg-surface hover:border-primary hover:shadow-sm"}`}>
-                              {m.status === "Completed" ? <CheckCircle size={18} weight="fill" className="mt-0.5 shrink-0 text-primary" aria-hidden /> : <Circle size={18} className="mt-0.5 shrink-0 text-muted" aria-hidden />}
+                              {m.status === "Completed" ? <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-primary" aria-hidden /> : <Circle size={18} className="mt-0.5 shrink-0 text-muted" aria-hidden />}
                               <span className="lang-text">{m.medicines.join(", ")}</span>
                             </button>
                           </motion.li>

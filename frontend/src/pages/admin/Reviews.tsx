@@ -1,4 +1,4 @@
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { Search } from "lucide-react";
 import { AnimatePresence, m as motion } from "motion/react";
 import { useState } from "react";
 import { Badge, Button, Card, EmptyState, ListSkeleton, PageHead, Pager, Select } from "../../components/ui";
@@ -129,7 +129,7 @@ export default function Reviews() {
         <div className="min-w-[12rem]">
           <label htmlFor="ar-search" className="mb-1 block text-sm font-semibold">{t("search")}</label>
           <div className="relative">
-            <MagnifyingGlass size={18} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
+            <Search size={18} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
             <input id="ar-search" className="field pl-9" value={search} onChange={(e) => { setSearch(e.target.value); setOffset(0); }} placeholder={t("searchPatients")} />
           </div>
         </div>

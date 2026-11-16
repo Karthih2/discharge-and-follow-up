@@ -1,4 +1,4 @@
-import { CalendarBlank, CheckCircle, Circle, Flag, Lock, MapPin, PhoneCall, SpeakerHigh } from "@phosphor-icons/react";
+import { Calendar, CheckCircle2, Circle, Flag, Lock, MapPin, Phone, Volume2 } from "lucide-react";
 import { AnimatePresence, m as motion } from "motion/react";
 import { useState } from "react";
 import { fmt } from "../i18n/strings";
@@ -115,11 +115,11 @@ export function ItemCard({ item, plan, task, onTask, onSource, onRefresh, previe
           {!preview && (
             <div className="mt-3 flex flex-wrap gap-2">
               <button className={btn} onClick={listen} disabled={locked} title={locked ? t("waitingDoctor") : undefined}>
-                <SpeakerHigh size={16} weight="duotone" aria-hidden /> {t("listen")}
+                <Volume2 size={16} aria-hidden /> {t("listen")}
               </button>
               {task && canAct && (
                 <button className={btn} disabled={locked} onClick={() => onTask!(task.id, task.status === "Pending" ? "Completed" : "Pending")}>
-                  {task.status === "Pending" ? <Circle size={16} aria-hidden /> : <CheckCircle size={16} weight="fill" aria-hidden />}
+                  {task.status === "Pending" ? <Circle size={16} aria-hidden /> : <CheckCircle2 size={16} aria-hidden />}
                   {task.status === "Pending" ? t("markDone") : t("undo")}
                 </button>
               )}
@@ -128,17 +128,17 @@ export function ItemCard({ item, plan, task, onTask, onSource, onRefresh, previe
               )}
               {canCall && !locked && (
                 <button className={btn} onClick={callback}>
-                  <PhoneCall size={16} weight="duotone" aria-hidden /> {t("requestCallback")}
+                  <Phone size={16} aria-hidden /> {t("requestCallback")}
                 </button>
               )}
               {canCall && !locked && (
                 <button className={btn} onClick={flag}>
-                  <Flag size={16} weight="duotone" aria-hidden /> {t("flagIt")}
+                  <Flag size={16} aria-hidden /> {t("flagIt")}
                 </button>
               )}
               {item.matches.length > 0 && !locked && (
                 <button className={btn} onClick={() => setMaps(!maps)} aria-expanded={maps}>
-                  <MapPin size={16} weight="duotone" aria-hidden /> {t("findProvider")} ({item.matches.length})
+                  <MapPin size={16} aria-hidden /> {t("findProvider")} ({item.matches.length})
                 </button>
               )}
             </div>
@@ -161,16 +161,16 @@ export function ItemCard({ item, plan, task, onTask, onSource, onRefresh, previe
             <StatusBadge status={task?.status === "Completed" ? "Completed" : item.status} />
             {d && (
               <span className="inline-flex items-center gap-1 rounded-md border border-line px-2 text-sm text-muted">
-                <CalendarBlank size={14} weight="duotone" aria-hidden /> {fmtDate(item.date_resolved!, { day: "numeric", month: "short" })}
+                <Calendar size={14} aria-hidden /> {fmtDate(item.date_resolved!, { day: "numeric", month: "short" })}
               </span>
             )}
-            {task?.status === "Completed" && <CheckCircle size={22} weight="fill" className="text-primary" aria-hidden />}
+            {task?.status === "Completed" && <CheckCircle2 size={20} className="text-accent" aria-hidden />}
           </div>
 
           {large && actions}
           {locked ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={mt(0.4)} className="mt-2 flex items-start gap-2">
-              <motion.span animate={{ scale: [1, 1.18, 1] }} transition={mt(0.9)} className="mt-0.5 shrink-0"><Lock size={22} weight="duotone" aria-hidden /></motion.span>
+              <motion.span animate={{ scale: [1, 1.18, 1] }} transition={mt(0.9)} className="mt-0.5 shrink-0"><Lock size={20} aria-hidden /></motion.span>
               <div className="lang-text">
                 <p className="font-semibold">{t("waitingDoctor")}</p>
                 {mine && item.reason_plain && <p className="text-sm">{t("reasonLabel")}: {item.reason_plain}</p>}

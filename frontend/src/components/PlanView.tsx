@@ -1,4 +1,4 @@
-import { Bell, CheckCircle, Clock, Columns, Rows, SquaresFour, WarningCircle } from "@phosphor-icons/react";
+import { Bell, CheckCircle2, Clock, Columns2, Rows3, LayoutGrid, AlertCircle } from "lucide-react";
 import { AnimatePresence, LayoutGroup, m as motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { fmt } from "../i18n/strings";
@@ -28,10 +28,10 @@ const ORDER: Record<string, number> = { appointment: 0, test: 1, referral: 2, wo
 
 function ViewSwitcher({ mode, set }: { mode: Mode; set: (m: Mode) => void }) {
   const { t } = useLang();
-  const opts: { m: Mode; label: string; Icon: typeof Rows }[] = [
-    { m: "cards", label: t("viewCards"), Icon: SquaresFour },
-    { m: "panels", label: t("viewPanels"), Icon: Columns },
-    { m: "timeline", label: t("timeline"), Icon: Rows },
+  const opts: { m: Mode; label: string; Icon: typeof Rows3 }[] = [
+    { m: "cards", label: t("viewCards"), Icon: LayoutGrid },
+    { m: "panels", label: t("viewPanels"), Icon: Columns2 },
+    { m: "timeline", label: t("timeline"), Icon: Rows3 },
   ];
   return (
     <div role="tablist" aria-label="Display" className="relative inline-flex max-w-full overflow-x-auto rounded-xl border border-primary p-0.5">
@@ -39,7 +39,7 @@ function ViewSwitcher({ mode, set }: { mode: Mode; set: (m: Mode) => void }) {
         <button key={m} role="tab" aria-selected={mode === m} onClick={() => set(m)} className="relative whitespace-nowrap px-2.5 py-1.5 text-sm font-semibold sm:px-3">
           {mode === m && <motion.span layoutId="mode-pill" className="absolute inset-0 rounded-[10px] bg-primary" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
           <span className={`relative inline-flex items-center gap-1.5 ${mode === m ? "text-surface" : "text-primary"}`}>
-            <Icon size={18} weight="duotone" aria-hidden /> {label}
+            <Icon size={18} aria-hidden /> {label}
           </span>
         </button>
       ))}
@@ -91,7 +91,7 @@ export function PlanView({ plan, preview, elderly, onTask, onAck, onSource, onRe
       )}
       {!preview && plan.open_reviews > 0 && scope === "full" && role === "patient" && (
         <p className="lang-text flex items-center gap-2 rounded-lg border border-attention bg-attention-tint p-3 text-attention">
-          <WarningCircle size={22} weight="duotone" aria-hidden /> {t("reviewBanner")}
+          <AlertCircle size={22} aria-hidden /> {t("reviewBanner")}
         </p>
       )}
       {(role === "manager" || role === "family") && scope !== "appointments" && <AlertFeed alerts={plan.alerts} onAck={role === "manager" ? onAck : undefined} />}
@@ -160,7 +160,7 @@ export function PlanView({ plan, preview, elderly, onTask, onAck, onSource, onRe
       {scope === "full" && warnings.length > 0 && (
         <section aria-labelledby="h-warn" className="rounded-md border border-attention bg-attention-tint p-4">
           <h2 id="h-warn" className="flex items-center gap-2 text-2xl text-attention">
-            <WarningCircle size={28} weight="duotone" aria-hidden /> {t("warningSigns")}
+            <AlertCircle size={28} aria-hidden /> {t("warningSigns")}
           </h2>
           <p className="lang-text my-2 font-semibold">{t("warningIntro")}</p>
           <ul className="space-y-3">
@@ -215,7 +215,7 @@ function TaskRow({ task, onTask }: { task: PlanTask; onTask?: (id: number, s: "P
       className={`card flex items-center justify-between gap-3 p-3 ${done ? "text-muted" : ""}`}
     >
       <div className="flex min-w-0 items-center gap-3">
-        {done ? <CheckCircle size={22} weight="fill" className="text-primary" aria-hidden /> : <Clock size={22} weight="duotone" className={task.overdue ? "text-attention" : "text-primary"} aria-hidden />}
+        {done ? <CheckCircle2 size={22} className="text-primary" aria-hidden /> : <Clock size={22} className={task.overdue ? "text-attention" : "text-primary"} aria-hidden />}
         <div className="min-w-0">
           <p className="lang-text font-semibold">{task.title}</p>
           <p className="text-sm text-muted">
@@ -261,7 +261,7 @@ function AlertFeed({ alerts, onAck }: { alerts: Alert[]; onAck?: (id: number) =>
   return (
     <Card aria-labelledby="h-alerts" as="section" className="p-4">
       <h2 id="h-alerts" className="mb-2 flex items-center gap-2 text-2xl">
-        <Bell size={26} weight="duotone" aria-hidden /> {t("alerts")}
+        <Bell size={26} aria-hidden /> {t("alerts")}
       </h2>
       {open.length === 0 && <p className="text-muted">{t("noAlerts")}</p>}
       <ul className="space-y-2">

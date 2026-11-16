@@ -1,4 +1,4 @@
-import { CalendarDots, House, PhoneCall, Stack, UsersThree } from "@phosphor-icons/react";
+import { CalendarDays, Home as HomeIcon, Phone, Layers, Users } from "lucide-react";
 import { lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { StaffShell } from "../components/Layout";
@@ -25,11 +25,11 @@ export default function DoctorApp() {
               variant="doctor"
               title={t("doctorWorkspace")}
               nav={[
-                { to: "/", label: t("myDay"), Icon: House, end: true },
-                { to: "/queue", label: t("reviewQueue"), Icon: Stack },
-                { to: "/calendar", label: t("doctorCalendar"), Icon: CalendarDots },
-                { to: "/patients", label: t("patients"), Icon: UsersThree },
-                { to: "/callbacks", label: t("callbacks"), Icon: PhoneCall },
+                { to: "/", label: t("myDay"), Icon: HomeIcon, end: true },
+                { to: "/queue", label: t("reviewQueue"), Icon: Layers },
+                { to: "/calendar", label: t("doctorCalendar"), Icon: CalendarDays },
+                { to: "/patients", label: t("patients"), Icon: Users },
+                { to: "/callbacks", label: t("callbacks"), Icon: Phone },
               ]}
             />
           </Guard>

@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarCheck, ChatCircleDots, Eye, FirstAidKit, Globe, Heart, Pill, Prohibit, ShieldCheck, Translate, UsersFour } from "@phosphor-icons/react";
+import { ArrowRight, CalendarCheck, MessageCircle, Eye, HeartPulse, Globe, Heart, Pill, ShieldOff, ShieldCheck, Languages, Users } from "lucide-react";
 import { m as motion, useInView, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -65,7 +65,7 @@ function FeatureCard({ icon: Icon, title, desc, index }: { icon: React.ElementTy
       className="kv-feature-card"
     >
       <div className="kv-feature-icon">
-        <Icon size={20} weight="duotone" />
+        <Icon size={20} />
       </div>
       <h3 className="mt-3 text-[1.05rem] font-semibold">{title}</h3>
       <p className="mt-1.5 text-sm text-muted leading-relaxed">{desc}</p>
@@ -86,7 +86,7 @@ function StepCard({ icon: Icon, num, title, desc, extra, index }: { icon: React.
       <div className="kv-step-num">{num}</div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2.5">
-          <div className="kv-step-icon"><Icon size={18} weight="duotone" /></div>
+          <div className="kv-step-icon"><Icon size={18} /></div>
           <h3 className="text-lg font-semibold">{title}</h3>
         </div>
         <p className="mt-2 text-muted text-[0.92rem] leading-relaxed">{desc}</p>
@@ -107,7 +107,7 @@ function RoleCard({ role, desc, icon: Icon, index }: { role: string; desc: strin
       className="kv-role-card"
     >
       <div className="kv-role-icon">
-        <Icon size={22} weight="duotone" />
+        <Icon size={22} />
       </div>
       <h3 className="mt-3 text-lg font-semibold">{role}</h3>
       <p className="mt-1.5 text-sm text-muted leading-relaxed">{desc}</p>
@@ -188,7 +188,7 @@ export default function Landing() {
           </ScrollReveal>
 
           <div className="kv-feature-row">
-            <FeatureCard icon={Translate} index={0}
+            <FeatureCard icon={Languages} index={0}
               title="Six languages"
               desc="Tamil, Hindi, Kannada, Telugu, Malayalam and English." />
             <FeatureCard icon={Pill} index={1}
@@ -208,10 +208,10 @@ export default function Landing() {
       <section className="kv-features-extra section-pad" style={{ paddingTop: 0 }}>
         <div className="mx-auto max-w-[1480px]">
           <div className="kv-feature-row">
-            <FeatureCard icon={UsersFour} index={0}
+            <FeatureCard icon={Users} index={0}
               title="Family sharing"
               desc="Share with family. They see only what you allow." />
-            <FeatureCard icon={ChatCircleDots} index={1}
+            <FeatureCard icon={MessageCircle} index={1}
               title="Source tracing"
               desc="Every item links back to the exact line in the summary." />
           </div>
@@ -244,7 +244,7 @@ export default function Landing() {
             <div className="kv-how-right">
               {[
                 { icon: Eye, num: 1, title: t("step1T"), desc: t("step1D"), extra: "PDF upload, copy-paste, photo scan. Personal data masked automatically." },
-                { icon: Translate, num: 2, title: t("step2T"), desc: t("step2D"), extra: "AI finds medicines, appointments, tests and warnings. Each links to source." },
+                { icon: Languages, num: 2, title: t("step2T"), desc: t("step2D"), extra: "AI finds medicines, appointments, tests and warnings. Each links to source." },
                 { icon: ShieldCheck, num: 3, title: t("step3T"), desc: t("step3D"), extra: "Ambiguous items flagged and locked. Doctor reviews before patient sees." },
                 { icon: Globe, num: 4, title: t("step4T"), desc: t("step4D"), extra: "Calendar, medicine timeline, fridge sheet, push reminders. Family gets read-only link." },
               ].map((s, i) => (
@@ -265,8 +265,8 @@ export default function Landing() {
 
           <div className="kv-role-grid">
             <RoleCard role="Patient" desc="Upload your discharge summary. Get a personal plan with medicines, appointments and reminders in your language." icon={Heart} index={0} />
-            <RoleCard role="Family" desc="View your loved one's plan. See only what they share. No app needed." icon={UsersFour} index={1} />
-            <RoleCard role="Doctor" desc="Review flagged items in a queue. Confirm, correct or clarify before the patient sees them." icon={FirstAidKit} index={2} />
+            <RoleCard role="Family" desc="View your loved one's plan. See only what they share. No app needed." icon={Users} index={1} />
+            <RoleCard role="Doctor" desc="Review flagged items in a queue. Confirm, correct or clarify before the patient sees them." icon={HeartPulse} index={2} />
             <RoleCard role="Management" desc="Hospital-wide stats. Track plans created, reviewed and shared." icon={Globe} index={3} />
           </div>
         </div>
@@ -296,7 +296,7 @@ export default function Landing() {
                 className="kv-trust-card"
               >
                 <div className="kv-trust-icon">
-                  <Prohibit size={20} weight="duotone" />
+                  <ShieldOff size={20} />
                 </div>
                 <p className="mt-2 text-sm font-medium">{t(key)}</p>
               </motion.div>

@@ -1,5 +1,5 @@
 @echo off
-cd /d "%~dp0backend"
+cd /d "%~dp0..\backend"
 if not exist .venv (
   echo Creating virtual environment...
   python -m venv .venv

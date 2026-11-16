@@ -1,6 +1,6 @@
 import { STRINGS, type StringKey } from "../i18n/strings";
 import { useLang } from "../lib/lang";
-import { CheckCircle, Circle, SpinnerGap, WarningCircle, XCircle } from "@phosphor-icons/react";
+import { CheckCircle2, Circle, Loader2, AlertCircle, XCircle } from "lucide-react";
 import { m as motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -86,12 +86,12 @@ export default function Run() {
                 {r.state === "running" && (
                   <span className="relative inline-flex">
                     <span className="pulse-ring absolute inset-0 rounded-full bg-secondary" aria-hidden />
-                    <SpinnerGap size={24} weight="duotone" className="relative animate-spin text-primary" aria-label="Running" />
+                    <Loader2 size={24} className="relative animate-spin text-primary" aria-label="Running" />
                   </span>
                 )}
-                {r.state === "done" && <CheckCircle size={24} weight="fill" className="text-primary" aria-label="Done" />}
-                {r.state === "flagged" && <WarningCircle size={24} weight="fill" className="text-attention" aria-label="Needs a look" />}
-                {r.state === "failed" && <XCircle size={24} weight="fill" className="text-attention" aria-label="Failed" />}
+                {r.state === "done" && <CheckCircle2 size={24} className="text-primary" aria-label="Done" />}
+                {r.state === "flagged" && <AlertCircle size={24} className="text-attention" aria-label="Needs a look" />}
+                {r.state === "failed" && <XCircle size={24} className="text-attention" aria-label="Failed" />}
               </span>
               <div>
                 <p className="font-semibold">{(`step_${r.key}` in STRINGS ? t(`step_${r.key}` as StringKey) : r.label)}</p>

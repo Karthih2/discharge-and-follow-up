@@ -1,4 +1,4 @@
-import { ClipboardText, Clock, Pulse, UsersFour, WarningCircle } from "@phosphor-icons/react";
+import { ClipboardList, Clock, Activity, Users, AlertCircle } from "lucide-react";
 import { m as motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -38,7 +38,7 @@ export default function DoctorHome() {
     }
   };
 
-  const statIcons = [ClipboardText, WarningCircle, Clock, UsersFour];
+  const statIcons = [ClipboardList, AlertCircle, Clock, Users];
   const stats: [string, number | undefined, string, boolean][] = [
     [t("openReviews"), h?.open_reviews, "/queue", false],
     [t("overdueReviews"), h?.overdue_reviews, "/queue", true],
@@ -60,7 +60,7 @@ export default function DoctorHome() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
           <Card className="flex items-center gap-3 p-3">
             <span className="relative inline-flex">
-              <Pulse size={26} weight="duotone" className={h.available ? "text-primary" : "text-muted"} aria-hidden />
+              <Activity size={26} className={h.available ? "text-primary" : "text-muted"} aria-hidden />
               {h.available && <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-primary" style={{ animation: "pulse 2s infinite" }} />}
             </span>
             <div className="leading-tight">
@@ -90,7 +90,7 @@ export default function DoctorHome() {
                         <p className="mt-1 text-muted">{label}</p>
                       </div>
                       <span className={`rounded-[10px] p-2 ${warn && n ? "bg-attention/8 text-attention" : "bg-primary/8 text-primary"}`}>
-                        <Icon size={22} weight="duotone" aria-hidden />
+                        <Icon size={22} aria-hidden />
                       </span>
                     </div>
                   </Card>
